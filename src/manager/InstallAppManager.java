@@ -47,7 +47,10 @@ public class InstallAppManager {
 	}
 	
 	public boolean checkEnterApp(){
-		return false;
+		if(AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean checkKillApp() {
