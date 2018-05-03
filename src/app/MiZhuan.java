@@ -36,7 +36,7 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 9篇
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  =20;
+	private int DEFAULT_INSTALL_COUNT  =5;
 	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
@@ -100,7 +100,7 @@ public class MiZhuan {
 //			if (ResultDict.COMMAND_SUCCESS != result)
 //				return result;
 //		}
-		int result = installApp_CUN_AL(driver);
+		int result = installApp_OPPO(driver);
 		if(result != ResultDict.COMMAND_SUCCESS){
 			return result;
 		}
@@ -310,8 +310,8 @@ public class MiZhuan {
 						driver.findElement(By.name("安装")).click();
 						Thread.sleep(30 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if(driver.getPageSource().contains("允许")){
-								driver.findElement(By.name("允许")).click();
+							if(driver.getPageSource().contains("同意并继续")){
+								driver.findElement(By.name("同意并继续")).click();
 								Thread.sleep(2000);
 							}
 						}
@@ -320,21 +320,15 @@ public class MiZhuan {
 						installCount++;
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-					    while(isElementExistByString("软件包安装程序")){
-					    	driver
-							.findElement(By.id("com.android.packageinstaller:id/done_button")).click();
-					    	Thread.sleep(500);
-					    	driver
-							.findElement(By.name("取消")).click();
-					    	Thread.sleep(500);
-					    }
+						driver.findElement(By.name("完成")).click();
+						Thread.sleep(2000);
 					} else if ("继续体验".equals(buttomButton.getText())) {
 						buttomButton.click();
 						Thread.sleep(20 *1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("允许")){
+							if(driver.getPageSource().contains("同意并继续")){
 								System.out.println("click allow");
-								driver.findElement(By.name("允许")).click();
+								driver.findElement(By.name("同意并继续")).click();
 								Thread.sleep(2000);
 							}
 						}
