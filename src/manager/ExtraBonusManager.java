@@ -8,14 +8,16 @@ import javax.imageio.ImageIO;
 
 import app.MiZhuan;
 import common.ResultDict;
+import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
 import utils.Log;
 
 public class ExtraBonusManager {
 	
+	AndroidDriver driver;
 
-
-	public ExtraBonusManager(){
+	public ExtraBonusManager(AndroidDriver driver){
+		this.driver = driver;
 
 	}
 

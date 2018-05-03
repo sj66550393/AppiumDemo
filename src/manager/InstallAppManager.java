@@ -4,13 +4,16 @@ import java.util.ArrayList;
 
 import app.MiZhuan;
 import common.ResultDict;
+import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
 import utils.Log;
 
 public class InstallAppManager {
 	
-	public InstallAppManager(){
+	AndroidDriver driver;
 	
+	public InstallAppManager(AndroidDriver driver){
+		this.driver = driver;
 	}
 	
 	public boolean checkEnterAppDetail(){
@@ -50,6 +53,10 @@ public class InstallAppManager {
 		if(AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
 			return false;
 		}
+		return true;
+	}
+	
+	public boolean isInApplicationDetail(){
 		return true;
 	}
 	

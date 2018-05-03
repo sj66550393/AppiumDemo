@@ -1,13 +1,16 @@
 package manager;
 
 import app.MiZhuan;
+import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
 import utils.Log;
 
 public class LooklookManager {
 
+	AndroidDriver driver;
 
-	public LooklookManager(){
+	public LooklookManager(AndroidDriver driver){
+		this.driver = driver;
 	}
 	public boolean checkClickBottomGame(){
 		return false;
