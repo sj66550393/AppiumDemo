@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import app.MiZhuan;
 import common.ResultDict;
 import io.appium.java_client.android.AndroidDriver;
@@ -31,15 +34,42 @@ public class ExtraBonusManager {
 	}
 	
 	public int checkEnterApp(){
-		return 1;
+		if (isElementExistByString("应用详情")) {
+			return ResultDict.COMMAND_BACK;
+		}
+		if(isHuaweiUpdateActivity()){
+			return ResultDict.COMMAND_BACK;
+		}
+		if(AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		return ResultDict.COMMAND_SUCCESS;
 	}
 	
 	public boolean checkKillApp(String name){
-		return false;
+		Log.log.info("checkKillApp");
+		if(!AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean checkFinishExtraBonus(){
-		return false;
+		return !isElementExistByString("打开");
+	}
+	
+	private boolean isHuaweiUpdateActivity(){
+		return "com.huawei.android.hwouc/.ui.activities.firmware.FirmwareNewVersionDetailsActivity".equals(AdbUtils.getTopActivity());
+	}
+	
+	private boolean isElementExistByString(String name){
+		try{
+			WebElement element = driver.findElement(By.name(name));
+			element.isDisplayed();
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
 	}
 	
 }

@@ -40,11 +40,11 @@ public class MiZhuan {
 	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
-	private boolean isSigninCompleted = false;
-	private boolean isSigninMorning = false;
-	private boolean isSigninNoon = false;
-	private boolean isSigninAfternoon =false;
-	private boolean isSigninNight = false;
+	private boolean isSigninCompleted = true;
+	private boolean isSigninMorning = true;
+	private boolean isSigninNoon = true;
+	private boolean isSigninAfternoon =true;
+	private boolean isSigninNight = true;
 	private int installCount = 0;
 
 	ExtraBonusManager extraBonusManager;
@@ -85,7 +85,6 @@ public class MiZhuan {
 				e.printStackTrace();
 			}
 		}
-//		int result = ResultDict.COMMAND_SUCCESS;
 		if(DateUtils.getHour() == 1){
 			isExtraBonusCompleted = false;
 			isLooklookCompleted = false;
@@ -95,16 +94,112 @@ public class MiZhuan {
 			isSigninAfternoon = false;
 			isSigninNight = false;
 		}
-//		if(!isSigninCompleted){
-////			result = signIn();
+		int result = ResultDict.COMMAND_SUCCESS;
+//		if(isElementExistByString("签到")){
+//			result  = clickSignin();
 //			if (ResultDict.COMMAND_SUCCESS != result)
 //				return result;
 //		}
-		int result = installApp_OPPO(driver);
+		if (!isExtraBonusCompleted) {
+			result = startSigninAppTask();
+			if (ResultDict.COMMAND_SUCCESS != result)
+				return result;
+		}
+		result = installApp_OPPO(driver);
 		if(result != ResultDict.COMMAND_SUCCESS){
 			return result;
 		}
 		return ResultDict.COMMAND_SUCCESS;
+	}
+	
+	private int clickSignin() {
+		try {
+			AdbUtils.click(90, 1127);
+			Thread.sleep(1000);
+			if (!signinManager.checkClickBottomRecommand()) {
+				return ResultDict.COMMAND_RESTART_APP;
+			}
+			if (!signinManager.checkHasSignin()) {
+				isSigninCompleted = true;
+				System.out.println("set isSigninCompleted true");
+				return ResultDict.COMMAND_SUCCESS ;
+			}
+			AdbUtils.click(90, 224);
+			Thread.sleep(2000);
+			if (!signinManager.checkEnterSigninDetail()) {
+				return ResultDict.COMMAND_RESTART_APP;
+			}
+			AdbUtils.click(180,1139);
+			Thread.sleep(5000);
+			AdbUtils.back();
+			Thread.sleep(1000);
+			AdbUtils.back(); 
+			isSigninCompleted = true;
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+
+	private int startSigninAppTask() {
+		try {
+			String lastPackage = "";
+			int appUseTime = 1;
+			boolean leftSwipe = false;
+			while (!((DateUtils.getHour() > 8) || ((DateUtils.getHour() == 8) && (DateUtils.getMinute() > 30)))) {
+				if (leftSwipe) {
+					AdbUtils.swipe(100, 500, 400, 500);
+				} else {
+					AdbUtils.swipe(400, 500, 100, 500);
+				}
+				Thread.sleep(1 * 60 * 1000);
+				leftSwipe = !leftSwipe;
+			}
+			System.out.println("点击应用赚");
+			// 点击应用赚
+//			driver.findElement(By.xpath("//android.widget.TabWidget/android.widget.LinearLayout[contains(@index,1)]"))
+//			.click();
+			driver.findElement(By.name("应用赚")).click();
+			Thread.sleep(1000);
+			// 额外奖励
+			driver.findElement(By.name("额外奖励")).click();
+			Thread.sleep(8000);
+			while (true) {
+				Thread.sleep(500);
+				AdbUtils.swipe(300, 500, 300, 1000);
+				Thread.sleep(5000);
+				if (isElementExistById("me.mizhuan:id/mituo_status")) {
+					driver.findElement(By.id("me.mizhuan:id/mituo_status")).click();
+				} else {
+					if (!((DateUtils.getHour() > 10)
+							|| ((DateUtils.getHour() == 10) && (DateUtils.getMinute() > 32)))) {
+						Thread.sleep(2 * 60 * 1000);
+						continue;
+					} else {
+						isExtraBonusCompleted = true;
+						return ResultDict.COMMAND_SUCCESS;
+					}
+				}
+				if(lastPackage.equals(AdbUtils.getCurrentPackage())){
+					appUseTime++;
+				}else{
+					appUseTime = 1;
+				}
+				Thread.sleep(appUseTime * 70 * 1000);
+				String name = AdbUtils.getCurrentPackage();
+				lastPackage = AdbUtils.getCurrentPackage();
+				AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+				Thread.sleep(5000);
+				if (!extraBonusManager.checkKillApp(name)) {
+					return ResultDict.COMMAND_RESTART_APP;
+				}
+				Thread.sleep(5000);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 	}
 	
 	public int installApp_CUN_AL(AndroidDriver driver) {
@@ -367,6 +462,16 @@ public class MiZhuan {
 	private boolean isElementExistByString(String name){
 		try{
 			WebElement element = driver.findElement(By.name(name));
+			element.isDisplayed();
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+	}
+	
+	private boolean isElementExistById(String id){
+		try{
+			WebElement element = driver.findElement(By.id(id));
 			element.isDisplayed();
 			return true;
 		}catch(Exception e) {
