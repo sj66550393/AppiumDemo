@@ -108,11 +108,14 @@ public class MiZhuan {
 			isSigninNight = false;
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
-//		if(isElementExistByString("签到")){
-//			result  = clickSignin();
-//			if (ResultDict.COMMAND_SUCCESS != result)
-//				return result;
-//		}
+		if(isElementExistByString("签到")){
+			result  = clickSignin();
+			if (ResultDict.COMMAND_SUCCESS != result)
+				return result;
+		}
+		if(isElementExistByString("上午签到") || isElementExistByString("中午签到") || isElementExistByString("下午签到") || isElementExistByString("晚上签到")) {
+			
+		}
 		if (!isExtraBonusCompleted) {
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result)
@@ -464,15 +467,10 @@ public class MiZhuan {
 
 	private int clickSignin() {
 		try {
-			AdbUtils.click(90, 1127);
+			driver.findElement(By.name("签到")).click();
 			Thread.sleep(1000);
 			if (!signinManager.checkClickBottomRecommand()) {
 				return ResultDict.COMMAND_RESTART_APP;
-			}
-			if (!signinManager.checkHasSignin()) {
-				isSigninCompleted = true;
-				System.out.println("set isSigninCompleted true");
-				return ResultDict.COMMAND_SUCCESS ;
 			}
 			AdbUtils.click(90, 224);
 			Thread.sleep(2000);

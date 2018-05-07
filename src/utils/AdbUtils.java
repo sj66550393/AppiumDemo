@@ -166,7 +166,6 @@ public class AdbUtils {
     	try {
     		exec(adb + "input keyevent 26");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
