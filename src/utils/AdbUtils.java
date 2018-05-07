@@ -170,4 +170,28 @@ public class AdbUtils {
 			e.printStackTrace();
 		}
     }
+    
+    public static String getProductModel(){
+    	try {
+    		String str = printf(adb + "getprop | grep ro.product.model");
+    		String[] splitStr = str.split(":");
+    		return splitStr[1].trim();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+    }
+    
+    public static boolean isPad(){
+    	try {
+    		String str = printf(adb + "wm size");
+    		String[] splitStr = str.split(":")[1].split("x");
+    		int width = Integer.parseInt(splitStr[0].trim());
+    		int height = Integer.parseInt(splitStr[1].trim());
+    		return width > height;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
 }

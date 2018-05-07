@@ -15,13 +15,35 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import utils.AdbUtils;
 import utils.Log;
+import common.Configure;
 import common.ResultDict;
 
 public class ShouZhuan {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
+		init();
 		Timer t = new Timer();
 		t.schedule(new Task1(), 1000);
+	}
+
+	private static void init() {
+		Configure.isPad = AdbUtils.isPad();
+		String productModel = AdbUtils.getProductModel();
+		Configure.productModel = productModel;
+		switch (productModel) {
+		case "[OPPO A37m]":
+			break;
+		case "[SM-G7109]":
+			break;
+		case "[CUN-TL00]":
+			break;
+		case "[Lenovo TB3-X70N]":
+			break;
+		case "[CUN-AL00]":
+			break;
+		default:
+			break;
+		}
 	}
 }
 
