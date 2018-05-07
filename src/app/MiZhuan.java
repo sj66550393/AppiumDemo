@@ -39,10 +39,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
-	private boolean isExtraBonusCompleted = false;
-	private boolean isLooklookCompleted = false;
+	private boolean isExtraBonusCompleted = true;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = false;
+	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = true;
 	private boolean isSigninMorning = true;
 	private boolean isSigninNoon = true;
@@ -64,9 +64,9 @@ public class MiZhuan {
 		capabilities.setCapability("appPackage", "me.mizhuan");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
-		capabilities.setCapability("udid", "UCZHUGEU99999999");
+		capabilities.setCapability("udid", "GEQBBBE675433987");
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4731/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -113,7 +113,7 @@ public class MiZhuan {
 			if (ResultDict.COMMAND_SUCCESS != result)
 				return result;
 		}
-		if(isElementExistByString("上午签到") || isElementExistByString("中午签到") || isElementExistByString("下午签到") || isElementExistByString("晚上签到")) {
+		if(isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班") || isElementExistByString("晚上探班")) {
 			
 		}
 		if (!isExtraBonusCompleted) {
@@ -469,9 +469,6 @@ public class MiZhuan {
 		try {
 			driver.findElement(By.name("签到")).click();
 			Thread.sleep(1000);
-			if (!signinManager.checkClickBottomRecommand()) {
-				return ResultDict.COMMAND_RESTART_APP;
-			}
 			AdbUtils.click(90, 224);
 			Thread.sleep(2000);
 			if (!signinManager.checkEnterSigninDetail()) {

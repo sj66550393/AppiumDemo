@@ -1,5 +1,7 @@
 package manager;
 
+import org.openqa.selenium.By;
+
 import app.MiZhuan;
 import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
@@ -20,7 +22,7 @@ public class LooklookManager {
 	}
 	
 	public boolean checkEnterEntertainNews(){
-		return false;
+		return "今日必看".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText());
 	}
 	
 	public boolean checkEnterHotNews(){
@@ -44,7 +46,7 @@ public class LooklookManager {
 	}
 
 	public boolean checkClick360News(){
-		return false;
+		return "360新闻".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText());
 	}
 	
 	public boolean checkClickTuituiLe(){

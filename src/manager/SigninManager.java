@@ -2,6 +2,8 @@ package manager;
 
 import java.util.ArrayList;
 
+import org.openqa.selenium.By;
+
 import app.MiZhuan;
 import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
@@ -16,12 +18,9 @@ public class SigninManager {
 	
 	}
 	
-	public boolean checkClickBottomRecommand(){
-	return false;
-	}
 	
 	public boolean checkEnterSigninDetail() {
-		return false;
+	 return "Ç©µ½".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText());
 	}
 	
 	public boolean checkHasSignin(){

@@ -30,20 +30,6 @@ public class ShouZhuan {
 		Configure.isPad = AdbUtils.isPad();
 		String productModel = AdbUtils.getProductModel();
 		Configure.productModel = productModel;
-		switch (productModel) {
-		case "[OPPO A37m]":
-			break;
-		case "[SM-G7109]":
-			break;
-		case "[CUN-TL00]":
-			break;
-		case "[Lenovo TB3-X70N]":
-			break;
-		case "[CUN-AL00]":
-			break;
-		default:
-			break;
-		}
 	}
 }
 
