@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AdbUtils {
-	public static String deviceId = "GEQBBBE675433987";
+	public static String deviceId = "UCZHUGEU99999999";
 	public static String storageDes = "e:/";
 	public static String storageDir = storageDes + deviceId + "/";
 	private static String adb =  "adb -s " + deviceId	+" shell ";
