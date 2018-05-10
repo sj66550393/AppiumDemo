@@ -39,8 +39,8 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
-	private boolean isExtraBonusCompleted = false;
-	private boolean isLooklookCompleted = true;
+	private boolean isExtraBonusCompleted = true;
+	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = true;
@@ -64,12 +64,12 @@ public class MiZhuan {
 		capabilities.setCapability("appPackage", "me.mizhuan");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
-		capabilities.setCapability("udid", "UCZHUGEU99999999");
-		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		capabilities.setCapability("udid", "GEQBBA865430172");
+//		try {
+//			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+//		} catch (MalformedURLException e) {
+//			e.printStackTrace();
+//		}
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -78,24 +78,34 @@ public class MiZhuan {
 	}
 	
 	public int start(){		
-		if (!AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")) {
-			Activity activity = new Activity("me.mizhuan" , ".ActCover");
-			driver.startActivity(activity);
-			try {
-				Thread.sleep(20 * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//		if (!AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")) {
+//			Activity activity = new Activity("me.mizhuan" , ".ActCover");
+//			driver.startActivity(activity);
+//			try {
+//				Thread.sleep(20 * 1000);
+//			} catch (InterruptedException e) {
+//				driver.quit();
+//				e.printStackTrace();
+//		        return ResultDict.COMMAND_RESTART_APP;	
+//			}
+//		}
+		try {
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+			Thread.sleep(20 * 1000);
+		} catch (Exception e) {
+			driver.quit();
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
 		}
-		
-		if(isElementExistById("me.mizhuan:id/start_button")){
-			System.out.println("开始赚");
-			driver.findElement(By.id("me.mizhuan:id/start_button")).click();
-			try {
+		try {
+			if (isElementExistById("me.mizhuan:id/start_button")) {
+				driver.findElement(By.id("me.mizhuan:id/start_button")).click();
 				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-			   e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			driver.quit();
+			return ResultDict.COMMAND_RESTART_APP;
 		}
 		
 		if(DateUtils.getHour() == 1){
@@ -119,17 +129,20 @@ public class MiZhuan {
 		if (!isExtraBonusCompleted) {
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result)
+				driver.quit();
 				return result;
 		}
 		if(!isClickAdsCompleted){
 			result = startClickAds();
 			if (ResultDict.COMMAND_SUCCESS != result)
+				driver.quit();
 				return result;
 		}
 		
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
 			if (ResultDict.COMMAND_SUCCESS != result)
+				driver.quit();
 				return result;
 		}
 		if(!isInstallCompleted){
@@ -152,9 +165,7 @@ public class MiZhuan {
 				return result;
 			}
 		}
-		if(result != ResultDict.COMMAND_SUCCESS){
-			return result;
-		}
+		driver.quit();
 		return ResultDict.COMMAND_SUCCESS;
 	}
 	
@@ -177,8 +188,12 @@ public class MiZhuan {
 			if (!clickTurnturn()) {
 				return ResultDict.COMMAND_RESTART_APP;
 			}
-			clickTuitui();
-			clickRedPackage();
+			if(!clickTuitui()){
+				return ResultDict.COMMAND_RESTART_APP;
+			}
+			if(!clickRedPackage()){
+				return ResultDict.COMMAND_RESTART_APP;
+			}
 //			if (!clickGoldNews()) {
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
@@ -189,29 +204,31 @@ public class MiZhuan {
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
 			return ResultDict.COMMAND_SUCCESS;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
 
 	// 推推乐
-	public void clickTuitui() {
+	public boolean clickTuitui() {
 		try {
 			Thread.sleep(10000);
 			if(!isElementExistByString("推推乐")){
-				return ;
+				return false;
 			}
 			for (; tuituiNum < Contants.TUITUI_NUM; tuituiNum++) {
 				driver.findElement(By.name("推推乐")).click();
 				Thread.sleep(10 * 1000);
 				if (isElementExistByString("今日任务已完成")) {
-					return;
+					return false;
 				}
 				driver.findElement(By.name("返回")).click();
 			}
-		} catch (InterruptedException e) {
+			return true;
+		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -231,29 +248,30 @@ public class MiZhuan {
 				AdbUtils.back();
 			}
 			return true;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 
 	// 拆红包
-	public void clickRedPackage() {
+	public boolean clickRedPackage() {
 		try {
 			if(!isElementExistByString("拆红包")){
-				return ;
+				return false;
 			}
 			for (; redPackageNum < Contants.RED_PACKAGES_NUM; redPackageNum++) {
 				driver.findElement(By.name("拆红包")).click();
 				Thread.sleep(10000);
 				if (isElementExistByString("今日任务已完成")) {
-					return;
+					return true;
 				}
 				driver.findElement(By.name("返回")).click();
 			}
-		} catch (InterruptedException e) {
+			return true;
+		} catch (Exception e) {
 			e.printStackTrace();
-			return;
+			return false;
 		}
 	}
 
