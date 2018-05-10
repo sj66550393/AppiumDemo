@@ -40,9 +40,9 @@ public class MiZhuan {
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
 	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = false;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = true;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = true;
 	private boolean isSigninMorning = true;
 	private boolean isSigninNoon = true;
@@ -92,21 +92,23 @@ public class MiZhuan {
 		try {
 			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
+			driver.findElement(By.name("1212")).click();
+			driver.quit();
 		} catch (Exception e) {
 			driver.quit();
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
-		try {
-			if (isElementExistById("me.mizhuan:id/start_button")) {
-				driver.findElement(By.id("me.mizhuan:id/start_button")).click();
-				Thread.sleep(10000);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			driver.quit();
-			return ResultDict.COMMAND_RESTART_APP;
-		}
+//		try {
+//			if (isElementExistById("me.mizhuan:id/start_button")) {
+//				driver.findElement(By.id("me.mizhuan:id/start_button")).click();
+//				Thread.sleep(10000);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			driver.quit();
+//			return ResultDict.COMMAND_RESTART_APP;
+//		}
 		
 		if(DateUtils.getHour() == 1){
 			isExtraBonusCompleted = false;
@@ -527,7 +529,7 @@ public class MiZhuan {
 			}
 			Thread.sleep(2000);
 			AdbUtils.back();
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
