@@ -39,8 +39,8 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = true;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = true;
@@ -64,7 +64,7 @@ public class MiZhuan {
 		capabilities.setCapability("appPackage", "me.mizhuan");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
-		capabilities.setCapability("udid", "GEQBBA865430172");
+		capabilities.setCapability("udid", "GEQBBAE67543372");
 //		try {
 //			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 //		} catch (MalformedURLException e) {
@@ -92,8 +92,6 @@ public class MiZhuan {
 		try {
 			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
-			driver.findElement(By.name("1212")).click();
-			driver.quit();
 		} catch (Exception e) {
 			driver.quit();
 			e.printStackTrace();
@@ -130,9 +128,11 @@ public class MiZhuan {
 		}
 		if (!isExtraBonusCompleted) {
 			result = startSigninAppTask();
-			if (ResultDict.COMMAND_SUCCESS != result)
+			if (ResultDict.COMMAND_SUCCESS != result) {
 				driver.quit();
 				return result;
+			}
+				return ResultDict.COMMAND_RESTART_APP;
 		}
 		if(!isClickAdsCompleted){
 			result = startClickAds();
@@ -557,26 +557,20 @@ public class MiZhuan {
 			// 额外奖励
 			driver.findElement(By.name("额外奖励")).click();
 			Thread.sleep(8000);
+			AdbUtils.swipe(300, 500, 300, 1000);
+			Thread.sleep(5000);
 			while (true) {
-				Thread.sleep(500);
-				AdbUtils.swipe(300, 500, 300, 1000);
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				if (isElementExistById("me.mizhuan:id/mituo_status")) {
-					driver.findElement(By.id("me.mizhuan:id/mituo_status")).click();
-				} else {
-					if (!((DateUtils.getHour() > 10)
-							|| ((DateUtils.getHour() == 10) && (DateUtils.getMinute() > 32)))) {
-						Thread.sleep(2 * 60 * 1000);
-						continue;
-					} else {
+					String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
+					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "0万".equals(mituo.substring(mituo.length()-2))) {
 						isExtraBonusCompleted = true;
-						return ResultDict.COMMAND_SUCCESS;
+						break;
+					} else {
+						driver.findElement(By.id("me.mizhuan:id/mituo_status")).click();
 					}
-				}
-				if(lastPackage.equals(AdbUtils.getCurrentPackage())){
-					appUseTime++;
-				}else{
-					appUseTime = 2;
+				} else {
+					continue;
 				}
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
@@ -588,6 +582,7 @@ public class MiZhuan {
 				}
 				Thread.sleep(5000);
 			}
+			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
