@@ -39,10 +39,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
-	private boolean isExtraBonusCompleted = false;
+	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
-	private boolean isClickAdsCompleted = false;
+	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = true;
 	private boolean isSigninMorning = true;
 	private boolean isSigninNoon = true;
@@ -64,12 +64,7 @@ public class MiZhuan {
 		capabilities.setCapability("appPackage", "me.mizhuan");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
-		capabilities.setCapability("udid", "GEQBBAE67543372");
-//		try {
-//			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-//		} catch (MalformedURLException e) {
-//			e.printStackTrace();
-//		}
+		capabilities.setCapability("udid", "0123456789ABCDEF");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -185,29 +180,37 @@ public class MiZhuan {
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
 			if (!clickThreeSixZeroNews()) {
+				driver.quit();
 				return ResultDict.COMMAND_RESTART_APP;
 			}
 			if (!clickTurnturn()) {
+				driver.quit();
 				return ResultDict.COMMAND_RESTART_APP;
 			}
 			if(!clickTuitui()){
+				driver.quit();
 				return ResultDict.COMMAND_RESTART_APP;
 			}
 			if(!clickRedPackage()){
+				driver.quit();
 				return ResultDict.COMMAND_RESTART_APP;
 			}
 //			if (!clickGoldNews()) {
+//			driver.quit();
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
 //			if (!clickEighteenNews()) {
+//			driver.quit();
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
 //			if (!clickLoveNews()) {
+//			driver.quit();
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			driver.quit();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -603,7 +606,7 @@ public class MiZhuan {
 						.getText().substring(0, 2);
 				String appSizeStr = driver
 						.findElement(By
-								.id("me.mizhuan:id/mituo_app_size"))
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				System.out.println("appSize = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
@@ -687,7 +690,7 @@ public class MiZhuan {
 						.getText().substring(0, 2);
 				String appSizeStr = driver
 						.findElement(By
-								.id("me.mizhuan:id/mituo_app_size"))
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				System.out.println("app size = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
@@ -776,7 +779,7 @@ public class MiZhuan {
 						.getText().substring(0, 2);
 				String appSizeStr = driver
 						.findElement(By
-								.id("me.mizhuan:id/mituo_app_size"))
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				System.out.println("appSize = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
