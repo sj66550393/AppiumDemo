@@ -64,7 +64,8 @@ public class MiZhuan {
 		capabilities.setCapability("appPackage", "me.mizhuan");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
-		capabilities.setCapability("udid", "0123456789ABCDEF");
+		capabilities.setCapability("noReset", true);
+		capabilities.setCapability("udid", "UCZHUGEU99999999");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -207,6 +208,7 @@ public class MiZhuan {
 //			driver.quit();
 //				return ResultDict.COMMAND_RESTART_APP;
 //			}
+			driver.quit();
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

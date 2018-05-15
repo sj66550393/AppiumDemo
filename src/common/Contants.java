@@ -25,12 +25,12 @@ public class Contants {
 	
 	public static final int TODAY_MUST_NUM = 6;  //今日必看6篇
 	
-	public static final int ENTERTAINMENT_NEWS = 5; //娱乐爆料 5篇
-	public static final int THREE_SIX_ZERO_NEWS_NUM = 6; //360新闻 9篇
-	public static final int HOT_NEWS_NUM = 5; //热点新闻 5篇
-	public static final int TURNTURN_NUM = 9; //翻翻乐 9篇
-	public static final int TUITUI_NUM = 6; //推推乐 6篇
-	public static final int GOLD_NEWS_NUM = 7; //点金新闻 7篇
-	public static final int EIGHTEEN_NEWS_NUM = 9; // 18头条 9篇
-	public static final int LOVE_NEWS_NUM = 9; //我爱头条 9篇
+	public static final int ENTERTAINMENT_NEWS = 10; //娱乐爆料 5篇
+	public static final int THREE_SIX_ZERO_NEWS_NUM = 10; //360新闻 9篇
+	public static final int HOT_NEWS_NUM = 10; //热点新闻 5篇
+	public static final int TURNTURN_NUM = 10; //翻翻乐 9篇
+	public static final int TUITUI_NUM = 10; //推推乐 6篇
+	public static final int GOLD_NEWS_NUM = 10; //点金新闻 7篇
+	public static final int EIGHTEEN_NEWS_NUM = 10; // 18头条 9篇
+	public static final int LOVE_NEWS_NUM = 10; //我爱头条 9篇
 }
