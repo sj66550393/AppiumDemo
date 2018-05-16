@@ -4,12 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import common.Configure;
+
 public class AdbUtils {
-	public static String deviceId = "UCZHUGEU99999999";
-	public static String storageDes = "e:/";
+	public static String deviceId = "0a34eca0";
+	public static String storageDes = "d:/";
 	public static String storageDir = storageDes + deviceId + "/";
 	private static String adb =  "adb -s " + deviceId	+" shell ";
     public static String getTopActivity(){
+    	if(Configure.isPad){
+    		String execResult = printf(adb + "dumpsys activity activities | grep mResumedActivity").trim();
+        	String[] str = execResult.split(" ");
+        	return  execResult.split(" ")[3];
+    	}
     	String execResult = printf(adb + "dumpsys activity activities | grep mFocusedActivity");
     	String[] str = execResult.split(" ");
     	return  execResult.split(" ")[5];

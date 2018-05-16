@@ -39,10 +39,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 28;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = false;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = true;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = true;
 	private boolean isSigninMorning = true;
 	private boolean isSigninNoon = true;
@@ -65,7 +65,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "UCZHUGEU99999999");
+		capabilities.setCapability("udid", "0a34eca0");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -128,20 +128,21 @@ public class MiZhuan {
 				driver.quit();
 				return result;
 			}
-				return ResultDict.COMMAND_RESTART_APP;
 		}
-		if(!isClickAdsCompleted){
+		if (!isClickAdsCompleted) {
 			result = startClickAds();
-			if (ResultDict.COMMAND_SUCCESS != result)
+			if (ResultDict.COMMAND_SUCCESS != result) {
 				driver.quit();
 				return result;
+			}
 		}
 		
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
-			if (ResultDict.COMMAND_SUCCESS != result)
+			if (ResultDict.COMMAND_SUCCESS != result) {
 				driver.quit();
 				return result;
+			}
 		}
 		if(!isInstallCompleted){
 			switch (Configure.productModel) {
@@ -160,6 +161,7 @@ public class MiZhuan {
 				break;
 			}
 			if (result != ResultDict.COMMAND_SUCCESS) {
+				driver.quit();
 				return result;
 			}
 		}

@@ -40,7 +40,7 @@ public class ExtraBonusManager {
 		if(isHuaweiUpdateActivity()){
 			return ResultDict.COMMAND_BACK;
 		}
-		if(AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
+		if(AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")){
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 		return ResultDict.COMMAND_SUCCESS;
@@ -48,7 +48,7 @@ public class ExtraBonusManager {
 	
 	public boolean checkKillApp(String name){
 		Log.log.info("checkKillApp");
-		if(!AdbUtils.getTopActivity().equals("me.mizhuan/.TabFragmentActivity")){
+		if(!AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")){
 			return false;
 		}
 		return true;
