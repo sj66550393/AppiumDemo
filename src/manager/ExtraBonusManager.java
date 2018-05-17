@@ -47,7 +47,6 @@ public class ExtraBonusManager {
 	}
 	
 	public boolean checkKillApp(String name){
-		Log.log.info("checkKillApp");
 		if(!AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")){
 			return false;
 		}
