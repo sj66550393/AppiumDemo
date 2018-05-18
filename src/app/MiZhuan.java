@@ -39,11 +39,11 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 21;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = true;
-	private boolean isInstallCompleted = false;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = false;
+	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
-	private boolean isSigninCompleted = true;
+	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = true;
 	private boolean isSigninNoon = true;
 	private boolean isSigninAfternoon =true;
@@ -65,7 +65,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "GEQBAE87523644");
+		capabilities.setCapability("udid", "0a34eca0");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -86,7 +86,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4731/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -115,12 +115,21 @@ public class MiZhuan {
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
 		if(isElementExistByString("签到")){
+			Log.log.info("开始签到任务");
 			result  = clickSignin();
 			if (ResultDict.COMMAND_SUCCESS != result)
 				return result;
 		}
 		if(isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班") || isElementExistByString("晚上探班")) {
-			
+			try {
+				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
+				Thread.sleep(4000);
+				AdbUtils.back();
+			} catch (Exception e) {
+				driver.quit();
+				e.printStackTrace();
+				return ResultDict.COMMAND_RESTART_APP;
+			}
 		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
@@ -490,17 +499,17 @@ public class MiZhuan {
 		try {
 			driver.findElement(By.name("签到")).click();
 			Thread.sleep(1000);
-			AdbUtils.click(90, 224);
-			Thread.sleep(2000);
-			AdbUtils.click(180,1139);
+			driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
 			Thread.sleep(5000);
 			AdbUtils.back();
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			AdbUtils.back(); 
 			isSigninCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
+			driver.quit();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}

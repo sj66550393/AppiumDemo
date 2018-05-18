@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import common.Configure;
 
 public class AdbUtils {
-	public static String deviceId = "GEQBAE87523644";
+	public static String deviceId = "0a34eca0";
 	public static String storageDes = "e:/";
 	public static String storageDir = storageDes + deviceId + "/";
 	private static String adb =  "adb -s " + deviceId	+" shell ";
