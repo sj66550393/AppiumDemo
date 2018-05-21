@@ -65,7 +65,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "0a34eca0");
+		capabilities.setCapability("udid", "4LJNFMYDP7ROJZ7T");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -120,19 +120,19 @@ public class MiZhuan {
 			if (ResultDict.COMMAND_SUCCESS != result)
 				return result;
 		}
-		if(isElementExistByString("ÉÏÎçÌ½°à") || isElementExistByString("ÖĞÎçÌ½°à") || isElementExistByString("ÏÂÎçÌ½°à") || isElementExistByString("ÍíÉÏÌ½°à")) {
-			try {
-				Log.log.info("µã»÷Ì½°à");
-				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
-				Thread.sleep(4000);
-				AdbUtils.back();
-			} catch (Exception e) {
-				driver.quit();
-				e.printStackTrace();
-				Log.log.info(e.getMessage());
-				return ResultDict.COMMAND_RESTART_APP;
-			}
-		}
+//		if(isElementExistByString("ÉÏÎçÌ½°à") || isElementExistByString("ÖĞÎçÌ½°à") || isElementExistByString("ÏÂÎçÌ½°à") || isElementExistByString("ÍíÉÏÌ½°à")) {
+//			try {
+//				Log.log.info("µã»÷Ì½°à");
+//				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
+//				Thread.sleep(4000);
+//				AdbUtils.back();
+//			} catch (Exception e) {
+//				driver.quit();
+//				e.printStackTrace();
+//				Log.log.info(e.getMessage());
+//				return ResultDict.COMMAND_RESTART_APP;
+//			}
+//		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("¿ªÊ¼¶îÍâÈÎÎñ");
 			result = startSigninAppTask();
