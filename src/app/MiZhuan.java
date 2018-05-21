@@ -86,7 +86,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4731/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -122,12 +122,14 @@ public class MiZhuan {
 		}
 		if(isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班") || isElementExistByString("晚上探班")) {
 			try {
+				Log.log.info("点击探班");
 				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
 				Thread.sleep(4000);
 				AdbUtils.back();
 			} catch (Exception e) {
 				driver.quit();
 				e.printStackTrace();
+				Log.log.info(e.getMessage());
 				return ResultDict.COMMAND_RESTART_APP;
 			}
 		}
@@ -140,6 +142,7 @@ public class MiZhuan {
 			}
 		}
 		if (!isClickAdsCompleted) {
+			Log.log.info("开始看广告任务");
 			result = startClickAds();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 				driver.quit();
@@ -224,7 +227,8 @@ public class MiZhuan {
 			driver.quit();
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
-			e.printStackTrace();			
+			e.printStackTrace();	
+			Log.log.info(e.getMessage());
 			driver.quit();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
@@ -248,6 +252,7 @@ public class MiZhuan {
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -270,6 +275,7 @@ public class MiZhuan {
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -291,6 +297,7 @@ public class MiZhuan {
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -327,8 +334,9 @@ public class MiZhuan {
 			Thread.sleep(2000);
 			AdbUtils.back();
 			return true;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -361,8 +369,9 @@ public class MiZhuan {
 			Thread.sleep(2000);
 			AdbUtils.back();
 			return true;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -386,6 +395,7 @@ public class MiZhuan {
 			return true;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -430,8 +440,9 @@ public class MiZhuan {
 			Thread.sleep(2000);
 			AdbUtils.back();
 			return true;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -457,8 +468,9 @@ public class MiZhuan {
 			Thread.sleep(2000);
 			AdbUtils.back();
 			return true;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return false;
 		}
 	}
@@ -497,13 +509,16 @@ public class MiZhuan {
 
 	private int clickSignin() {
 		try {
+			Log.log.info("点击签到");
 			driver.findElement(By.name("签到")).click();
 			Thread.sleep(1000);
+			Log.log.info("点击普通签到");
 			driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
 			Thread.sleep(5000);
 			AdbUtils.back();
 			Thread.sleep(2000);
 			AdbUtils.back(); 
+			Log.log.info("签到完成");
 			isSigninCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
@@ -546,6 +561,7 @@ public class MiZhuan {
 			AdbUtils.back();
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
 		}
         return ResultDict.COMMAND_SUCCESS;
@@ -587,7 +603,7 @@ public class MiZhuan {
 				} else {
 					continue;
 				}
-				Log.log.info("额外经理开始计时。。。");
+				Log.log.info("额外奖励开始计时。。。");
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				lastPackage = AdbUtils.getCurrentPackage();
@@ -595,6 +611,7 @@ public class MiZhuan {
 				Log.log.info("kill " + name);
 				Thread.sleep(5000);
 				if (!extraBonusManager.checkKillApp(name)) {
+					driver.quit();
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 				Thread.sleep(5000);
@@ -602,6 +619,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -701,6 +719,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -795,6 +814,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -882,6 +902,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -892,7 +913,7 @@ public class MiZhuan {
 			WebElement element = driver.findElement(By.id("com.huawei.systemmanager:id/btn_allow"));
 			element.isDisplayed();
 			return true;
-		}catch(Exception e) {
+		}catch(Exception e) {		
 			return false;
 		}
 	}
