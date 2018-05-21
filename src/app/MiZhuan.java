@@ -42,12 +42,12 @@ public class MiZhuan {
 	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = false;
-	private boolean isSigninMorning = true;
-	private boolean isSigninNoon = true;
-	private boolean isSigninAfternoon =true;
-	private boolean isSigninNight = true;
+	private boolean isSigninMorning = false;
+	private boolean isSigninNoon = false;
+	private boolean isSigninAfternoon =false;
+	private boolean isSigninNight = false;
 	private int installCount = 0;
 
 	ExtraBonusManager extraBonusManager;
@@ -120,19 +120,38 @@ public class MiZhuan {
 			if (ResultDict.COMMAND_SUCCESS != result)
 				return result;
 		}
-//		if(isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班") || isElementExistByString("晚上探班")) {
-//			try {
-//				Log.log.info("点击探班");
+		if(isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班") || isElementExistByString("晚上探班")) {
+			try {
+				Log.log.info("点击探班");
 //				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
-//				Thread.sleep(4000);
-//				AdbUtils.back();
-//			} catch (Exception e) {
-//				driver.quit();
-//				e.printStackTrace();
-//				Log.log.info(e.getMessage());
-//				return ResultDict.COMMAND_RESTART_APP;
-//			}
-//		}
+				if(isElementExistByString("上午探班")){
+					driver.findElement(By.name("上午探班")).click();
+					isSigninMorning = true;
+					Thread.sleep(4000);
+					AdbUtils.back();
+				} else if(isElementExistByString("中午探班")) {
+					driver.findElement(By.name("中午探班")).click();
+					isSigninNoon = true;
+					Thread.sleep(4000);
+					AdbUtils.back();
+				} else if(isElementExistByString("下午探班")) {
+					driver.findElement(By.name("下午探班")).click();
+					isSigninAfternoon = true;
+					Thread.sleep(4000);
+					AdbUtils.back();
+				} else if(isElementExistByString("晚上探班")) {
+					driver.findElement(By.name("晚上探班")).click();
+					isSigninNight = true;
+					Thread.sleep(4000);
+					AdbUtils.back();
+				} 
+			} catch (Exception e) {
+				driver.quit();
+				e.printStackTrace();
+				Log.log.info(e.getMessage());
+				return ResultDict.COMMAND_RESTART_APP;
+			}
+		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -186,6 +205,7 @@ public class MiZhuan {
 	private int startLooklookTaskFromBottomGame() {
 
 		try {
+			Log.log.info("点击游戏赚");
 			driver.findElement(By.name("游戏赚"))
 			.click();
 			Thread.sleep(8000);
@@ -242,10 +262,14 @@ public class MiZhuan {
 				return false;
 			}
 			for (; tuituiNum < Contants.TUITUI_NUM; tuituiNum++) {
+				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
+					return false;
+				}
 				driver.findElement(By.name("推推乐")).click();
 				Thread.sleep(10 * 1000);
 				if (isElementExistByString("今日任务已完成")) {
-					return false;
+					AdbUtils.back();
+					return true;
 				}
 				driver.findElement(By.name("返回")).click();
 			}
@@ -264,9 +288,14 @@ public class MiZhuan {
 				return true;
 			}
 			for (; tuituiNum < Contants.TURNTURN_NUM; tuituiNum++) {
+				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
+					return false;
+				}
 				driver.findElement(By.name("翻翻乐")).click();
 				Thread.sleep(10 * 1000);
 				if (isElementExistByString("今日任务已完成")) {
+					AdbUtils.back();
+					AdbUtils.back();
 					return true;
 				}
 				AdbUtils.back();
@@ -287,9 +316,13 @@ public class MiZhuan {
 				return false;
 			}
 			for (; redPackageNum < Contants.RED_PACKAGES_NUM; redPackageNum++) {
+				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
+					return false;
+				}
 				driver.findElement(By.name("拆红包")).click();
 				Thread.sleep(10000);
 				if (isElementExistByString("今日任务已完成")) {
+					driver.findElement(By.name("返回")).click();
 					return true;
 				}
 				driver.findElement(By.name("返回")).click();
@@ -460,6 +493,9 @@ public class MiZhuan {
 				return true;
 			}
 			for (; ThreeSixZeroNewsNum < Contants.THREE_SIX_ZERO_NEWS_NUM + 3; ThreeSixZeroNewsNum++) {
+				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
+					return false;
+				}
 				swipeAndClickNews();
 				if (!looklookManager.checkClick360News()) {
 					return false;
@@ -936,6 +972,34 @@ public class MiZhuan {
 		}catch(Exception e) {
 			return false;
 		}
+	}
+	
+	private int timeSwitcher(){
+		if(DateUtils.getHour() == 8 && isSigninMorning == false) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 11 && isSigninNoon == false) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 13 && isSigninNoon == false) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 19 && isSigninNight == false) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 8 && DateUtils.getMinute() >= 30 && DateUtils.getMinute() <= 35) {
+			isExtraBonusCompleted = false;
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 10 && DateUtils.getMinute() >= 30 && DateUtils.getMinute() <= 35) {
+			isExtraBonusCompleted = false;
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		if(DateUtils.getHour() == 12 && DateUtils.getMinute() >= 0 && DateUtils.getMinute() <= 5) {
+			isExtraBonusCompleted = false;
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		return ResultDict.COMMAND_SUCCESS;
 	}
 
 }
