@@ -50,6 +50,7 @@ class Task1 extends TimerTask {
 				@Override
 				public void run() {
 					Log.log.info("restart app");
+					System.out.println("isAwake = " + AdbUtils.isAwake2());
 					if (AdbUtils.isAwake2().equals("false")) {
 						try {
 							AdbUtils.clickPower();

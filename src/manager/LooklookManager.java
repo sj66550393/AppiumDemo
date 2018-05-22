@@ -47,7 +47,7 @@ public class LooklookManager {
 
 	public boolean checkClick360News(){
 //		return "360пбне".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText());
-		return true;
+		return false;
 	}
 	
 	public boolean checkClickTuituiLe(){
