@@ -38,10 +38,10 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 21;
+	private int DEFAULT_INSTALL_COUNT  = 10;
 	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = false;
-	private boolean isInstallCompleted = true;
+	private boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
@@ -69,7 +69,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "0123456789ABCDEF");
+		capabilities.setCapability("udid", "GEQBBAE60912353");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -90,7 +90,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4731/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4751/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -172,14 +172,6 @@ public class MiZhuan {
 				return result;
 			}
 		}
-		
-		if (!isLooklookCompleted) {
-			result = startLooklookTaskFromBottomGame();
-			if (ResultDict.COMMAND_SUCCESS != result) {
-				driver.quit();
-				return result;
-			}
-		}
 		if(!isInstallCompleted){
 			Log.log.info("安装任务开始");
 			switch (Configure.productModel) {
@@ -198,6 +190,13 @@ public class MiZhuan {
 				break;
 			}
 			if (result != ResultDict.COMMAND_SUCCESS) {
+				driver.quit();
+				return result;
+			}
+		}
+		if (!isLooklookCompleted) {
+			result = startLooklookTaskFromBottomGame();
+			if (ResultDict.COMMAND_SUCCESS != result) {
 				driver.quit();
 				return result;
 			}
@@ -226,17 +225,23 @@ public class MiZhuan {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
-			if (!clickTurnturn()) {
-				driver.quit();
-				return ResultDict.COMMAND_RESTART_APP;
+			if (!isTurnturnComleted) {
+				if (!clickTurnturn()) {
+					driver.quit();
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 			}
-			if(!clickTuitui()){
-				driver.quit();
-				return ResultDict.COMMAND_RESTART_APP;
+			if (!isTuituiComleted) {
+				if (!clickTuitui()) {
+					driver.quit();
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 			}
-			if(!clickRedPackage()){
-				driver.quit();
-				return ResultDict.COMMAND_RESTART_APP;
+			if (!isPackageCompleted) {
+				if (!clickRedPackage()) {
+					driver.quit();
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 			}
 //			if (!clickGoldNews()) {
 //			driver.quit();
@@ -579,7 +584,7 @@ public class MiZhuan {
 		try {
 			Log.log.info("点击签到");
 			driver.findElement(By.name("签到")).click();
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 			Log.log.info("点击普通签到");
 			driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
 			Thread.sleep(5000);
@@ -640,15 +645,15 @@ public class MiZhuan {
 			String lastPackage = "";
 			int appUseTime = 1;
 			boolean leftSwipe = false;
-			while (!((DateUtils.getHour() > 8) || ((DateUtils.getHour() == 8) && (DateUtils.getMinute() > 30)))) {
-				if (leftSwipe) {
-					AdbUtils.swipe(100, 500, 400, 500);
-				} else {
-					AdbUtils.swipe(400, 500, 100, 500);
-				}
-				Thread.sleep(1 * 60 * 1000);
-				leftSwipe = !leftSwipe;
-			}
+//			while (!((DateUtils.getHour() > 8) || ((DateUtils.getHour() == 8) && (DateUtils.getMinute() > 30)))) {
+//				if (leftSwipe) {
+//					AdbUtils.swipe(100, 500, 400, 500);
+//				} else {
+//					AdbUtils.swipe(400, 500, 100, 500);
+//				}
+//				Thread.sleep(1 * 60 * 1000);
+//				leftSwipe = !leftSwipe;
+//			}
 			// 点击应用赚
 			driver.findElement(By.name("应用赚")).click();
 			Thread.sleep(1000);
@@ -661,7 +666,9 @@ public class MiZhuan {
 				Thread.sleep(1000);
 				if (isElementExistById("me.mizhuan:id/mituo_status")) {
 					String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
-					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "0万".equals(mituo.substring(mituo.length()-2))) {
+					String type = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo")).getText().substring(1, 3);
+					System.out.println("type = " + type);
+					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");
 						isExtraBonusCompleted = true;
 						break;
@@ -824,9 +831,14 @@ public class MiZhuan {
 						Thread.sleep(60 * 1000);
 						driver.findElement(By.name("安装")).click();
 						Thread.sleep(60* 1000);
-						driver.findElement(By.name("打开")).click();
-						Thread.sleep(1000);
-						driver.findElement(By.name("删除")).click();
+//						driver.findElement(By.name("打开")).click();
+//						Thread.sleep(1000);
+//						driver.findElement(By.name("删除")).click();
+//						Thread.sleep(5 * 1000);
+//						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+						AdbUtils.back();
+						Thread.sleep(3 * 1000);
+						buttomButton.click();
 						Thread.sleep(10 * 1000);
 						for(int j=0;j<5;j++){
 							if(driver.getPageSource().contains("允许")){

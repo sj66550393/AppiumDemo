@@ -10,7 +10,14 @@ import manager.SigninManager;
 
 public class MeiRiZhuanDian {
 	private boolean isLooklookCompleted = false;
-//	private int choujiangji = 
+	private int choujiangji = 0; //欢乐抽奖机
+	private int yangshen = 0; //养生之道
+	private int paihongbao = 0; //全民派红包
+	private int wajinkuang = 0; //
+	private int quanjiatong = 0;
+	private int xianjinghongbao = 0;
+	private int dahuayule = 0;
+	private int yingdajiang = 0;
 	
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
