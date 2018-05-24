@@ -38,9 +38,9 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // ÎÒ°®Í·Ìõ 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 10;
+	private int DEFAULT_INSTALL_COUNT  = 25;
 	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = false;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
@@ -69,7 +69,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "GEQBBAE60912353");
+		capabilities.setCapability("udid", "GEQABBE67019433");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -90,7 +90,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4751/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4771/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -123,6 +123,8 @@ public class MiZhuan {
 			result  = clickSignin();
 			if (ResultDict.COMMAND_SUCCESS != result)
 				return result;
+		} else {
+			isSigninCompleted = true;
 		}
 		if(isElementExistByString("ÉÏÎçÌ½°à") || isElementExistByString("ÖÐÎçÌ½°à") || isElementExistByString("ÏÂÎçÌ½°à") || isElementExistByString("ÍíÉÏÌ½°à")) {
 			try {
@@ -534,9 +536,9 @@ public class MiZhuan {
 					return false;
 				}
 				swipeAndClickNews();
-				if (!looklookManager.checkClick360News()) {
-					return false;
-				}
+//				if (!looklookManager.checkClick360News()) {
+//					return false;
+//				}
 			}
 			Thread.sleep(2000);
 			AdbUtils.back();

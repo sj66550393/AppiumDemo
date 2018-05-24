@@ -19,12 +19,8 @@ public class Contants {
 	public static final int GIFT7_NUM = 4;                     //第七个礼包
 	
 	//米赚参数
-	
-
-	public static final int RED_PACKAGES_NUM = 5;
-	
-	public static final int TODAY_MUST_NUM = 6;  //今日必看6篇
-	
+	public static final int RED_PACKAGES_NUM = 10;
+	public static final int TODAY_MUST_NUM = 10;  //今日必看6篇
 	public static final int ENTERTAINMENT_NEWS = 10; //娱乐爆料 5篇
 	public static final int THREE_SIX_ZERO_NEWS_NUM = 10; //360新闻 9篇
 	public static final int HOT_NEWS_NUM = 10; //热点新闻 5篇
