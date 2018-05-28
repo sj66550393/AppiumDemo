@@ -27,11 +27,11 @@ public class MeiRiZhuanDian {
 		capabilities.setCapability("automationName", "Appium");
 		capabilities.setCapability("platformName", "Android");
 		capabilities.setCapability("platformVersion", "5.1.1");
-		capabilities.setCapability("appPackage", "me.mizhuan");
+		capabilities.setCapability("appPackage", "com.adsmobile.mrzd");
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "0123456789ABCDEF");
+		capabilities.setCapability("udid", "GEQABBE67019433");
 //		extraBonusManager = new ExtraBonusManager(driver);
 //		looklookManager = new LooklookManager(driver);
 //		installAppManager = new InstallAppManager(driver);

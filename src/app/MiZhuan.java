@@ -38,11 +38,11 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 25;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = true;
+	private int DEFAULT_INSTALL_COUNT  = 10;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -69,7 +69,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "GEQABBE67019433");
+		capabilities.setCapability("udid", "GEQBBA675243");
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -90,7 +90,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4771/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:4801/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -204,6 +204,10 @@ public class MiZhuan {
 			}
 		}
 		driver.quit();
+		if(DateUtils.getHour() <= 12) {
+			isExtraBonusCompleted = false;
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 		return ResultDict.COMMAND_SUCCESS;
 	}
 	
@@ -516,6 +520,7 @@ public class MiZhuan {
 
 	private boolean clickThreeSixZeroNews() {
 		try {
+			Log.log.info("点击360新闻");
 			driver.findElement(By.name("360新闻")).click();
 			Thread.sleep(10000);
 			if(isElementExistByString("知道了")) {
@@ -647,15 +652,15 @@ public class MiZhuan {
 			String lastPackage = "";
 			int appUseTime = 1;
 			boolean leftSwipe = false;
-//			while (!((DateUtils.getHour() > 8) || ((DateUtils.getHour() == 8) && (DateUtils.getMinute() > 30)))) {
-//				if (leftSwipe) {
-//					AdbUtils.swipe(100, 500, 400, 500);
-//				} else {
-//					AdbUtils.swipe(400, 500, 100, 500);
-//				}
-//				Thread.sleep(1 * 60 * 1000);
-//				leftSwipe = !leftSwipe;
-//			}
+			while (!((DateUtils.getHour() > 8) || ((DateUtils.getHour() == 8) && (DateUtils.getMinute() > 30)))) {
+				if (leftSwipe) {
+					AdbUtils.swipe(100, 500, 400, 500);
+				} else {
+					AdbUtils.swipe(400, 500, 100, 500);
+				}
+				Thread.sleep(1 * 60 * 1000);
+				leftSwipe = !leftSwipe;
+			}
 			// 点击应用赚
 			driver.findElement(By.name("应用赚")).click();
 			Thread.sleep(1000);
@@ -766,6 +771,10 @@ public class MiZhuan {
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
+						if (isElementExistByString("软件包安装程序")) {
+							driver.pressKeyCode(AndroidKeyCode.BACK);
+							Thread.sleep(2000);
+						}
 					} else if ("继续体验".equals(buttomButton.getText())) {
 						Log.log.info("点击继续体验");
 						buttomButton.click();
