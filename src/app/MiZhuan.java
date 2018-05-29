@@ -38,7 +38,7 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 10;
+	private int DEFAULT_INSTALL_COUNT  = 0;
 	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
@@ -69,7 +69,7 @@ public class MiZhuan {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "GEQBBA675243");
+		capabilities.setCapability("udid", Configure.deviceId);
 		extraBonusManager = new ExtraBonusManager(driver);
 		looklookManager = new LooklookManager(driver);
 		installAppManager = new InstallAppManager(driver);
@@ -90,7 +90,7 @@ public class MiZhuan {
 //			}
 //		}
 		try {
-			driver = new AndroidDriver(new URL("http://127.0.0.1:4801/wd/hub"), capabilities);
+			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
@@ -717,7 +717,7 @@ public class MiZhuan {
 			Thread.sleep(2000);
 //			driver.findElement(By.xpath("//android.widget.TabWidget/android.widget.LinearLayout[contains(@index,1)]"))
 //					.click();
-			while (installCount < DEFAULT_INSTALL_COUNT) {
+			while (installCount < Configure.Mizhuan_instlal_count) {
 				Thread.sleep(3000);				
 				String text = driver
 						.findElement(By
@@ -738,6 +738,13 @@ public class MiZhuan {
 					if ("立即安装".equals(buttomButton.getText())) {
 						Log.log.info("点击立即安装");
 						buttomButton.click();
+						Thread.sleep(3 * 1000);
+						if(driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom")).getText().equals("立即安装")) {
+							AdbUtils.back();
+							Thread.sleep(2 * 1000);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							continue;
+						}
 						Thread.sleep(60 * 1000);
 						while (true) {
 							WebElement installButton = driver
@@ -819,7 +826,7 @@ public class MiZhuan {
 			Log.log.info("点击应用");
 			driver.findElement(By.name("应用")).click();
 			Thread.sleep(2000);
-			while (installCount < DEFAULT_INSTALL_COUNT) {
+			while (installCount < Configure.Mizhuan_instlal_count) {
 				String text = driver
 						.findElement(By
 								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
@@ -922,7 +929,7 @@ public class MiZhuan {
 			Log.log.info("点击应用");
 			driver.findElement(By.name("应用")).click();
 			Thread.sleep(2000);
-			while (installCount < DEFAULT_INSTALL_COUNT) {
+			while (installCount < Configure.Mizhuan_instlal_count) {
 				Thread.sleep(3000);
 				Log.log.info("installCount = " + installCount);
 				String text = driver

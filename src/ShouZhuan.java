@@ -1,3 +1,4 @@
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Timer;
@@ -21,6 +22,23 @@ import common.ResultDict;
 public class ShouZhuan {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
+		if(args[0] != null) {
+			Configure.logDir = args[0] + ":\\";
+			AdbUtils.storageDes = args[0] + ":\\";
+		}
+		if(args[1] != null) {
+		Configure.deviceId = args[1];
+		AdbUtils.deviceId = args[1];
+		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
+		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
+		}
+		if(args[2] != null) {
+			Configure.appiumPort = args[2];
+		}
+		
+		if(args[3] != null){
+			Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
+		}
 		init();
 		Timer t = new Timer();
 		t.schedule(new Task1(), 1000);
@@ -30,6 +48,10 @@ public class ShouZhuan {
 		Configure.isPad = AdbUtils.isPad();
 		String productModel = AdbUtils.getProductModel();
 		Configure.productModel = productModel;
+		File file = new File(Configure.logDir + AdbUtils.deviceId);
+		if(!file.exists()) {
+			file.mkdirs();
+		}
 	}
 }
 

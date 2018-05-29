@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import common.Configure;
 
 public class AdbUtils {
-	public static String deviceId = "GEQBBA675243";
+	public static String deviceId;
 	public static String storageDes = "e:/";
 	public static String storageDir = storageDes + deviceId + "/";
-	private static String adb =  "adb -s " + deviceId	+" shell ";
+	public static String adb =  "adb -s " + deviceId	+" shell ";
     public static String getTopActivity(){
     	if(Configure.isPad){
     		String execResult = printf(adb + "dumpsys activity activities | grep mResumedActivity").trim();
