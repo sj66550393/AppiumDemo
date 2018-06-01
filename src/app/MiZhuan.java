@@ -739,7 +739,7 @@ public class MiZhuan {
 						Log.log.info("点击立即安装");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
-						if(driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom")).getText().equals("立即安装")) {
+						if(isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
@@ -846,6 +846,13 @@ public class MiZhuan {
 					if ("立即安装".equals(buttomButton.getText())) {
 						Log.log.info("点击立即安装");
 						buttomButton.click();
+						Thread.sleep(3 * 1000);
+						if(isElementExistByString("立即安装")) {
+							AdbUtils.back();
+							Thread.sleep(2 * 1000);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							continue;
+						}
 						Thread.sleep(60 * 1000);
 						driver.findElement(By.name("安装")).click();
 						Thread.sleep(60* 1000);
@@ -952,6 +959,13 @@ public class MiZhuan {
 					if ("立即安装".equals(buttomButton.getText())) {
 						Log.log.info("点击立即安装");
 						buttomButton.click();
+						Thread.sleep(3 * 1000);
+						if(isElementExistByString("立即安装")) {
+							AdbUtils.back();
+							Thread.sleep(2 * 1000);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							continue;
+						}
 						Thread.sleep(60 * 1000);
 						driver.findElement(By.name("安装")).click();
 						Thread.sleep(30 * 1000);
