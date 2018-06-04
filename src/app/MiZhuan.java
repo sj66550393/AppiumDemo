@@ -39,10 +39,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = false;
-	private boolean isLooklookCompleted = false;
+	private boolean isExtraBonusCompleted = true;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = false;
+	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -78,17 +78,6 @@ public class MiZhuan {
 	}
 	
 	public int start(){		
-//		if (!AdbUtils.getTopActivity().contains("me.mizhuan/.TabFragmentActivity")) {
-//			Activity activity = new Activity("me.mizhuan" , ".ActCover");
-//			driver.startActivity(activity);
-//			try {
-//				Thread.sleep(20 * 1000);
-//			} catch (InterruptedException e) {
-//				driver.quit();
-//				e.printStackTrace();
-//		        return ResultDict.COMMAND_RESTART_APP;	
-//			}
-//		}
 		try {
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
@@ -96,18 +85,7 @@ public class MiZhuan {
 			driver.quit();
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
-		}
-//		try {
-//			if (isElementExistById("me.mizhuan:id/start_button")) {
-//				driver.findElement(By.id("me.mizhuan:id/start_button")).click();
-//				Thread.sleep(10000);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			driver.quit();
-//			return ResultDict.COMMAND_RESTART_APP;
-//		}
-		
+		}	
 		if(DateUtils.getHour() == 1){
 			isExtraBonusCompleted = false;
 			isLooklookCompleted = false;
@@ -778,7 +756,7 @@ public class MiZhuan {
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						if (isElementExistByString("软件包安装程序")) {
+						while (isElementExistByString("打开")) {
 							driver.pressKeyCode(AndroidKeyCode.BACK);
 							Thread.sleep(2000);
 						}
@@ -907,6 +885,10 @@ public class MiZhuan {
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
+						while (isElementExistByString("打开")) {
+							driver.pressKeyCode(AndroidKeyCode.BACK);
+							Thread.sleep(2000);
+						}
 					} else {
 
 					}
