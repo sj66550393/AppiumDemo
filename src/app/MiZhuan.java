@@ -825,6 +825,31 @@ public class MiZhuan {
 						Log.log.info("点击立即安装");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
+						if(isElementExistById("me.mizhuan:id/mituo_rowTextOne")){
+							String str  = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText().substring(0,2);
+							if(!str.equals("首次")){
+								AdbUtils.back();
+								Thread.sleep(2 * 1000);
+								SwipeScreen.swipe(driver, 300, 800, 300, 665);
+								continue;
+							}
+						}else{
+							AdbUtils.back();
+							Thread.sleep(2 * 1000);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							continue;
+						}
+						String size = driver
+								.findElement(By
+										.id("me.mizhuan:id/mituo_app_view1"))
+								.getText();
+						double DetailAppSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
+						if(DetailAppSize > 40){
+							AdbUtils.back();
+							Thread.sleep(2 * 1000);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							continue;
+						}
 						if(isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
