@@ -39,10 +39,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = true;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -96,6 +96,16 @@ public class MiZhuan {
 			isSigninNight = false;
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
+		if(isElementExistById("me.mizhuan:id/close")) {
+			driver.findElement(By.id("me.mizhuan:id/close")).click();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				driver.quit();
+				e.printStackTrace();
+				return ResultDict.COMMAND_RESTART_APP;
+			}
+		}
 		if(isElementExistByString("签到")){
 			Log.log.info("开始签到任务");
 			result  = clickSignin();
@@ -692,7 +702,7 @@ public class MiZhuan {
 			Thread.sleep(1000);
 			Log.log.info("点击应用");
 			driver.findElement(By.name("应用")).click();
-			Thread.sleep(2000);
+			Thread.sleep(10000);
 //			driver.findElement(By.xpath("//android.widget.TabWidget/android.widget.LinearLayout[contains(@index,1)]"))
 //					.click();
 			while (installCount < Configure.Mizhuan_instlal_count) {
@@ -829,9 +839,6 @@ public class MiZhuan {
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
 					if ("立即安装".equals(buttomButton.getText())) {
-						Log.log.info("点击立即安装");
-						buttomButton.click();
-						Thread.sleep(3 * 1000);
 						if (isElementExistById("me.mizhuan:id/mituo_rowTextOne")) {
 							String str = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText()
 									.substring(0, 2);
@@ -855,6 +862,9 @@ public class MiZhuan {
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
+						Log.log.info("点击立即安装");
+						buttomButton.click();
+						Thread.sleep(3 * 1000);
 						if (isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
@@ -862,13 +872,22 @@ public class MiZhuan {
 							continue;
 						}
 						Thread.sleep(60 * 1000);
+						while(isElementExistByString("应用详情")){
+							WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
+						    String buttonText = buttomButton1.getText();
+						    if(buttonText.substring(buttonText.length()-1).equals("%")){
+						    	Thread.sleep(30 * 1000);
+						    	continue;
+						    }else {
+						    	break;
+						    }
+						}
 						driver.findElement(By.name("安装")).click();
 						Thread.sleep(60 * 1000);
-						// driver.findElement(By.name("打开")).click();
-						// Thread.sleep(1000);
-						// driver.findElement(By.name("删除")).click();
-						// Thread.sleep(5 * 1000);
-						// AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+						while(AdbUtils.getCurrentPackage().equals("packageinstaller")){
+							AdbUtils.back();
+							Thread.sleep(1000);
+						}
 						AdbUtils.back();
 						Thread.sleep(3 * 1000);
 						buttomButton.click();
