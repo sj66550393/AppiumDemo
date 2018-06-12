@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import callback.TaskCallback;
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
@@ -23,6 +24,8 @@ import common.Contants;
 import common.ResultDict;
 
 public class MiZhuan {
+	
+	private static MiZhuan mizhuan;
 	
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
@@ -53,13 +56,15 @@ public class MiZhuan {
 	private boolean isTurnturnComleted = false;
 	private boolean isPackageCompleted = false;
 	private int installCount = 0;
+	public boolean isCompleted = false;
 
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
 	InstallAppManager installAppManager;
 	SigninManager signinManager;
+
 	
-	public MiZhuan() {
+	private MiZhuan() {
 		capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName", "CUN AL00");
 		capabilities.setCapability("automationName", "Appium");
@@ -77,7 +82,14 @@ public class MiZhuan {
 		
 	}
 	
-	public int start(){		
+	public static MiZhuan getInstance() {
+		if(mizhuan == null) {
+			mizhuan = new MiZhuan();
+		}
+		return mizhuan;
+	}
+	
+	public int start(TaskCallback callback){		
 		try {
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);

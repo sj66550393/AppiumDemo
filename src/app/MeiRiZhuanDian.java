@@ -9,6 +9,8 @@ import manager.LooklookManager;
 import manager.SigninManager;
 
 public class MeiRiZhuanDian {
+	private static MeiRiZhuanDian meiRiZhuanDian;
+	public boolean isCompleted;
 	private boolean isLooklookCompleted = false;
 	private int choujiangji = 0; //欢乐抽奖机
 	private int yangshen = 0; //养生之道
@@ -21,7 +23,7 @@ public class MeiRiZhuanDian {
 	
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
-	public MeiRiZhuanDian() {
+	private MeiRiZhuanDian() {
 		capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName", "CUN AL00");
 		capabilities.setCapability("automationName", "Appium");
@@ -38,8 +40,15 @@ public class MeiRiZhuanDian {
 //		signinManager = new SigninManager(driver);
 	}
 	
-//	public int start() {
-//		
-//	}
+	public static MeiRiZhuanDian getInstance() {
+		if(meiRiZhuanDian != null) {
+			meiRiZhuanDian = new MeiRiZhuanDian();
+		}
+		return meiRiZhuanDian;
+	}
+	
+	public void start() {
+		
+	}
 
 }

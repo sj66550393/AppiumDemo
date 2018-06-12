@@ -10,7 +10,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import app.MeiRiZhuanDian;
 import app.MiZhuan;
+import callback.TaskCallback;
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
@@ -40,8 +42,37 @@ public class ShouZhuan {
 			Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 		}
 		init();
-		Timer t = new Timer();
-		t.schedule(new Task1(), 1000);
+		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
+		Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				if (!MiZhuan.getInstance().isCompleted) {
+					MiZhuan.getInstance().start(new TaskCallback() {
+						
+						@Override
+						public void onSuccess() {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onRestartApp() {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+				} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
+					MeiRiZhuanDian.getInstance().start();
+				}
+
+			}
+		};
+		
+		fixedThreadPool.execute(runnable);
+		
+//		Timer t = new Timer();
+//		t.schedule(new Task1(), 1000);
 	}
 
 	private static void init() {
@@ -53,20 +84,22 @@ public class ShouZhuan {
 			file.mkdirs();
 		}
 	}
+	
 }
 
+
+
+
 class Task1 extends TimerTask {
-	private MiZhuan mizhuan;
 	ExecutorService fixedThreadPool;
 
 	public Task1() {
-		mizhuan = new MiZhuan();
 		fixedThreadPool = Executors.newFixedThreadPool(4);
 	}
 
 	@Override
 	public void run() {
-		switch (mizhuan.start()) {
+		switch (MiZhuan.getInstance().start()) {
 		case ResultDict.COMMAND_RESTART_APP:
 			fixedThreadPool.execute(new Runnable() {
 				@Override
@@ -99,7 +132,7 @@ class Task1 extends TimerTask {
 			break;
 		}
 	}
-
+	
 	public void restartApp() {
 		try {
 			while (!AdbUtils.getCurrentPackage().contains("launcher")) {
