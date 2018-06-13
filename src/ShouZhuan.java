@@ -74,7 +74,7 @@ public class ShouZhuan {
 		if(appInfoFile.exists()) {
 		String info = TextUtil.txt2StringUTF8(appInfoFile);
 		Configure.map = new Gson().fromJson(info, HashMap.class);
-//		AdbUtils.rootComandEnablePackage();
+//		AdbUtils.rootComandDisablePackage();
 		}
 		if(!file.exists()) {
 			file.mkdirs();
@@ -109,25 +109,26 @@ class Task1 extends TimerTask {
 			} catch (Exception e) {
 			}
 		}
-		if (!MiZhuan.getInstance().isCompleted) {
-			MiZhuan.getInstance().start(new TaskCallback() {
-
-				@Override
-				public void onSuccess(AndroidDriver driver) {
-					MiZhuan.getInstance().isCompleted = true;
-					driver.quit();
-					restartApp();
-				}
-
-				@Override
-				public void onRestartApp(AndroidDriver driver) {
-					driver.quit();
-					restartApp();
-					
-				}
-
-			});
-		} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
+//		if (!MiZhuan.getInstance().isCompleted) {
+//			MiZhuan.getInstance().start(new TaskCallback() {
+//
+//				@Override
+//				public void onSuccess(AndroidDriver driver) {
+//					MiZhuan.getInstance().isCompleted = true;
+//					driver.quit();
+//					restartApp();
+//				}
+//
+//				@Override
+//				public void onRestartApp(AndroidDriver driver) {
+//					driver.quit();
+//					restartApp();
+//					
+//				}
+//
+//			});
+//		} else 
+		if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 				
 				@Override
