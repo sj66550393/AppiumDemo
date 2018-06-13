@@ -49,6 +49,34 @@ public class AdbUtils {
 		}
     }
     
+    public static void rootComandDisablePackage(String packageName){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb);
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		os.writeBytes("su\n");
+            os.writeBytes("pm disable " + packageName + "\n");
+            os.writeBytes("exit\n");
+            os.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void rootComandEnablePackage(String packageName){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb);
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		os.writeBytes("su\n");
+            os.writeBytes("pm enable " + packageName + "\n");
+            os.writeBytes("exit\n");
+            os.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     public static void rootComandEnablePackage(){
     	try {
     		Process process = Runtime.getRuntime().exec(adb);

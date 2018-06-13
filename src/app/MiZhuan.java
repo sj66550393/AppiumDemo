@@ -42,7 +42,7 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = true;
+	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
@@ -676,6 +676,20 @@ public class MiZhuan {
 				if (isElementExistById("me.mizhuan:id/mituo_status")) {
 					String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
 					String type = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo")).getText().substring(1, 3);
+					String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,2)]/android.widget.TextView[contains(@index,1)]")).getText();
+					System.out.println("name = " + secondAppName);
+					String packageName = Configure.map.get(secondAppName);
+					if(packageName != null){
+						System.out.println("packageName = " + packageName);
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								AdbUtils.rootComandDisablePackage(packageName);
+							}
+						}).start();
+					}
+				
 					System.out.println("type = " + type);
 					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");
@@ -690,6 +704,9 @@ public class MiZhuan {
 				Log.log.info("额外奖励开始计时。。。");
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
+				if("".equals(lastPackage) && (!lastPackage.equals(name))){
+					AdbUtils.rootComandDisablePackage(lastPackage);
+				}
 				lastPackage = AdbUtils.getCurrentPackage();
 				AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 				Log.log.info("kill " + name);
