@@ -1,5 +1,6 @@
 package utils;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +26,54 @@ public class AdbUtils {
     public static String isAwake(){
     	String execResult = printf(adb + "dumpsys window policy | grep mAwake");
     	return execResult.substring(11, 16);
+    }
+    
+    public static void rootComandDisablePackage(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb);
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		os.writeBytes("su\n");
+    	    for (String value : Configure.map.values()) {
+    	        System.out.println(value);
+    	        if(value.equals("me.mizhuan") || value.equals("io.appium.unlock")|| value.equals("io.appium.settings") || value.equals("com.jiesong.myapplicationlist")){
+    	        	continue;
+    	        }
+    	        os.writeBytes("pm disable " + value + "\n");
+    	      }
+            os.writeBytes("pm disable me.miyou.game.by\n");
+            os.writeBytes("exit\n");
+            os.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void rootComandEnablePackage(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb);
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		os.writeBytes("su\n");
+    	    for (String value : Configure.map.values()) {
+    	        System.out.println(value);
+    	        os.writeBytes("pm enable " + value + "\n");
+    	      }
+            os.writeBytes("pm disable me.miyou.game.by\n");
+            os.writeBytes("exit\n");
+            os.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void pull(String sourcePath , String desPath) {
+    	try {
+    		exec("adb -s " + deviceId + " pull " + sourcePath + " " + desPath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public static String isAwake2(){
@@ -91,7 +140,6 @@ public class AdbUtils {
     	try {
 			exec(adb + "input tap " + x + " " + y);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

@@ -1,5 +1,7 @@
 package common;
 
+import java.util.HashMap;
+
 public class Configure {
 	public static boolean isPad;
 	public static String productModel;
@@ -7,4 +9,5 @@ public class Configure {
 	public static String deviceId;//deviceId
 	public static String appiumPort;
 	public static String logDir;//logĿ¼
+	public static HashMap<String, String> map;
 }

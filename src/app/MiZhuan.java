@@ -42,10 +42,10 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = false;
+	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = false;
-	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = false;
+	private boolean isInstallCompleted = true;
+	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -91,9 +91,11 @@ public class MiZhuan {
 	
 	public void start(TaskCallback callback){
 		try {
+			System.out.println("start");
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
+			System.out.println("error" + e.getMessage());
 			driver.quit();
 			e.printStackTrace();
 			callback.onRestartApp(driver);
@@ -209,7 +211,7 @@ public class MiZhuan {
 			callback.onRestartApp(driver);
 			return;
 		}
-		callback.onSuccess();
+		callback.onSuccess(driver);
 	}
 	
 	private int startLooklookTaskFromBottomGame() {
@@ -267,7 +269,6 @@ public class MiZhuan {
 		} catch (Exception e) {
 			e.printStackTrace();	
 			Log.log.info(e.getMessage());
-			driver.quit();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}

@@ -2,6 +2,8 @@ package app;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import callback.TaskCallback;
+import common.Configure;
 import io.appium.java_client.android.AndroidDriver;
 import manager.ExtraBonusManager;
 import manager.InstallAppManager;
@@ -33,7 +35,7 @@ public class MeiRiZhuanDian {
 		capabilities.setCapability("appActivity", ".ActCover");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
-		capabilities.setCapability("udid", "GEQABBE67019433");
+		capabilities.setCapability("udid", Configure.deviceId);
 //		extraBonusManager = new ExtraBonusManager(driver);
 //		looklookManager = new LooklookManager(driver);
 //		installAppManager = new InstallAppManager(driver);
@@ -47,7 +49,7 @@ public class MeiRiZhuanDian {
 		return meiRiZhuanDian;
 	}
 	
-	public void start() {
+	public void start(TaskCallback callback) {
 		
 	}
 
