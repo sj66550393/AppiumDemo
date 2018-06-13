@@ -89,14 +89,15 @@ public class MiZhuan {
 		return mizhuan;
 	}
 	
-	public int start(TaskCallback callback){		
+	public void start(TaskCallback callback){
 		try {
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			driver.quit();
 			e.printStackTrace();
-			return ResultDict.COMMAND_RESTART_APP;
+			callback.onRestartApp(driver);
+			return;
 		}	
 		if(DateUtils.getHour() == 1){
 			isExtraBonusCompleted = false;
@@ -113,16 +114,17 @@ public class MiZhuan {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-				driver.quit();
 				e.printStackTrace();
-				return ResultDict.COMMAND_RESTART_APP;
+				callback.onRestartApp(driver);
+				return;
 			}
 		}
 		if(isElementExistByString("签到")){
 			Log.log.info("开始签到任务");
 			result  = clickSignin();
 			if (ResultDict.COMMAND_SUCCESS != result)
-				return result;
+				callback.onRestartApp(driver);
+				return ;
 		} else {
 			isSigninCompleted = true;
 		}
@@ -151,27 +153,26 @@ public class MiZhuan {
 					Thread.sleep(4000);
 					AdbUtils.back();
 				} 
-			} catch (Exception e) {
-				driver.quit();
-				e.printStackTrace();
-				Log.log.info(e.getMessage());
-				return ResultDict.COMMAND_RESTART_APP;
+			} catch (Exception e) {			
+				e.printStackTrace();	
+				callback.onRestartApp(driver);
+				return;
 			}
 		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result) {
-				driver.quit();
-				return result;
+				callback.onRestartApp(driver);
+				return;
 			}
 		}
 		if (!isClickAdsCompleted) {
 			Log.log.info("开始看广告任务");
 			result = startClickAds();
 			if (ResultDict.COMMAND_SUCCESS != result) {
-				driver.quit();
-				return result;
+			   callback.onRestartApp(driver);
+				return;
 			}
 		}
 		if(!isInstallCompleted){
@@ -192,23 +193,23 @@ public class MiZhuan {
 				break;
 			}
 			if (result != ResultDict.COMMAND_SUCCESS) {
-				driver.quit();
-				return result;
+				callback.onRestartApp(driver);
+				return;
 			}
 		}
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
 			if (ResultDict.COMMAND_SUCCESS != result) {
-				driver.quit();
-				return result;
+				callback.onRestartApp(driver);
+				return;
 			}
 		}
-		driver.quit();
 		if(DateUtils.getHour() <= 12) {
 			isExtraBonusCompleted = false;
-			return ResultDict.COMMAND_RESTART_APP;
+			callback.onRestartApp(driver);
+			return;
 		}
-		return ResultDict.COMMAND_SUCCESS;
+		callback.onSuccess();
 	}
 	
 	private int startLooklookTaskFromBottomGame() {

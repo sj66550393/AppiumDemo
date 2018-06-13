@@ -1,6 +1,7 @@
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import io.appium.java_client.android.AndroidDriver;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -41,40 +42,11 @@ public class ShouZhuan {
 		if(args[3] != null){
 			Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 		}
-		init();
-		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
-		Runnable runnable = new Runnable() {
-
-			@Override
-			public void run() {
-				if (!MiZhuan.getInstance().isCompleted) {
-					MiZhuan.getInstance().start(new TaskCallback() {
-						
-						@Override
-						public void onSuccess() {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void onRestartApp() {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-				} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
-					MeiRiZhuanDian.getInstance().start();
-				}
-
-			}
-		};
-		
-		fixedThreadPool.execute(runnable);
-		
-//		Timer t = new Timer();
-//		t.schedule(new Task1(), 1000);
+		init();	
+		Timer t = new Timer();
+		t.schedule(new Task1(), 1000);
 	}
-
+	
 	private static void init() {
 		Configure.isPad = AdbUtils.isPad();
 		String productModel = AdbUtils.getProductModel();
@@ -99,37 +71,39 @@ class Task1 extends TimerTask {
 
 	@Override
 	public void run() {
-		switch (MiZhuan.getInstance().start()) {
-		case ResultDict.COMMAND_RESTART_APP:
-			fixedThreadPool.execute(new Runnable() {
-				@Override
-				public void run() {
-					Log.log.info("restart app");
-					System.out.println("isAwake = " + AdbUtils.isAwake2());
-					if (AdbUtils.isAwake2().equals("false")) {
-						try {
-							AdbUtils.clickPower();
-							Thread.sleep(2000);
-							AdbUtils.swipe(300, 900, 300, 300);
-							Thread.sleep(2000);
-							AdbUtils.swipe(100, 500, 600, 500);
-							Thread.sleep(2000);
-							AdbUtils.swipe(100, 500, 600, 500);
-							Thread.sleep(2000);
-							AdbUtils.swipe(300, 900, 300, 300);
-						} catch (Exception e) {
-						}
-					}
-					restartApp();
-				}
-			});
+		if (AdbUtils.isAwake2().equals("false")) {
+			try {
+				AdbUtils.clickPower();
+				Thread.sleep(2000);
+				AdbUtils.swipe(300, 900, 300, 300);
+				Thread.sleep(2000);
+				AdbUtils.swipe(100, 500, 600, 500);
+				Thread.sleep(2000);
+				AdbUtils.swipe(100, 500, 600, 500);
+				Thread.sleep(2000);
+				AdbUtils.swipe(300, 900, 300, 300);
+			} catch (Exception e) {
+			}
+		}
+		if (!MiZhuan.getInstance().isCompleted) {
+			MiZhuan.getInstance().start(new TaskCallback() {
 
-			break;
-		case ResultDict.COMMAND_SUCCESS:
-			Log.log.info("success");
-			break;
-		default:
-			break;
+				@Override
+				public void onSuccess() {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onRestartApp(AndroidDriver driver) {
+					driver.quit();
+					restartApp();
+					
+				}
+
+			});
+		} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
+			MeiRiZhuanDian.getInstance().start();
 		}
 	}
 	
@@ -139,8 +113,6 @@ class Task1 extends TimerTask {
 				AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 			}
 			Thread.sleep(3000);
-//			AdbUtils.startActivity("me.mizhuan/.ActCover");
-//			Thread.sleep(30000);
 			run();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
