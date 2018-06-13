@@ -685,7 +685,7 @@ public class MiZhuan {
 							
 							@Override
 							public void run() {
-								AdbUtils.rootComandDisablePackage(packageName);
+								AdbUtils.rootComandEnablePackage(packageName);
 							}
 						}).start();
 					}
@@ -704,6 +704,7 @@ public class MiZhuan {
 				Log.log.info("额外奖励开始计时。。。");
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
+				
 				if("".equals(lastPackage) && (!lastPackage.equals(name))){
 					AdbUtils.rootComandDisablePackage(lastPackage);
 				}

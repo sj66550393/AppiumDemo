@@ -69,12 +69,16 @@ public class ShouZhuan {
 		String productModel = AdbUtils.getProductModel();
 		Configure.productModel = productModel;
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
-//		AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDir);
-		File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
-		if(appInfoFile.exists()) {
-		String info = TextUtil.txt2StringUTF8(appInfoFile);
-		Configure.map = new Gson().fromJson(info, HashMap.class);
-//		AdbUtils.rootComandDisablePackage();
+		try {
+			AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDir);
+			File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
+			if(appInfoFile.exists()) {
+			String info = TextUtil.txt2StringUTF8(appInfoFile);
+			Configure.map = new Gson().fromJson(info, HashMap.class);
+			AdbUtils.rootComandDisablePackage();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		if(!file.exists()) {
 			file.mkdirs();
