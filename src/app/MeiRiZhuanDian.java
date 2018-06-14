@@ -14,6 +14,7 @@ import manager.ExtraBonusManager;
 import manager.InstallAppManager;
 import manager.LooklookManager;
 import manager.SigninManager;
+import utils.AdbUtils;
 import utils.Log;
 
 public class MeiRiZhuanDian {
@@ -97,11 +98,34 @@ public class MeiRiZhuanDian {
 		Thread.sleep(1000);
 		driver.findElement(By.name("Èí¼þÇ©µ½")).click();
 		Thread.sleep(1000);
+		boolean isFirst = true;
 		while(isElementExistById("com.adsmobile.mrzd:id/tm_item")) {
 			String appName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]")).getText();
 			String time = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]")).getText();
-		    System.out.println("appName = " + appName);
+		    
+			System.out.println("appName = " + appName);
 		    System.out.println("time = " + time);
+		    if(isFirst) {
+		    	String packageName2 = Configure.map.get(appName);
+				AdbUtils.rootComandEnablePackage(packageName2);
+				isFirst = false;
+		    }
+		    driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout")).click();
+		    if(isElementExistByXpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]")) {
+				String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]")).getText();
+				String packageName = Configure.map.get(secondAppName);
+				
+				if(packageName != null){
+					System.out.println("packageName = " + packageName);
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							AdbUtils.rootComandEnablePackage(packageName);
+						}
+					}).start();
+				}
+		    }
 		}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -123,6 +147,16 @@ public class MeiRiZhuanDian {
 	private boolean isElementExistByString(String name){
 		try{
 			WebElement element = driver.findElement(By.name(name));
+			element.isDisplayed();
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+	}
+	
+	private boolean isElementExistByXpath(String xpath) {
+		try{
+			WebElement element = driver.findElement(By.xpath(xpath));
 			element.isDisplayed();
 			return true;
 		}catch(Exception e) {

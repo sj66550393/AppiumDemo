@@ -34,8 +34,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0] + ":\\";
 			AdbUtils.storageDes = args[0] + ":\\";
 		} else {
-			Configure.logDir = "d:\\";
-			AdbUtils.storageDes = "d:\\";
+			Configure.logDir = "e:\\";
+			AdbUtils.storageDes = "e:\\";
 		}
 		if(args.length > 1 && args[1] != null) {
 		Configure.deviceId = args[1];
@@ -43,15 +43,15 @@ public class ShouZhuan {
 		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
 		} else {
-			Configure.deviceId = "GEQBBAE675434127";
-			AdbUtils.deviceId = "GEQBBAE675434127";
-			AdbUtils.storageDir = AdbUtils.storageDes + "GEQBBAE675434127" + "/";
-			AdbUtils.adb = "adb -s " + "GEQBBAE675434127"	+" shell ";
+			Configure.deviceId = "UCZHUGEU99999999";
+			AdbUtils.deviceId = "UCZHUGEU99999999";
+			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
+			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999"	+" shell ";
 		}
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4723";
+			Configure.appiumPort = "4731";
 		}
 		
 		if(args.length > 3 && args[3] != null){

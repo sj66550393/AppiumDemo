@@ -671,21 +671,45 @@ public class MiZhuan {
 			Thread.sleep(8000);
 			AdbUtils.swipe(300, 500, 300, 1000);
 			Thread.sleep(5000);
+			boolean isFirst = true;
 			while (true) {
 				Thread.sleep(1000);
 				if (isElementExistById("me.mizhuan:id/mituo_status")) {
 					String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
 					String type = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo")).getText().substring(1, 3);
+					if(isFirst) {
+						String firstAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]")).getText();
+						String packageName2 = Configure.map.get(firstAppName);
+						if (packageName2 == null) {
+							for (String key : Configure.map.keySet()) {
+								if (key.contains(firstAppName) || firstAppName.contains(key)) {
+									packageName2 = Configure.map.get(key);
+									break;
+								}
+							}
+						}
+						AdbUtils.rootComandEnablePackage(packageName2);
+						isFirst = false;
+					}
 					String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,2)]/android.widget.TextView[contains(@index,1)]")).getText();
 					System.out.println("name = " + secondAppName);
 					String packageName = Configure.map.get(secondAppName);
-					if(packageName != null){
-						System.out.println("packageName = " + packageName);
+					if (packageName == null) {
+						for (String key : Configure.map.keySet()) {
+							if (key.contains(secondAppName) || secondAppName.contains(key)) {
+								packageName = Configure.map.get(key);
+								break;
+							}
+						}
+					}
+					final String finalPackageName = packageName;
+					if(finalPackageName != null){
+						System.out.println("packageName = " + finalPackageName);
 						new Thread(new Runnable() {
 							
 							@Override
 							public void run() {
-								AdbUtils.rootComandEnablePackage(packageName);
+								AdbUtils.rootComandEnablePackage(finalPackageName);
 							}
 						}).start();
 					}

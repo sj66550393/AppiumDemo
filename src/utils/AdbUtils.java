@@ -267,6 +267,7 @@ public class AdbUtils {
     public static boolean isPad(){
     	try {
     		String str = printf(adb + "wm size");
+    		System.out.println(str);
     		String[] splitStr = str.split(":")[1].split("x");
     		int width = Integer.parseInt(splitStr[0].trim());
     		int height = Integer.parseInt(splitStr[1].trim());
