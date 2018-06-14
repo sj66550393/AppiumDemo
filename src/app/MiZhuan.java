@@ -672,13 +672,14 @@ public class MiZhuan {
 			AdbUtils.swipe(300, 500, 300, 1000);
 			Thread.sleep(5000);
 			boolean isFirst = true;
+			int position = 1;
 			while (true) {
 				Thread.sleep(1000);
-				if (isElementExistById("me.mizhuan:id/mituo_status")) {
-					String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
-					String type = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo")).getText().substring(1, 3);
+				if (isElementExistByXpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")) {
+					String mituo = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).getText();
+					String type = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+position+")]/android.widget.TextView[contains(@index,2)]")).getText().substring(1, 3);
 					if(isFirst) {
-						String firstAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]")).getText();
+						String firstAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+position+")]/android.widget.TextView[contains(@index,1)]")).getText();
 						String packageName2 = Configure.map.get(firstAppName);
 						if (packageName2 == null) {
 							for (String key : Configure.map.keySet()) {
@@ -688,10 +689,15 @@ public class MiZhuan {
 								}
 							}
 						}
+						if(packageName2 != null){
 						AdbUtils.rootComandEnablePackage(packageName2);
+						} else{
+							position++;
+							continue;
+						}
 						isFirst = false;
 					}
-					String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,2)]/android.widget.TextView[contains(@index,1)]")).getText();
+					String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+(position+1)+")]/android.widget.TextView[contains(@index,1)]")).getText();
 					System.out.println("name = " + secondAppName);
 					String packageName = Configure.map.get(secondAppName);
 					if (packageName == null) {
@@ -712,15 +718,14 @@ public class MiZhuan {
 								AdbUtils.rootComandEnablePackage(finalPackageName);
 							}
 						}).start();
-					}
-				
+					} 
 					System.out.println("type = " + type);
 					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");
 						isExtraBonusCompleted = true;
 						break;
 					} else {
-						driver.findElement(By.id("me.mizhuan:id/mituo_status")).click();
+						driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).click();
 					}
 				} else {
 					continue;
@@ -1237,6 +1242,16 @@ public class MiZhuan {
 	private boolean isElementExistById(String id){
 		try{
 			WebElement element = driver.findElement(By.id(id));
+			element.isDisplayed();
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+	}
+	
+	private boolean isElementExistByXpath(String xpath) {
+		try{
+			WebElement element = driver.findElement(By.xpath(xpath));
 			element.isDisplayed();
 			return true;
 		}catch(Exception e) {

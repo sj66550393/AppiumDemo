@@ -19,10 +19,11 @@ import utils.Log;
 
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
-	public boolean isCompleted;
+	public boolean isCompleted = false;
 	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = false;
-	private boolean isInstallCompleted = true;
+	private boolean isInstallCompleted = false;
+	private int DEFAULT_INSTALL_COUNT  = 2;
 	private int choujiangji = 0; //欢乐抽奖机
 	private int yangshen = 0; //养生之道
 	private int paihongbao = 0; //全民派红包
@@ -41,7 +42,7 @@ public class MeiRiZhuanDian {
 		capabilities.setCapability("platformName", "Android");
 		capabilities.setCapability("platformVersion", "5.1.1");
 		capabilities.setCapability("appPackage", "com.adsmobile.mrzd");
-		capabilities.setCapability("appActivity", ".ActCover");
+		capabilities.setCapability("appActivity", ".ui.activity.MrzdAdSplashActivity");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
 		capabilities.setCapability("udid", Configure.deviceId);
@@ -52,7 +53,7 @@ public class MeiRiZhuanDian {
 	}
 	
 	public static MeiRiZhuanDian getInstance() {
-		if(meiRiZhuanDian != null) {
+		if(meiRiZhuanDian == null) {
 			meiRiZhuanDian = new MeiRiZhuanDian();
 		}
 		return meiRiZhuanDian;
@@ -90,22 +91,7 @@ public class MeiRiZhuanDian {
 			}
 		}
 		if(!isInstallCompleted){
-			Log.log.info("安装任务开始");
-			switch (Configure.productModel) {
-			case "[OPPO A37m]":
-				result = installApp_OPPO(driver);
-				break;
-			case "[CUN-TL00]":
-				result = installApp_CUN_TL(driver);
-				break;
-			case "[Lenovo TB3-X70N]":
-				break;
-			case "[CUN-AL00]":
-				result = installApp_CUN_AL(driver);
-				break;
-			default:
-				break;
-			}
+			result = install();
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 				return;
@@ -114,11 +100,53 @@ public class MeiRiZhuanDian {
 	}
 	
 	private int install() {
+		int result = ResultDict.COMMAND_SUCCESS;
 		try {
 			driver.findElement(By.name("快速任务")).click();
 			Thread.sleep(5000);
 			driver.findElement(By.name("在线任务")).click();
 			Thread.sleep(1000);
+			int installCount = 0;
+			while (installCount < DEFAULT_INSTALL_COUNT) {
+				if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
+					driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
+					Thread.sleep(2000);
+					if(isElementExistByString("下载")) {
+						driver.findElement(By.name("下载")).click();
+						Thread.sleep(60*1000);
+						switch (Configure.productModel) {
+						case "[OPPO A37m]":
+							result = installApp_OPPO(driver);
+							break;
+						case "[CUN-TL00]":
+							result = installApp_CUN_TL(driver);
+							break;
+						case "[Lenovo TB3-X70N]":
+							break;
+						case "[CUN-AL00]":
+							result = installApp_CUN_AL(driver);
+							break;
+						default:
+							break;
+						}
+						if(result != ResultDict.COMMAND_SUCCESS) {
+							return result;
+						} else {
+							AdbUtils.back();
+							installCount++;
+							Thread.sleep(2000);
+							if(isElementExistByString("不了")){
+								driver.findElement(By.name("不了")).click();
+								Thread.sleep(1000);
+							}
+						}
+					} else{
+						return ResultDict.COMMAND_RESTART_APP;
+					}
+				} else {
+					break;
+				}
+			}
 		}catch(Exception e) {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
@@ -137,8 +165,26 @@ public class MeiRiZhuanDian {
 	}
 
 	private int installApp_OPPO(AndroidDriver driver2) {
-		// TODO Auto-generated method stub
-		return 0;
+		try{
+		driver.findElement(By.name("安装")).click();
+		Thread.sleep(30 * 1000);
+		driver.findElement(By.name("完成")).click();
+		Thread.sleep(3000);
+		driver.findElement(By.name("重新体验")).click();
+		for (int j = 0; j < 5; j++) {
+			if(driver.getPageSource().contains("同意并继续")){
+				driver.findElement(By.name("同意并继续")).click();
+				Thread.sleep(2000);
+			}
+		}
+		Log.log.info("开始体验5分钟。。。");
+		Thread.sleep(5*60* 1000);
+		AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+		Thread.sleep(2000);
+		return ResultDict.COMMAND_SUCCESS;
+		}catch (Exception e) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 	}
 
 	private int startSigninAppTask() {

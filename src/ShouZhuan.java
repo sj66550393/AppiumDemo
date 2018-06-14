@@ -34,8 +34,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0] + ":\\";
 			AdbUtils.storageDes = args[0] + ":\\";
 		} else {
-			Configure.logDir = "e:\\";
-			AdbUtils.storageDes = "e:\\";
+			Configure.logDir = "d:\\";
+			AdbUtils.storageDes = "d:\\";
 		}
 		if(args.length > 1 && args[1] != null) {
 		Configure.deviceId = args[1];
@@ -70,7 +70,7 @@ public class ShouZhuan {
 		Configure.productModel = productModel;
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
 		try {
-			AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDir);
+			AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId);
 			File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
 			if(appInfoFile.exists()) {
 			String info = TextUtil.txt2StringUTF8(appInfoFile);
@@ -113,38 +113,40 @@ class Task1 extends TimerTask {
 			} catch (Exception e) {
 			}
 		}
-		if (!MiZhuan.getInstance().isCompleted) {
-			MiZhuan.getInstance().start(new TaskCallback() {
-
-				@Override
-				public void onSuccess(AndroidDriver driver) {
-					MiZhuan.getInstance().isCompleted = true;
-					driver.quit();
-					restartApp();
-				}
-
-				@Override
-				public void onRestartApp(AndroidDriver driver) {
-					driver.quit();
-					restartApp();
-					
-				}
-
-			});
-		} else 
+//		if (!MiZhuan.getInstance().isCompleted) {
+//			MiZhuan.getInstance().start(new TaskCallback() {
+//
+//				@Override
+//				public void onSuccess(AndroidDriver driver) {
+//					MiZhuan.getInstance().isCompleted = true;
+//					driver.quit();
+//					restartApp();
+//				}
+//
+//				@Override
+//				public void onRestartApp(AndroidDriver driver) {
+//					driver.quit();
+//					restartApp();
+//					
+//				}
+//
+//			});
+//		} else 
 		if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 				
 				@Override
 				public void onSuccess(AndroidDriver driver) {
-					// TODO Auto-generated method stub
+					MeiRiZhuanDian.getInstance().isCompleted = true;
+					driver.quit();
+					restartApp();
 					
 				}
 				
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
-					// TODO Auto-generated method stub
-					
+					driver.quit();
+					restartApp();
 				}
 			});
 		}
