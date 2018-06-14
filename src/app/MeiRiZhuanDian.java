@@ -89,8 +89,58 @@ public class MeiRiZhuanDian {
 				return;
 			}
 		}
+		if(!isInstallCompleted){
+			Log.log.info("安装任务开始");
+			switch (Configure.productModel) {
+			case "[OPPO A37m]":
+				result = installApp_OPPO(driver);
+				break;
+			case "[CUN-TL00]":
+				result = installApp_CUN_TL(driver);
+				break;
+			case "[Lenovo TB3-X70N]":
+				break;
+			case "[CUN-AL00]":
+				result = installApp_CUN_AL(driver);
+				break;
+			default:
+				break;
+			}
+			if (result != ResultDict.COMMAND_SUCCESS) {
+				callback.onRestartApp(driver);
+				return;
+			}
+		}
 	}
 	
+	private int install() {
+		try {
+			driver.findElement(By.name("快速任务")).click();
+			Thread.sleep(5000);
+			driver.findElement(By.name("在线任务")).click();
+			Thread.sleep(1000);
+		}catch(Exception e) {
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+		return ResultDict.COMMAND_SUCCESS;
+	}
+	
+	
+	private int installApp_CUN_AL(AndroidDriver driver2) {
+		
+		return 0;
+	}
+
+	private int installApp_CUN_TL(AndroidDriver driver2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int installApp_OPPO(AndroidDriver driver2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private int startSigninAppTask() {
 		try {
 		// 点击应用赚
@@ -98,36 +148,56 @@ public class MeiRiZhuanDian {
 		Thread.sleep(1000);
 		driver.findElement(By.name("软件签到")).click();
 		Thread.sleep(1000);
+		String lastPackage = "";
 		boolean isFirst = true;
-		while(isElementExistById("com.adsmobile.mrzd:id/tm_item")) {
-			String appName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]")).getText();
-			String time = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]")).getText();
-		    
-			System.out.println("appName = " + appName);
-		    System.out.println("time = " + time);
-		    if(isFirst) {
-		    	String packageName2 = Configure.map.get(appName);
-				AdbUtils.rootComandEnablePackage(packageName2);
-				isFirst = false;
-		    }
-		    driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout")).click();
-		    if(isElementExistByXpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]")) {
-				String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]")).getText();
-				String packageName = Configure.map.get(secondAppName);
-				
-				if(packageName != null){
-					System.out.println("packageName = " + packageName);
-					new Thread(new Runnable() {
-						
-						@Override
-						public void run() {
-							AdbUtils.rootComandEnablePackage(packageName);
-						}
-					}).start();
+			while (isElementExistById("com.adsmobile.mrzd:id/tm_item")) {
+				String appName = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+						.getText();
+				String time = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
+						.getText();
+				int experienceTime = Integer.parseInt(time.substring(2, 3));
+				System.out.println("appName = " + appName);
+				System.out.println("time = " + time);
+				if (isFirst) {
+					String packageName2 = Configure.map.get(appName);
+					AdbUtils.rootComandEnablePackage(packageName2);
+					isFirst = false;
 				}
-		    }
-		}
-		} catch(Exception e) {
+				driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+						.click();
+				if (isElementExistByXpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]")) {
+					String secondAppName = driver.findElement(By.xpath(
+							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
+							.getText();
+					String packageName = Configure.map.get(secondAppName);
+
+					if (packageName != null) {
+						System.out.println("packageName = " + packageName);
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								AdbUtils.rootComandEnablePackage(packageName);
+							}
+						}).start();
+					}
+				}
+				Thread.sleep(experienceTime * 70);
+				String name = AdbUtils.getCurrentPackage();
+				if ("".equals(lastPackage) && (!lastPackage.equals(name))) {
+					AdbUtils.rootComandDisablePackage(lastPackage);
+				}
+				lastPackage = AdbUtils.getCurrentPackage();
+				AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+				Log.log.info("kill " + name);
+				Thread.sleep(5000);
+				
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
