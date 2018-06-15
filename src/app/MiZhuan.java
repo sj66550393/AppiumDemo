@@ -42,9 +42,9 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = false;
-	private boolean isLooklookCompleted = false;
-	private boolean isInstallCompleted = true;
+	private boolean isExtraBonusCompleted = true;
+	private boolean isLooklookCompleted = true;
+	private boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
@@ -675,11 +675,13 @@ public class MiZhuan {
 			int position = 1;
 			while (true) {
 				Thread.sleep(1000);
-				if (isElementExistByXpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")) {
-					String mituo = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).getText();
-					String type = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+position+")]/android.widget.TextView[contains(@index,2)]")).getText().substring(1, 3);
+				if (isElementExistByXpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")) {
+					String mituo = driver.findElement(By.xpath("//android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).getText();
+					String type = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,2)]")).getText().substring(1, 3);
+					System.out.println("mituo = " + mituo);
+					System.out.println("type = " + type);
 					if(isFirst) {
-						String firstAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+position+")]/android.widget.TextView[contains(@index,1)]")).getText();
+						String firstAppName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
 						String packageName2 = Configure.map.get(firstAppName);
 						if (packageName2 == null) {
 							for (String key : Configure.map.keySet()) {
@@ -697,7 +699,7 @@ public class MiZhuan {
 						}
 						isFirst = false;
 					}
-					String secondAppName = driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+(position+1)+")]/android.widget.TextView[contains(@index,1)]")).getText();
+					String secondAppName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+(position+1)+")]/android.widget.TextView[contains(@index,1)]")).getText();
 					System.out.println("name = " + secondAppName);
 					String packageName = Configure.map.get(secondAppName);
 					if (packageName == null) {
@@ -725,7 +727,7 @@ public class MiZhuan {
 						isExtraBonusCompleted = true;
 						break;
 					} else {
-						driver.findElement(By.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.LinearLayout/android.view.View/android.widget.ListView/android.widget.RelativeLayout[contain(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).click();
+						driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).click();
 					}
 				} else {
 					continue;
@@ -1255,6 +1257,7 @@ public class MiZhuan {
 			element.isDisplayed();
 			return true;
 		}catch(Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
