@@ -39,8 +39,7 @@ public class AdbUtils {
     	        	continue;
     	        }
     	        os.writeBytes("pm disable " + value + "\n");
-    	      }
-            os.writeBytes("pm disable me.miyou.game.by\n");
+    	      }       
             os.writeBytes("exit\n");
             os.flush();
 		} catch (Exception e) {
@@ -51,14 +50,32 @@ public class AdbUtils {
     
     public static void rootComandDisablePackage(String packageName){
     	try {
-    		Process process = Runtime.getRuntime().exec(adb);
+    		BufferedReader input = null;
+    		System.out.println("adb = " + adb);
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
-    		os.writeBytes("su\n");
-            os.writeBytes("pm disable " + packageName + "\n");
+    		Thread.sleep(1000);
+            os.writeBytes("pm enable " + packageName + "\n");
             os.writeBytes("exit\n");
             os.flush();
+            String line = input.readLine();
+            for (int i = 0; i < 15; i++) {             
+                line = input.readLine();
+                System.out.println("line = " + line);
+             }
+            try {
+            	System.out.println("process.waitFor();");
+            	System.out.println("result = " + process.waitFor());
+            	System.out.println("after process");
+                System.out.println("process value = " + process.exitValue());
+                
+            } catch(InterruptedException e) { 
+                System.out.println("error = " + e.getMessage() );
+            } 
+            System.out.println("end");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("error");
 			e.printStackTrace();
 		}
     }
@@ -71,6 +88,13 @@ public class AdbUtils {
             os.writeBytes("pm enable " + packageName + "\n");
             os.writeBytes("exit\n");
             os.flush();
+            try {
+            	process.waitFor(); 
+                System.out.println("process value = " + process.exitValue());
+                
+            } catch(InterruptedException e) { 
+                System.out.println("error = " + e.getMessage() );
+            } 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

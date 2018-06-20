@@ -124,9 +124,10 @@ public class MiZhuan {
 		if(isElementExistByString("签到")){
 			Log.log.info("开始签到任务");
 			result  = clickSignin();
-			if (ResultDict.COMMAND_SUCCESS != result)
+			if (ResultDict.COMMAND_SUCCESS != result) {
 				callback.onRestartApp(driver);
 				return ;
+			}
 		} else {
 			isSigninCompleted = true;
 		}

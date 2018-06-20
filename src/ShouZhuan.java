@@ -1,4 +1,6 @@
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import io.appium.java_client.android.AndroidDriver;
@@ -51,7 +53,7 @@ public class ShouZhuan {
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4731";
+			Configure.appiumPort = "4801";
 		}
 		
 		if(args.length > 3 && args[3] != null){
@@ -60,8 +62,23 @@ public class ShouZhuan {
 			Configure.Mizhuan_instlal_count = 10;
 		}
 		init();	
-		Timer t = new Timer();
-		t.schedule(new Task1(), 1000);
+		AdbUtils.rootComandDisablePackage("com.adsmobile.mrzd");
+//		Process process;
+//		try {
+//			System.out.println(AdbUtils.adb);
+//			process = Runtime.getRuntime().exec(AdbUtils.adb);
+//			DataOutputStream os = new DataOutputStream(process.getOutputStream());
+////			os.writeBytes("su\n");
+//			os.writeBytes("pm disable com.jingdong.app.mall\n");
+//			os.writeBytes("exit\n");
+//	        os.flush();
+//		} catch (IOException e) {
+//			System.out.println("error");
+//			e.printStackTrace();
+//		}
+		
+//		Timer t = new Timer();
+//		t.schedule(new Task1(), 1000);
 	}
 	
 	private static void init() {
@@ -78,6 +95,7 @@ public class ShouZhuan {
 			AdbUtils.rootComandDisablePackage();
 			}
 		} catch (Exception e) {
+			System.out.println("error = " + e.getMessage());
 			e.printStackTrace();
 		}
 		if(!file.exists()) {
