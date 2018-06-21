@@ -30,18 +30,21 @@ public class AdbUtils {
     
     public static void rootComandDisablePackage(){
     	try {
-    		Process process = Runtime.getRuntime().exec(adb);
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
-    		os.writeBytes("su\n");
+    		Thread.sleep(1000);
     	    for (String value : Configure.map.values()) {
     	        System.out.println(value);
     	        if(value.equals("me.mizhuan") || value.equals("io.appium.unlock")|| value.equals("io.appium.settings") || value.equals("com.jiesong.myapplicationlist") || value.equals("com.adsmobile.mrzd")){
     	        	continue;
     	        }
+    	        Thread.sleep(50);
     	        os.writeBytes("pm disable " + value + "\n");
     	      }       
+    	    Thread.sleep(1000);
             os.writeBytes("exit\n");
             os.flush();
+            os.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,7 +59,7 @@ public class AdbUtils {
     		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
     		Thread.sleep(1000);
-            os.writeBytes("pm enable " + packageName + "\n");
+            os.writeBytes("pm disable " + packageName + "\n");
             os.writeBytes("exit\n");
             os.flush();
             String line = input.readLine();
@@ -82,19 +85,29 @@ public class AdbUtils {
     
     public static void rootComandEnablePackage(String packageName){
     	try {
-    		Process process = Runtime.getRuntime().exec(adb);
+    		BufferedReader input = null;
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
-    		os.writeBytes("su\n");
+    		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    		Thread.sleep(1000);
             os.writeBytes("pm enable " + packageName + "\n");
             os.writeBytes("exit\n");
             os.flush();
+            String line = input.readLine();
+            for (int i = 0; i < 15; i++) {             
+                line = input.readLine();
+                System.out.println("line = " + line);
+             }
             try {
-            	process.waitFor(); 
+            	System.out.println("process.waitFor();");
+            	System.out.println("result = " + process.waitFor());
+            	System.out.println("after process");
                 System.out.println("process value = " + process.exitValue());
                 
             } catch(InterruptedException e) { 
                 System.out.println("error = " + e.getMessage() );
             } 
+            System.out.println("end");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,9 +116,9 @@ public class AdbUtils {
     
     public static void rootComandEnablePackage(){
     	try {
-    		Process process = Runtime.getRuntime().exec(adb);
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
-    		os.writeBytes("su\n");
+    		Thread.sleep(1000);
     	    for (String value : Configure.map.values()) {
     	        System.out.println(value);
     	        os.writeBytes("pm enable " + value + "\n");

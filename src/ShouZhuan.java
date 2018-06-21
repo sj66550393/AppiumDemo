@@ -45,10 +45,10 @@ public class ShouZhuan {
 		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
 		} else {
-			Configure.deviceId = "69add09e";
-			AdbUtils.deviceId = "69add09e";
-			AdbUtils.storageDir = AdbUtils.storageDes + "69add09e" + "/";
-			AdbUtils.adb = "adb -s " + "69add09e"	+" shell ";
+			Configure.deviceId = "78ae61e";
+			AdbUtils.deviceId = "78ae61e";
+			AdbUtils.storageDir = AdbUtils.storageDes + "78ae61e" + "/";
+			AdbUtils.adb = "adb -s " + "78ae61e"	+" shell ";
 		}
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
@@ -62,23 +62,8 @@ public class ShouZhuan {
 			Configure.Mizhuan_instlal_count = 10;
 		}
 		init();	
-		AdbUtils.rootComandDisablePackage("com.adsmobile.mrzd");
-//		Process process;
-//		try {
-//			System.out.println(AdbUtils.adb);
-//			process = Runtime.getRuntime().exec(AdbUtils.adb);
-//			DataOutputStream os = new DataOutputStream(process.getOutputStream());
-////			os.writeBytes("su\n");
-//			os.writeBytes("pm disable com.jingdong.app.mall\n");
-//			os.writeBytes("exit\n");
-//	        os.flush();
-//		} catch (IOException e) {
-//			System.out.println("error");
-//			e.printStackTrace();
-//		}
-		
-//		Timer t = new Timer();
-//		t.schedule(new Task1(), 1000);
+		Timer t = new Timer();
+		t.schedule(new Task1(), 1000);
 	}
 	
 	private static void init() {

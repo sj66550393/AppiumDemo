@@ -42,9 +42,9 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = true;
+	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = true;
-	private boolean isInstallCompleted = false;
+	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
