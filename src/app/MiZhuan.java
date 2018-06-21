@@ -826,15 +826,15 @@ public class MiZhuan {
 							}
 						}
 						installCount++;
-						Log.log.info("�Ѱ�װ" + installCount + "��Ӧ��");
+						Log.log.info("已安装" + installCount + "个应用");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						while (isElementExistByString("��")) {
+						while (isElementExistByString("打开")) {
 							driver.pressKeyCode(AndroidKeyCode.BACK);
 							Thread.sleep(2000);
 						}
-					} else if ("��������".equals(buttomButton.getText())) {
+					} else if ("继续体验".equals(buttomButton.getText())) {
 						Log.log.info("�����������");
 						buttomButton.click();
 						Thread.sleep(20 *1000);
