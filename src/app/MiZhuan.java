@@ -29,16 +29,16 @@ public class MiZhuan {
 	
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
-	private int redPackageNum = 0; // ²ğºì°ü 
-	private int todayMustNum = 0; // ½ñÈÕ±Ø¿´ 
-	private int entertainmentNews = 0; // ÓéÀÖ±¬ÁÏ 
-	private int ThreeSixZeroNewsNum = 0; // 360ĞÂÎÅ 
-	private int HotNewsNum = 0; // ÈÈµãĞÂÎÅ 
-	private int turnturnNum = 0; // ·­·­ÀÖ 
-	private int tuituiNum = 0; // ÍÆÍÆÀÖ 
-	private int goldNewsNum = 0; // µã½ğÍ·Ìõ 
-	private int eighteenNum = 0; // 18Í·Ìõ
-	private int loveNewsNum = 0; // ÎÒ°®Í·Ìõ 
+	private int redPackageNum = 0; // æ‹†çº¢åŒ…
+	private int todayMustNum = 0; // ä»Šæ—¥å¿…çœ‹
+	private int entertainmentNews = 0; // å¨±ä¹çˆ†æ–™
+	private int ThreeSixZeroNewsNum = 0; // 360æ–°é—»
+	private int HotNewsNum = 0; // çƒ­ç‚¹æ–°é—»
+	private int turnturnNum = 0; // ç¿»ç¿»ä¹
+	private int tuituiNum = 0; // æ¨æ¨ä¹ 
+	private int goldNewsNum = 0; // ç‚¹é‡‘å¤´æ¡ 
+	private int eighteenNum = 0; // 18å¤´æ¡
+	private int loveNewsNum = 0; // æˆ‘çˆ±å¤´æ¡ 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
@@ -121,8 +121,8 @@ public class MiZhuan {
 				return;
 			}
 		}
-		if(isElementExistByString("Ç©µ½")){
-			Log.log.info("¿ªÊ¼Ç©µ½ÈÎÎñ");
+		if(isElementExistByString("ç­¾åˆ°")){
+			Log.log.info("å¼€å§‹ç­¾åˆ°ä»»åŠ¡");
 			result  = clickSignin();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 				callback.onRestartApp(driver);
@@ -131,27 +131,27 @@ public class MiZhuan {
 		} else {
 			isSigninCompleted = true;
 		}
-		if(isElementExistByString("ÉÏÎçÌ½°à") || isElementExistByString("ÖĞÎçÌ½°à") || isElementExistByString("ÏÂÎçÌ½°à") || isElementExistByString("ÍíÉÏÌ½°à")) {
+		if(isElementExistByString("ä¸Šåˆæ¢ç­") || isElementExistByString("ä¸­åˆæ¢ç­") || isElementExistByString("ä¸‹åˆæ¢ç­") || isElementExistByString("æ™šä¸Šæ¢ç­")) {
 			try {
-				Log.log.info("µã»÷Ì½°à");
+				Log.log.info("ç‚¹å‡»æ¢ç­");
 //				driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
-				if(isElementExistByString("ÉÏÎçÌ½°à")){
-					driver.findElement(By.name("ÉÏÎçÌ½°à")).click();
+				if(isElementExistByString("ä¸Šåˆæ¢ç­")){
+					driver.findElement(By.name("ä¸Šåˆæ¢ç­")).click();
 					isSigninMorning = true;
 					Thread.sleep(4000);
 					AdbUtils.back();
-				} else if(isElementExistByString("ÖĞÎçÌ½°à")) {
-					driver.findElement(By.name("ÖĞÎçÌ½°à")).click();
+				} else if(isElementExistByString("ä¸­åˆæ¢ç­")) {
+					driver.findElement(By.name("ä¸­åˆæ¢ç­")).click();
 					isSigninNoon = true;
 					Thread.sleep(4000);
 					AdbUtils.back();
-				} else if(isElementExistByString("ÏÂÎçÌ½°à")) {
-					driver.findElement(By.name("ÏÂÎçÌ½°à")).click();
+				} else if(isElementExistByString("ä¸‹åˆæ¢ç­")) {
+					driver.findElement(By.name("ä¸‹åˆæ¢ç­")).click();
 					isSigninAfternoon = true;
 					Thread.sleep(4000);
 					AdbUtils.back();
-				} else if(isElementExistByString("ÍíÉÏÌ½°à")) {
-					driver.findElement(By.name("ÍíÉÏÌ½°à")).click();
+				} else if(isElementExistByString("æ™šä¸Šæ¢ç­")) {
+					driver.findElement(By.name("æ™šä¸Šæ¢ç­")).click();
 					isSigninNight = true;
 					Thread.sleep(4000);
 					AdbUtils.back();
@@ -163,7 +163,7 @@ public class MiZhuan {
 			}
 		}
 		if (!isExtraBonusCompleted) {
-			Log.log.info("¿ªÊ¼¶îÍâÈÎÎñ");
+			Log.log.info("å¼€å§‹é¢å¤–ä»»åŠ¡");
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 				callback.onRestartApp(driver);
@@ -171,7 +171,7 @@ public class MiZhuan {
 			}
 		}
 		if (!isClickAdsCompleted) {
-			Log.log.info("¿ªÊ¼¿´¹ã¸æÈÎÎñ");
+			Log.log.info("å¼€å§‹çœ‹å¹¿å‘Šä»»åŠ¡");
 			result = startClickAds();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 			   callback.onRestartApp(driver);
@@ -179,7 +179,7 @@ public class MiZhuan {
 			}
 		}
 		if(!isInstallCompleted){
-			Log.log.info("°²×°ÈÎÎñ¿ªÊ¼");
+			Log.log.info("å¼€å§‹å®‰è£…ä»»åŠ¡");
 			switch (Configure.productModel) {
 			case "[OPPO A37m]":
 				result = installApp_OPPO(driver);
@@ -218,8 +218,8 @@ public class MiZhuan {
 	private int startLooklookTaskFromBottomGame() {
 
 		try {
-			Log.log.info("µã»÷ÓÎÏ·×¬");
-			driver.findElement(By.name("ÓÎÏ·×¬"))
+			Log.log.info("ç‚¹å‡»æ¸¸æˆèµš");
+			driver.findElement(By.name("æ¸¸æˆèµš"))
 			.click();
 			Thread.sleep(8000);
 			for (int i = 0; i < 5; i++) {
@@ -274,30 +274,30 @@ public class MiZhuan {
 		}
 	}
 
-	// ÍÆÍÆÀÖ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean clickTuitui() {
 		try {
 			Thread.sleep(3000);
-			if(isElementExistByString("ÖªµÀÁË")) {
+			if(isElementExistByString("ÖªçŸ¥é“äº†")) {
 				System.out.println("find know");
-				driver.findElement(By.name("ÖªµÀÁË")).click();
+				driver.findElement(By.name("ÖªçŸ¥é“äº†")).click();
 				isTuituiComleted = true;
 				return true;
 			}
-			if(!isElementExistByString("ÍÆÍÆÀÖ")){
+			if(!isElementExistByString("æ¨æ¨ä¹")){
 				return false;
 			}
 			for (; tuituiNum < Contants.TUITUI_NUM; tuituiNum++) {
 				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
 					return false;
 				}
-				driver.findElement(By.name("ÍÆÍÆÀÖ")).click();
+				driver.findElement(By.name("æ¨æ¨ä¹")).click();
 				Thread.sleep(10 * 1000);
-				if (isElementExistByString("½ñÈÕÈÎÎñÒÑÍê³É")) {
+				if (isElementExistByString("ä»Šæ—¥ä»»åŠ¡å·²å®Œæˆ")) {
 					AdbUtils.back();
 					return true;
 				}
-				driver.findElement(By.name("·µ»Ø")).click();
+				driver.findElement(By.name("è¿”å›")).click();
 			}
 			return true;
 		} catch (Exception e) {
@@ -307,26 +307,26 @@ public class MiZhuan {
 		}
 	}
 
-	// ·­·­ÀÖ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean clickTurnturn() {
 		try {
 			Thread.sleep(3000);
-			if(isElementExistByString("ÖªµÀÁË")) {
+			if(isElementExistByString("ÖªçŸ¥é“äº†")) {
 				System.out.println("find know");
-				driver.findElement(By.name("ÖªµÀÁË")).click();
+				driver.findElement(By.name("ÖªçŸ¥é“äº†")).click();
 				isTurnturnComleted = true;
 				return true;
 			}
-			if(!isElementExistByString("·­·­ÀÖ")){
+			if(!isElementExistByString("ç¿»ç¿»ä¹")){
 				return true;
 			}
 			for (; tuituiNum < Contants.TURNTURN_NUM; tuituiNum++) {
 				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
 					return false;
 				}
-				driver.findElement(By.name("·­·­ÀÖ")).click();
+				driver.findElement(By.name("ç¿»ç¿»ä¹")).click();
 				Thread.sleep(10 * 1000);
-				if (isElementExistByString("½ñÈÕÈÎÎñÒÑÍê³É")) {
+				if (isElementExistByString("ä»Šæ—¥ä»»åŠ¡å·²å®Œæˆ")) {
 					AdbUtils.back();
 					AdbUtils.back();
 					return true;
@@ -342,30 +342,30 @@ public class MiZhuan {
 		}
 	}
 
-	// ²ğºì°ü
+	// æ‹†çº¢åŒ…
 	public boolean clickRedPackage() {
 		try {
 			Thread.sleep(3000);
-			if(isElementExistByString("ÖªµÀÁË")) {
+			if(isElementExistByString("ÖªçŸ¥é“äº†")) {
 				System.out.println("find know");
-				driver.findElement(By.name("ÖªµÀÁË")).click();
+				driver.findElement(By.name("ÖªçŸ¥é“äº†")).click();
 				isPackageCompleted = true;
 				return true;
 			}
-			if(!isElementExistByString("²ğºì°ü")){
+			if(!isElementExistByString("æ‹†çº¢åŒ…")){
 				return true;
 			}
 			for (; redPackageNum < Contants.RED_PACKAGES_NUM; redPackageNum++) {
 				if(timeSwitcher() != ResultDict.COMMAND_SUCCESS){
 					return false;
 				}
-				driver.findElement(By.name("²ğºì°ü")).click();
+				driver.findElement(By.name("æ‹†çº¢åŒ…")).click();
 				Thread.sleep(10000);
-				if (isElementExistByString("½ñÈÕÈÎÎñÒÑÍê³É")) {
-					driver.findElement(By.name("·µ»Ø")).click();
+				if (isElementExistByString("ä»Šæ—¥ä»»åŠ¡å·²å®Œæˆ")) {
+					driver.findElement(By.name("è¿”å›")).click();
 					return true;
 				}
-				driver.findElement(By.name("·µ»Ø")).click();
+				driver.findElement(By.name("è¿”å›")).click();
 			}
 			return true;
 		} catch (Exception e) {
@@ -375,7 +375,7 @@ public class MiZhuan {
 		}
 	}
 
-	// µã½ğÍ·Ìõ
+	// ç‚¹é‡‘å¤´æ¡
 	public boolean clickGoldNews() {
 		try {
 			AdbUtils.click(216,695);
@@ -414,7 +414,7 @@ public class MiZhuan {
 		}
 	}
 
-	// 18Í·Ìõ
+	// 18å¤´æ¡
 	public boolean clickEighteenNews() {
 		try {
 			AdbUtils.click(216,695);
@@ -449,7 +449,7 @@ public class MiZhuan {
 		}
 	}
 
-	// ÎÒ°®Í·Ìõ
+	// æˆ‘çˆ±å¤´æ¡
 	public boolean clickLoveNews() {
 		try {
 			AdbUtils.click(648,695);
@@ -473,17 +473,17 @@ public class MiZhuan {
 		}
 	}
 
-	// ½ñÈÕ±Ø¿´
+	// ä»Šæ—¥å¿…çœ‹
 	public void clickTodayMustNews() {
 		// TODO
 	}
 
-	// ÓéÀÖ±¬ÁÏ
+	// å¨±ä¹çˆ†æ–™
 	public boolean clickEntertainmentNews() {
 		try {
-			driver.findElement(By.name("ÓéÀÖ±¬ÁÏ"));
+			driver.findElement(By.name("å¨±ä¹çˆ†æ–™"));
 			Thread.sleep(2000);
-			if(isElementExistByString("½ñÈÕÈÎÎñÒÑÍê³É")){
+			if(isElementExistByString("ä»Šæ—¥ä»»åŠ¡å·²å®Œæˆ")){
 				AdbUtils.back();
 				return true;
 			}
@@ -523,19 +523,19 @@ public class MiZhuan {
 
 	private boolean clickThreeSixZeroNews() {
 		try {
-			Log.log.info("µã»÷360ĞÂÎÅ");
-			driver.findElement(By.name("360ĞÂÎÅ")).click();
+			Log.log.info("ç‚¹å‡»360æ–°é—»");
+			driver.findElement(By.name("360æ–°é—»")).click();
 			Thread.sleep(10000);
-			if(isElementExistByString("ÖªµÀÁË")) {
+			if(isElementExistByString("ÖªçŸ¥é“äº†")) {
 				System.out.println("find know");
-				driver.findElement(By.name("ÖªµÀÁË")).click();
+				driver.findElement(By.name("ÖªçŸ¥é“äº†")).click();
 				is360Completed = true;
 				return true;
 			}
 //			if (!looklookManager.checkClick360News()) {
 //				return false;
 //			}
-			if(isElementExistByString("½ñÈÕÈÎÎñÒÑÍê³É")){
+			if(isElementExistByString("ä»Šæ—¥ä»»åŠ¡å·²å®Œæˆ")){
 				AdbUtils.back();
 				return true;
 			}
@@ -558,7 +558,7 @@ public class MiZhuan {
 		}
 	}
 
-	// »¬¶¯µã»÷ĞÂÎÅ ĞÂÎÅ½çÃæÍ£Áô20S
+	// æ»‘åŠ¨ç‚¹å‡»æ–°é—» æ–°é—»ç•Œé¢åœç•™20S
 	public void swipeAndClickNews() {
 		try {
 			Thread.sleep(5000);
@@ -572,7 +572,7 @@ public class MiZhuan {
 		}
 	}
 	
-	// »¬¶¯µã»÷ĞÂÎÅ ĞÂÎÅ½çÃæ»¬¶¯
+	// æ»‘åŠ¨ç‚¹å‡»æ–°é—» æ–°é—»ç•Œé¢æ»‘åŠ¨
 	public void swipeAndClickNews2() {
 		try {
 			Thread.sleep(5000);
@@ -592,16 +592,16 @@ public class MiZhuan {
 
 	private int clickSignin() {
 		try {
-			Log.log.info("µã»÷Ç©µ½");
-			driver.findElement(By.name("Ç©µ½")).click();
+			Log.log.info("ç‚¹å‡»ç­¾åˆ°");
+			driver.findElement(By.name("ç­¾åˆ°")).click();
 			Thread.sleep(5000);
-			Log.log.info("µã»÷ÆÕÍ¨Ç©µ½");
+			Log.log.info("ç‚¹å‡»æ™®é€šç­¾åˆ°");
 			driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
 			Thread.sleep(5000);
 			AdbUtils.back();
 			Thread.sleep(2000);
 			AdbUtils.back(); 
-			Log.log.info("Ç©µ½Íê³É");
+			Log.log.info("ç­¾åˆ°å®Œæˆ");
 			isSigninCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
@@ -615,20 +615,20 @@ public class MiZhuan {
 	private int startClickAds() {
 
         try {
-    		driver.findElement(By.name("ÍÆ¼ö"))
+    		driver.findElement(By.name("æ¨è"))
     		.click();
 			Thread.sleep(2000);
-			driver.findElement(By.name("¿´¿´×¬"))
+			driver.findElement(By.name("çœ‹çœ‹èµš"))
 			.click();
 			Thread.sleep(4000);
-			driver.findElement(By.name("µã¹ã¸æ"))
+			driver.findElement(By.name("ç‚¹å¹¿å‘Š"))
 			.click();
 			Thread.sleep(2000);
-			driver.findElement(By.name("¿ªÊ¼×¬Ç®"))
+			driver.findElement(By.name("å¼€å§‹èµšé’±"))
 			.click();
 			Thread.sleep(2000);
-			if(isElementExistByString("½ö´ËÒ»´Î")){
-				driver.findElement(By.name("½ö´ËÒ»´Î"))
+			if(isElementExistByString("ä»…æ­¤ä¸€æ¬¡")){
+				driver.findElement(By.name("ä»…æ­¤ä¸€æ¬¡"))
 				.click();
 			}
 			Thread.sleep(70 * 1000);
@@ -637,7 +637,7 @@ public class MiZhuan {
 			Thread.sleep(8000);
 			AdbUtils.back();
 			Thread.sleep(1000);
-			if("µã¹ã¸æ".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText())){
+			if("ç‚¹å¹¿å‘Š".equals(driver.findElement(By.id("me.mizhuan:id/title")).getText())){
 				AdbUtils.back();
 			}
 			Thread.sleep(2000);
@@ -664,11 +664,11 @@ public class MiZhuan {
 				Thread.sleep(1 * 60 * 1000);
 				leftSwipe = !leftSwipe;
 			}
-			// µã»÷Ó¦ÓÃ×¬
-			driver.findElement(By.name("Ó¦ÓÃ×¬")).click();
+			// ç‚¹å‡»åº”ç”¨èµš
+			driver.findElement(By.name("åº”ç”¨èµš")).click();
 			Thread.sleep(1000);
-			// ¶îÍâ½±Àø
-			driver.findElement(By.name("¶îÍâ½±Àø")).click();
+			// é¢å¤–å¥–åŠ±
+			driver.findElement(By.name("é¢å¤–å¥–åŠ±")).click();
 			Thread.sleep(8000);
 			AdbUtils.swipe(300, 500, 300, 1000);
 			Thread.sleep(5000);
@@ -723,8 +723,8 @@ public class MiZhuan {
 						}).start();
 					} 
 					System.out.println("type = " + type);
-					if("ÒÑÇÀÍê".equals(mituo) || "Î´µ½Ê±¼ä".equals(mituo) || "Éî¶È".equals(type)) {
-						Log.log.info("¶îÍâÈÎÎñÍê³É");
+					if("å·²æŠ¢å®Œ".equals(mituo) || "æœªåˆ°æ—¶é—´".equals(mituo) || "æ·±åº¦".equals(type)) {
+						Log.log.info("é¢å¤–ä»»åŠ¡å®Œæˆ");
 						isExtraBonusCompleted = true;
 						break;
 					} else {
@@ -733,7 +733,7 @@ public class MiZhuan {
 				} else {
 					continue;
 				}
-				Log.log.info("¶îÍâ½±Àø¿ªÊ¼¼ÆÊ±¡£¡£¡£");
+				Log.log.info("é¢å¤–å¥–åŠ±å¼€å§‹è®¡æ—¶ã€‚ã€‚ã€‚");
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				
@@ -761,11 +761,11 @@ public class MiZhuan {
 	public int installApp_CUN_AL(AndroidDriver driver) {
 		try {
 			Thread.sleep(10000);
-			Log.log.info("µã»÷Ó¦ÓÃ×¬");
-			driver.findElement(By.name("Ó¦ÓÃ×¬")).click();
+			Log.log.info("ç‚¹å‡»åº”ç”¨èµš");
+			driver.findElement(By.name("åº”ç”¨èµš")).click();
 			Thread.sleep(1000);
-			Log.log.info("µã»÷Ó¦ÓÃ");
-			driver.findElement(By.name("Ó¦ÓÃ")).click();
+			Log.log.info("ç‚¹å‡»åº”ç”¨");
+			driver.findElement(By.name("åº”ç”¨")).click();
 			Thread.sleep(10000);
 //			driver.findElement(By.xpath("//android.widget.TabWidget/android.widget.LinearLayout[contains(@index,1)]"))
 //					.click();
@@ -781,17 +781,17 @@ public class MiZhuan {
 						.getText();
 				Log.log.info("appTyep = " + text + "   " + "appSize = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));			
-				if (("×¢²á".equals(text) || "ÌåÑé".equals(text)) && appSize < 40) {
+				if (("æ³¨å†Œ".equals(text) || "ä½“éªŒ".equals(text)) && appSize < 40) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
 							.click();
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
-					if ("Á¢¼´°²×°".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷Á¢¼´°²×°");
+					if ("ç«‹å³å®‰è£…".equals(buttomButton.getText())) {
+						Log.log.info("ç‚¹å‡»ç«‹å³å®‰è£…");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
-						if(isElementExistByString("Á¢¼´°²×°")) {
+						if(isElementExistByString("ç«‹å³å®‰è£…")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
@@ -801,7 +801,7 @@ public class MiZhuan {
 						while (true) {
 							WebElement installButton = driver
 									.findElement(By.id("com.android.packageinstaller:id/ok_button"));
-							if ("ÏÂÒ»²½".equals(installButton.getText())) {
+							if ("ä¸‹ä¸€æ­¥".equals(installButton.getText())) {
 								installButton.click();
 								Thread.sleep(1000);
 							} else {
@@ -812,43 +812,43 @@ public class MiZhuan {
 						}
 						Thread.sleep(10 * 1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("ÔÊĞí")){
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if(driver.getPageSource().contains("å…è®¸")){
+								driver.findElement(By.name("å…è®¸")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("å¼€å§‹ä½“éªŒ5åˆ†é’Ÿ");
 						Thread.sleep(5 * 60* 1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("ÔÊĞí")){
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if(driver.getPageSource().contains("å…è®¸")){
+								driver.findElement(By.name("å…è®¸")).click();
 								Thread.sleep(2000);
 							}
 						}
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						while (isElementExistByString("´ò¿ª")) {
+						while (isElementExistByString("ï¿½ï¿½")) {
 							driver.pressKeyCode(AndroidKeyCode.BACK);
 							Thread.sleep(2000);
 						}
-					} else if ("¼ÌĞøÌåÑé".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷¼ÌĞøÌåÑé");
+					} else if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 						buttomButton.click();
 						Thread.sleep(20 *1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("ÔÊĞí")){
+							if(driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")){
 								Log.log.info("click allow");
-								driver.findElement(By.name("ÔÊĞí")).click();
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5*60* 1000);						
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
@@ -872,11 +872,11 @@ public class MiZhuan {
 	private int installApp_CUN_TL(AndroidDriver driver) {
 		try {
 			Thread.sleep(10000);
-			Log.log.info("µã»÷Ó¦ÓÃ×¬");
-			driver.findElement(By.name("Ó¦ÓÃ×¬")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½×¬");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½×¬")).click();
 			Thread.sleep(1000);
-			Log.log.info("µã»÷Ó¦ÓÃ");
-			driver.findElement(By.name("Ó¦ÓÃ")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½")).click();
 			Thread.sleep(2000);
 			while (installCount < Configure.Mizhuan_instlal_count) {
 				String text = driver
@@ -896,17 +896,17 @@ public class MiZhuan {
 					SwipeScreen.swipe(driver, 300, 800, 300, 665);
 					continue;
 				}
-				if (("×¢²á".equals(text) || "ÌåÑé".equals(text)) && appSize < 40) {
+				if (("×¢ï¿½ï¿½".equals(text) || "ï¿½ï¿½ï¿½ï¿½".equals(text)) && appSize < 40) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
 							.click();
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
-					if ("Á¢¼´°²×°".equals(buttomButton.getText())) {
+					if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°".equals(buttomButton.getText())) {
 						if (isElementExistById("me.mizhuan:id/mituo_rowTextOne")) {
 							String str = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText()
 									.substring(0, 2);
-							if (!str.equals("Ê×´Î")) {
+							if (!str.equals("ï¿½×´ï¿½")) {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
 								SwipeScreen.swipe(driver, 300, 800, 300, 665);
@@ -926,17 +926,17 @@ public class MiZhuan {
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
-						Log.log.info("µã»÷Á¢¼´°²×°");
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
-						if (isElementExistByString("Á¢¼´°²×°")) {
+						if (isElementExistByString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
-						while(isElementExistByString("Ó¦ÓÃÏêÇé")){
+						while(isElementExistByString("Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")){
 							WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
 						    String buttonText = buttomButton1.getText();
 						    if(buttonText.substring(buttonText.length()-1).equals("%")){
@@ -946,7 +946,7 @@ public class MiZhuan {
 						    	break;
 						    }
 						}
-						driver.findElement(By.name("°²×°")).click();
+						driver.findElement(By.name("ï¿½ï¿½×°")).click();
 						Thread.sleep(60 * 1000);
 						while(AdbUtils.getCurrentPackage().equals("packageinstaller")){
 							AdbUtils.back();
@@ -957,48 +957,48 @@ public class MiZhuan {
 						buttomButton.click();
 						Thread.sleep(10 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if (driver.getPageSource().contains("ÔÊĞí")) {
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if (driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")) {
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5 * 60 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if (driver.getPageSource().contains("ÔÊĞí")) {
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if (driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")) {
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-					} else if ("¼ÌĞøÌåÑé".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷¼ÌĞøÌåÑé");
+					} else if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 						buttomButton.click();
 						Thread.sleep(20 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if (driver.getPageSource().contains("ÔÊĞí")) {
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if (driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")) {
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5 * 60 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if (driver.getPageSource().contains("ÔÊĞí")) {
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if (driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")) {
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						while (isElementExistByString("´ò¿ª")) {
+						while (isElementExistByString("ï¿½ï¿½")) {
 							driver.pressKeyCode(AndroidKeyCode.BACK);
 							Thread.sleep(2000);
 						}
@@ -1025,11 +1025,11 @@ public class MiZhuan {
 	public int installApp_OPPO(AndroidDriver driver) {
 		try {
 			Thread.sleep(10000);
-			Log.log.info("µã»÷Ó¦ÓÃ×¬");
-			driver.findElement(By.name("Ó¦ÓÃ×¬")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½×¬");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½×¬")).click();
 			Thread.sleep(1000);
-			Log.log.info("µã»÷Ó¦ÓÃ");
-			driver.findElement(By.name("Ó¦ÓÃ")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½")).click();
 			Thread.sleep(2000);
 			while (installCount < Configure.Mizhuan_instlal_count) {
 				Thread.sleep(3000);
@@ -1045,55 +1045,55 @@ public class MiZhuan {
 				Log.log.info("appTyep = " + text + "   " + "appSize = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
 				Log.log.info(text);
-				if (("×¢²á".equals(text) || "ÌåÑé".equals(text)) && appSize < 40) {
+				if (("×¢ï¿½ï¿½".equals(text) || "ï¿½ï¿½ï¿½ï¿½".equals(text)) && appSize < 40) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
 							.click();
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
-					if ("Á¢¼´°²×°".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷Á¢¼´°²×°");
+					if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
-						if(isElementExistByString("Á¢¼´°²×°")) {
+						if(isElementExistByString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
-						driver.findElement(By.name("°²×°")).click();
+						driver.findElement(By.name("ï¿½ï¿½×°")).click();
 						Thread.sleep(30 * 1000);
 						for (int j = 0; j < 5; j++) {
-							if(driver.getPageSource().contains("Í¬Òâ²¢¼ÌĞø")){
-								driver.findElement(By.name("Í¬Òâ²¢¼ÌĞø")).click();
+							if(driver.getPageSource().contains("Í¬ï¿½â²¢ï¿½ï¿½ï¿½ï¿½")){
+								driver.findElement(By.name("Í¬ï¿½â²¢ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5*60* 1000);
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						driver.findElement(By.name("Íê³É")).click();
+						driver.findElement(By.name("ï¿½ï¿½ï¿½")).click();
 						Thread.sleep(2000);
-					} else if ("¼ÌĞøÌåÑé".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷¼ÌĞøÌåÑé");
+					} else if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 						buttomButton.click();
 						Thread.sleep(20 *1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("Í¬Òâ²¢¼ÌĞø")){
+							if(driver.getPageSource().contains("Í¬ï¿½â²¢ï¿½ï¿½ï¿½ï¿½")){
 								Log.log.info("click allow");
-								driver.findElement(By.name("Í¬Òâ²¢¼ÌĞø")).click();
+								driver.findElement(By.name("Í¬ï¿½â²¢ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5*60* 1000);					
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
@@ -1117,11 +1117,11 @@ public class MiZhuan {
 	private int generateInstall(){
 		try {
 			Thread.sleep(10000);
-			Log.log.info("µã»÷Ó¦ÓÃ×¬");
-			driver.findElement(By.name("Ó¦ÓÃ×¬")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½×¬");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½×¬")).click();
 			Thread.sleep(1000);
-			Log.log.info("µã»÷Ó¦ÓÃ");
-			driver.findElement(By.name("Ó¦ÓÃ")).click();
+			Log.log.info("ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½");
+			driver.findElement(By.name("Ó¦ï¿½ï¿½")).click();
 			Thread.sleep(2000);
 			while (installCount < Configure.Mizhuan_instlal_count) {
 				String text = driver
@@ -1134,19 +1134,19 @@ public class MiZhuan {
 						.getText();
 				Log.log.info("appTyep = " + text + "   " + "appSize = " + appSizeStr);
 				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
-				if (("×¢²á".equals(text) || "ÌåÑé".equals(text)) && appSize < 40) {
+				if (("×¢ï¿½ï¿½".equals(text) || "ï¿½ï¿½ï¿½ï¿½".equals(text)) && appSize < 40) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
 							.click();
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
-					if ("Á¢¼´°²×°".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷Á¢¼´°²×°");
+					if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°");
 						buttomButton.click();
 						Thread.sleep(3 * 1000);
 						if(isElementExistById("me.mizhuan:id/mituo_rowTextOne")){
 							String str  = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText().substring(0,2);
-							if(!str.equals("Ê×´Î")){
+							if(!str.equals("ï¿½×´ï¿½")){
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
 								SwipeScreen.swipe(driver, 300, 800, 300, 665);
@@ -1169,7 +1169,7 @@ public class MiZhuan {
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
-						if(isElementExistByString("Á¢¼´°²×°")) {
+						if(isElementExistByString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
@@ -1177,30 +1177,30 @@ public class MiZhuan {
 						}
 						Thread.sleep(60 * 1000);
 						
-					} else if ("¼ÌĞøÌåÑé".equals(buttomButton.getText())) {
-						Log.log.info("µã»÷¼ÌĞøÌåÑé");
+					} else if ("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½".equals(buttomButton.getText())) {
+						Log.log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 						buttomButton.click();
 						Thread.sleep(20 *1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("ÔÊĞí")){
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if(driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")){
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
-						Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+						Log.log.info("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½");
 						Thread.sleep(5*60* 1000);
 						for(int j=0;j<5;j++){
-							if(driver.getPageSource().contains("ÔÊĞí")){					
-								driver.findElement(By.name("ÔÊĞí")).click();
+							if(driver.getPageSource().contains("ï¿½ï¿½ï¿½ï¿½")){					
+								driver.findElement(By.name("ï¿½ï¿½ï¿½ï¿½")).click();
 								Thread.sleep(2000);
 							}
 						}
 						installCount++;
-						Log.log.info("ÒÑ°²×°" + installCount + "¸öÓ¦ÓÃ");
+						Log.log.info("ï¿½Ñ°ï¿½×°" + installCount + "ï¿½ï¿½Ó¦ï¿½ï¿½");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
 						AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 						Thread.sleep(2000);
-						while (isElementExistByString("´ò¿ª")) {
+						while (isElementExistByString("ï¿½ï¿½")) {
 							driver.pressKeyCode(AndroidKeyCode.BACK);
 							Thread.sleep(2000);
 						}
