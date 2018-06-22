@@ -34,7 +34,7 @@ public class ExtraBonusManager {
 	}
 	
 	public int checkEnterApp(){
-		if (isElementExistByString("应用详情")) {
+		if (isElementExistByString("搴旂敤璇︽儏")) {
 			return ResultDict.COMMAND_BACK;
 		}
 		if(isHuaweiUpdateActivity()){
@@ -53,10 +53,7 @@ public class ExtraBonusManager {
 		return true;
 	}
 	
-	public boolean checkFinishExtraBonus(){
-		return !isElementExistByString("打开");
-	}
-	
+
 	private boolean isHuaweiUpdateActivity(){
 		return "com.huawei.android.hwouc/.ui.activities.firmware.FirmwareNewVersionDetailsActivity".equals(AdbUtils.getTopActivity());
 	}

@@ -24,9 +24,9 @@ public class MeiRiZhuanDian {
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = false;
 	private int DEFAULT_INSTALL_COUNT  = 2;
-	private int choujiangji = 0; //»¶ÀÖ³é½±»ú
-	private int yangshen = 0; //ÑøÉúÖ®µÀ
-	private int paihongbao = 0; //È«ÃñÅÉºì°ü
+	private int choujiangji = 0; //æ¬¢ä¹æŠ½å¥–æœº
+	private int yangshen = 0; //å…»ç”Ÿä¹‹é“
+	private int paihongbao = 0; //å…¨æ°‘æ´¾çº¢åŒ…
 	private int wajinkuang = 0; //
 	private int quanjiatong = 0;
 	private int xianjinghongbao = 0;
@@ -83,7 +83,7 @@ public class MeiRiZhuanDian {
 			}
 		}
 		if (!isExtraBonusCompleted) {
-			Log.log.info("¿ªÊ¼¶îÍâÈÎÎñ");
+			Log.log.info("å¼€å§‹é¢å¤–ä»»åŠ¡");
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 				callback.onRestartApp(driver);
@@ -102,17 +102,17 @@ public class MeiRiZhuanDian {
 	private int install() {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
-			driver.findElement(By.name("¿ìËÙÈÎÎñ")).click();
+			driver.findElement(By.name("å¿«é€Ÿä»»åŠ¡")).click();
 			Thread.sleep(5000);
-			driver.findElement(By.name("ÔÚÏßÈÎÎñ")).click();
+			driver.findElement(By.name("åœ¨çº¿ä»»åŠ¡")).click();
 			Thread.sleep(1000);
 			int installCount = 0;
 			while (installCount < DEFAULT_INSTALL_COUNT) {
 				if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
 					driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
 					Thread.sleep(2000);
-					if(isElementExistByString("ÏÂÔØ")) {
-						driver.findElement(By.name("ÏÂÔØ")).click();
+					if(isElementExistByString("ä¸‹è½½")) {
+						driver.findElement(By.name("ä¸‹è½½")).click();
 						Thread.sleep(60*1000);
 						switch (Configure.productModel) {
 						case "[OPPO A37m]":
@@ -135,8 +135,8 @@ public class MeiRiZhuanDian {
 							AdbUtils.back();
 							installCount++;
 							Thread.sleep(2000);
-							if(isElementExistByString("²»ÁË")){
-								driver.findElement(By.name("²»ÁË")).click();
+							if(isElementExistByString("ä¸äº†")){
+								driver.findElement(By.name("ä¸äº†")).click();
 								Thread.sleep(1000);
 							}
 						}
@@ -166,18 +166,18 @@ public class MeiRiZhuanDian {
 
 	private int installApp_OPPO(AndroidDriver driver2) {
 		try{
-		driver.findElement(By.name("°²×°")).click();
+		driver.findElement(By.name("å®‰è£…")).click();
 		Thread.sleep(30 * 1000);
-		driver.findElement(By.name("Íê³É")).click();
+		driver.findElement(By.name("å®Œæˆ")).click();
 		Thread.sleep(3000);
-		driver.findElement(By.name("ÖØĞÂÌåÑé")).click();
+		driver.findElement(By.name("é‡æ–°ä½“éªŒ")).click();
 		for (int j = 0; j < 5; j++) {
-			if(driver.getPageSource().contains("Í¬Òâ²¢¼ÌĞø")){
-				driver.findElement(By.name("Í¬Òâ²¢¼ÌĞø")).click();
+			if(driver.getPageSource().contains("Í¬åŒæ„å¹¶ç»§ç»­")){
+				driver.findElement(By.name("Í¬åŒæ„å¹¶ç»§ç»­")).click();
 				Thread.sleep(2000);
 			}
 		}
-		Log.log.info("¿ªÊ¼ÌåÑé5·ÖÖÓ¡£¡£¡£");
+		Log.log.info("å¼€å§‹ä½“éªŒ5åˆ†é’Ÿã€‚ã€‚ã€‚");
 		Thread.sleep(5*60* 1000);
 		AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 		Thread.sleep(2000);
@@ -189,10 +189,10 @@ public class MeiRiZhuanDian {
 
 	private int startSigninAppTask() {
 		try {
-		// µã»÷Ó¦ÓÃ×¬
-		driver.findElement(By.name("¿ìËÙÈÎÎñ")).click();
+		// ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½×¬
+		driver.findElement(By.name("å¿«é€Ÿä»»åŠ¡")).click();
 		Thread.sleep(1000);
-		driver.findElement(By.name("Èí¼şÇ©µ½")).click();
+		driver.findElement(By.name("è½¯ä»¶ç­¾åˆ°")).click();
 		Thread.sleep(1000);
 		String lastPackage = "";
 		boolean isFirst = true;
