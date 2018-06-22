@@ -1043,8 +1043,14 @@ public class MiZhuan {
 								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				Log.log.info("appTyep = " + text + "   " + "appSize = " + appSizeStr);
-				double appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
-				Log.log.info(text);
+				double appSize;
+				try {
+					appSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
+				} catch (Exception e) {
+					Thread.sleep(2 * 1000);
+					SwipeScreen.swipe(driver, 300, 800, 300, 665);
+					continue;
+				}
 				if (("注册".equals(text) || "体验".equals(text)) && appSize < 40) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
@@ -1114,7 +1120,7 @@ public class MiZhuan {
 		}
 	}
 	
-	private int generateInstall(){
+	private int universalInstall(){
 		try {
 			Thread.sleep(10000);
 			Log.log.info("点击应用赚");
@@ -1141,42 +1147,74 @@ public class MiZhuan {
 					Thread.sleep(2000);
 					WebElement buttomButton = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
 					if ("立即安装".equals(buttomButton.getText())) {
-						Log.log.info("点击立即安装");
-						buttomButton.click();
-						Thread.sleep(3 * 1000);
-						if(isElementExistById("me.mizhuan:id/mituo_rowTextOne")){
-							String str  = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText().substring(0,2);
-							if(!str.equals("首次")){
+						if (isElementExistById("me.mizhuan:id/mituo_rowTextOne")) {
+							String str = driver.findElement(By.id("me.mizhuan:id/mituo_rowTextOne")).getText()
+									.substring(0, 2);
+							if (!str.equals("首次")) {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
 								SwipeScreen.swipe(driver, 300, 800, 300, 665);
 								continue;
 							}
-						}else{
+						} else {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
-						String size = driver
-								.findElement(By
-										.id("me.mizhuan:id/mituo_app_view1"))
-								.getText();
+						String size = driver.findElement(By.id("me.mizhuan:id/mituo_app_view1")).getText();
 						double DetailAppSize = Double.parseDouble(appSizeStr.substring(0, appSizeStr.length() - 1));
-						if(DetailAppSize > 40){
+						if (DetailAppSize > 40) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
-						if(isElementExistByString("立即安装")) {
+						Log.log.info("点击立即安装");
+						buttomButton.click();
+						Thread.sleep(3 * 1000);
+						if (isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
-						
+						while(isElementExistByString("应用详情")){
+							WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
+						    String buttonText = buttomButton1.getText();
+						    if(buttonText.substring(buttonText.length()-1).equals("%")){
+						    	Thread.sleep(30 * 1000);
+						    	continue;
+						    }else {
+						    	break;
+						    }
+						}
+						int result = ResultDict.COMMAND_SUCCESS;
+						switch (Configure.productModel) {
+						case "[OPPO A37m]":
+							result = installApp_OPPO(driver);
+							break;
+						case "[CUN-TL00]":
+							result = universalInstall_CUN_TL(driver);
+							break;
+						case "[Lenovo TB3-X70N]":
+							break;
+						case "[CUN-AL00]":
+							result = universalInstall_CUN_AL(driver);
+							break;
+						default:
+							break;
+						}
+						if(result != ResultDict.COMMAND_SUCCESS) {
+							return result;
+						} else {
+							installCount++;
+							Log.log.info("已安装" + installCount + "个应用");
+							Log.log.info("kill " + AdbUtils.getCurrentPackage());
+							AdbUtils.killProcess(AdbUtils.getCurrentPackage());
+							Thread.sleep(2000);
+						}
 					} else if ("继续体验".equals(buttomButton.getText())) {
 						Log.log.info("点击继续体验");
 						buttomButton.click();
@@ -1217,6 +1255,44 @@ public class MiZhuan {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.log.info(e.getMessage());
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private int universalInstall_CUN_AL(AndroidDriver driver) {
+		return 0;
+	}
+
+	private int universalInstall_CUN_TL(AndroidDriver driver) {
+		try {
+			driver.findElement(By.name("安装")).click();
+			Thread.sleep(60 * 1000);
+			while (AdbUtils.getCurrentPackage().equals("packageinstaller")) {
+				AdbUtils.back();
+				Thread.sleep(1000);
+			}
+			AdbUtils.back();
+			Thread.sleep(3 * 1000);
+			WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
+			buttomButton1.click();
+			Thread.sleep(10 * 1000);
+			for (int j = 0; j < 5; j++) {
+				if (driver.getPageSource().contains("允许")) {
+					driver.findElement(By.name("允许")).click();
+					Thread.sleep(2000);
+				}
+			}
+			Log.log.info("开始体验5分钟。。。");
+			Thread.sleep(5 * 60 * 1000);
+			for (int j = 0; j < 5; j++) {
+				if (driver.getPageSource().contains("允许")) {
+					driver.findElement(By.name("允许")).click();
+					Thread.sleep(2000);
+				}
+			}
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
