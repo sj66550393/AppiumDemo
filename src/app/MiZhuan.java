@@ -42,7 +42,7 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = false;
+	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
@@ -681,6 +681,7 @@ public class MiZhuan {
 					String type = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,2)]")).getText().substring(1, 3);
 					System.out.println("mituo = " + mituo);
 					System.out.println("type = " + type);
+					try {
 					if(isFirst) {
 						String firstAppName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
 						String packageName2 = Configure.map.get(firstAppName);
@@ -722,6 +723,9 @@ public class MiZhuan {
 							}
 						}).start();
 					} 
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
 					System.out.println("type = " + type);
 					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");

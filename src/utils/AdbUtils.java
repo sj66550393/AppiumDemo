@@ -12,6 +12,7 @@ public class AdbUtils {
 	public static String storageDes = "e:/";
 	public static String storageDir = storageDes + deviceId + "/";
 	public static String adb =  "adb -s " + deviceId	+" shell ";
+	public static String adb1 = "/Users/taoyuehong/Library/Android/sdk/platform-tools/adb";
     public static String getTopActivity(){
     	if(Configure.isPad){
     		String execResult = printf(adb + "dumpsys activity activities | grep mResumedActivity").trim();
@@ -104,7 +105,7 @@ public class AdbUtils {
     
     public static void pull(String sourcePath , String desPath) {
     	try {
-    		exec("adb -s " + deviceId + " pull " + sourcePath + " " + desPath);
+    		exec(adb1 +" -s " + deviceId + " pull " + sourcePath + " " + desPath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

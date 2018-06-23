@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import app.MeiRiZhuanDian;
 import app.MiZhuan;
+import app.MyApplicationList;
 import callback.TaskCallback;
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
@@ -33,27 +34,27 @@ public class ShouZhuan {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
 		if(args.length > 0 && args[0] != null) {
-			Configure.logDir = args[0] + ":\\";
-			AdbUtils.storageDes = args[0] + ":\\";
+			Configure.logDir = args[0];
+			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "e:\\";
-			AdbUtils.storageDes = "e:\\";
+			Configure.logDir = "/Users/taoyuehong/log/";
+			AdbUtils.storageDes = "/Users/taoyuehong/log/";
 		}
 		if(args.length > 1 && args[1] != null) {
 		Configure.deviceId = args[1];
 		AdbUtils.deviceId = args[1];
 		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
-		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
+		AdbUtils.adb = "/Users/taoyuehong/Library/Android/sdk/platform-tools/adb -s " + args[1]	+" shell ";
 		} else {
 			Configure.deviceId = "78ae61e";
 			AdbUtils.deviceId = "78ae61e";
 			AdbUtils.storageDir = AdbUtils.storageDes + "78ae61e" + "/";
-			AdbUtils.adb = "adb -s " + "78ae61e"	+" shell ";
+			AdbUtils.adb = "/Users/taoyuehong/Library/Android/sdk/platform-tools/adb -s " + "78ae61e"	+" shell ";
 		}
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4801";
+			Configure.appiumPort = "4727";
 		}
 		
 		if(args.length > 3 && args[3] != null){
@@ -71,6 +72,11 @@ public class ShouZhuan {
 		String productModel = AdbUtils.getProductModel();
 		Configure.productModel = productModel;
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
+		MyApplicationList.getInstance().getApplicationList();
+		
+		
+		
+		
 		try {
 			AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId );
 			File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
