@@ -2,6 +2,7 @@ package app;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -42,7 +43,7 @@ public class MiZhuan {
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
 	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = true;
+	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = true;
 	private boolean isClickAdsCompleted = true;
@@ -162,6 +163,8 @@ public class MiZhuan {
 				return;
 			}
 		}
+		
+		getInstallCount();
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -200,6 +203,8 @@ public class MiZhuan {
 				return;
 			}
 		}
+		
+		
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
 			if (ResultDict.COMMAND_SUCCESS != result) {
@@ -271,6 +276,35 @@ public class MiZhuan {
 			e.printStackTrace();	
 			Log.log.info(e.getMessage());
 			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private void getInstallCount() {
+		try {
+		driver.findElement(By.name("领奖励")).click();
+		Thread.sleep(2000);
+		String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
+		str = str.split("/")[1];
+		DEFAULT_INSTALL_COUNT = Integer.parseInt(str);
+		System.out.println("install count = " + str);
+		Thread.sleep(2000);
+		AdbUtils.back();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void getBonus() {
+		try {
+		driver.findElement(By.name("领奖励")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.name("领取")).click();
+		Thread.sleep(5000);
+		AdbUtils.back();
+		Thread.sleep(2000);
+		AdbUtils.back();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1264,7 +1298,39 @@ public class MiZhuan {
 	}
 	
 	private int universalInstall_CUN_AL(AndroidDriver driver) {
-		return 0;
+		try {
+		while (true) {
+			WebElement installButton = driver
+					.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+			if ("下一步".equals(installButton.getText())) {
+				installButton.click();
+				Thread.sleep(1000);
+			} else {
+				installButton.click();
+				Thread.sleep(1000);
+				break;
+			}
+		}
+		Thread.sleep(10 * 1000);
+		for(int j=0;j<5;j++){
+			if(driver.getPageSource().contains("允许")){
+				driver.findElement(By.name("允许")).click();
+				Thread.sleep(2000);
+			}
+		}
+		Log.log.info("开始体验5分钟");
+		Thread.sleep(5 * 60* 1000);
+		for(int j=0;j<5;j++){
+			if(driver.getPageSource().contains("允许")){
+				driver.findElement(By.name("允许")).click();
+				Thread.sleep(2000);
+			}
+		}
+		return ResultDict.COMMAND_SUCCESS;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 	}
 
 	private int universalInstall_CUN_TL(AndroidDriver driver) {
@@ -1298,6 +1364,183 @@ public class MiZhuan {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	public void checkAppList() {
+		try {
+			System.out.println("start");
+			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
+			Thread.sleep(20 * 1000);
+			driver.findElement(By.name("应用赚")).click();
+			Thread.sleep(1000);
+			driver.findElement(By.name("额外奖励")).click();
+			Thread.sleep(8000);
+			int position = 1;
+			String lastAppName = "";
+			ArrayList<String> appList = new ArrayList<>();
+			int repeatCount = 0;
+			while(true) {
+			String appName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
+			if(appName.equals(lastAppName)) {
+				SwipeScreen.swipe(driver, 300, 800, 300, 665);
+				if(repeatCount <5) {
+					repeatCount++;
+				continue;
+				}
+			} else {
+				repeatCount = 0;
+				appList.add(appName);
+				lastAppName = appName;
+			}
+			String packageName = Configure.map.get(appName);
+			System.out.println("appName = " + appName);
+			if(packageName == null) {
+				System.out.println("unhandle application name = " + appName + "       packageName = " + packageName);
+			}
+			if(repeatCount >= 5) {
+				for(int i=2;i<20;i++) {
+					try {
+					String appName1 = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ i+")]/android.widget.TextView[contains(@index,1)]")).getText();
+					System.out.println("appName = " + appName1);
+					}catch(Exception e) {
+						System.out.println("end");
+						break;
+					}
+					String packageName1 = Configure.map.get(appName);
+					if(packageName == null) {
+						System.out.println("unhandle application name = " + appName + "       packageName = " + packageName);
+					}
+				}
+			}
+			if(repeatCount >= 5) {
+				break;
+			}else {
+			SwipeScreen.swipe(driver, 300, 800, 300, 665);
+			}
+			}
+			System.out.println("getApllicationList end");
+		} catch (Exception e) {
+			System.out.println("error" + e.getMessage());
+			driver.quit();
+			e.printStackTrace();
+			return;
+		}
+	}
+	
+	public void checkAllApp() {
+		try {
+			System.out.println("start");
+			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort +"/wd/hub"), capabilities);
+			Thread.sleep(20 * 1000);
+			driver.findElement(By.name("应用赚")).click();
+			Thread.sleep(1000);
+//			driver.findElement(By.name("额外奖励")).click();
+//			Thread.sleep(8000);
+//			int position = 1;
+//			String lastAppName = "";
+//			ArrayList<String> appList = new ArrayList<>();
+//			int repeatCount = 0;
+//			while(true) {
+//			String appName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
+//			if(appName.equals(lastAppName)) {
+//				SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//				if(repeatCount <5) {
+//					repeatCount++;
+//				continue;
+//				}
+//			} else {
+//				repeatCount = 0;
+//				appList.add(appName);
+//				lastAppName = appName;
+//			}
+//			String packageName = Configure.map.get(appName);
+//			System.out.println("appName = " + appName);
+//			if(packageName == null) {
+//				System.out.println("unhandle application name = " + appName + "       packageName = " + packageName);
+//			}
+//			if(repeatCount >= 5) {
+//				String appName1 = "";
+//				for(int i=2;i<20;i++) {
+//					try {
+//					appName1 = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ i+")]/android.widget.TextView[contains(@index,1)]")).getText();
+//					System.out.println("appName = " + appName1);
+//					}catch(Exception e) {
+//						System.out.println("end");
+//						break;
+//					}
+//					String packageName1 = Configure.map.get(appName1);
+//					if(packageName1 == null) {
+//						System.out.println("unhandle application name = " + appName1 + "       packageName = " + packageName1);
+//					}
+//				}
+//			}
+//			if(repeatCount >= 5) {
+//				break;
+//			}else {
+//			SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//			}
+//			}
+//			System.out.println("getApllicationList end");
+			driver.findElement(By.name("应用")).click();
+			Thread.sleep(3000);
+			int repeatCount = 0;
+			int position = 1;
+			String lastAppName = "";
+			ArrayList appList = new ArrayList();
+			while(true) {
+				String appName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
+				String text = driver
+						.findElement(By
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+						.getText().substring(0, 2);
+				System.out.println(text);
+				if((!"注册".equals(text)) && (!"体验".equals(text))) {
+					SwipeScreen.swipe(driver, 300, 800, 300, 665);
+					continue;
+				}
+				
+				if(appName.equals(lastAppName)) {
+					SwipeScreen.swipe(driver, 300, 800, 300, 665);
+					if(repeatCount <5) {
+						repeatCount++;
+					continue;
+					}
+				} else {
+					repeatCount = 0;
+					appList.add(appName);
+					lastAppName = appName;
+				}
+				if(repeatCount >= 5) {
+					for(int i=2;i<20;i++) {
+						String text1 = driver
+								.findElement(By
+										.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+								.getText().substring(0, 2);
+						if((!"注册".equals(text1)) && (!"体验".equals(text1))) {
+							continue;
+						}
+						try {
+						String appName1 = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ i+")]/android.widget.TextView[contains(@index,1)]")).getText();
+						System.out.println("appName = " + appName1);
+						}catch(Exception e) {
+							System.out.println("end");
+							break;
+						}
+					}
+				}
+				if(repeatCount >= 5) {
+					break;
+				}else {
+				SwipeScreen.swipe(driver, 300, 800, 300, 665);
+				}
+				}
+				System.out.println("getApllicationList end");
+		} catch (Exception e) {
+			System.out.println("error" + e.getMessage());
+			driver.quit();
+			e.printStackTrace();
+			return;
 		}
 	}
 	

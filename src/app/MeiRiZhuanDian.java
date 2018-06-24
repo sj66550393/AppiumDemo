@@ -21,9 +21,9 @@ public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
 	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = false;
+	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private int DEFAULT_INSTALL_COUNT  = 2;
+	private int DEFAULT_INSTALL_COUNT  = 10;
 	private int choujiangji = 0; //欢乐抽奖机
 	private int yangshen = 0; //养生之道
 	private int paihongbao = 0; //全民派红包
@@ -160,8 +160,37 @@ public class MeiRiZhuanDian {
 	}
 
 	private int installApp_CUN_TL(AndroidDriver driver2) {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			driver.findElement(By.name("安装")).click();
+			Thread.sleep(60 * 1000);
+			while (AdbUtils.getCurrentPackage().equals("packageinstaller")) {
+				AdbUtils.back();
+				Thread.sleep(1000);
+			}
+			AdbUtils.back();
+			Thread.sleep(3 * 1000);
+			WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
+			buttomButton1.click();
+			Thread.sleep(10 * 1000);
+			for (int j = 0; j < 5; j++) {
+				if (driver.getPageSource().contains("允许")) {
+					driver.findElement(By.name("允许")).click();
+					Thread.sleep(2000);
+				}
+			}
+			Log.log.info("开始体验5分钟。。。");
+			Thread.sleep(5 * 60 * 1000);
+			for (int j = 0; j < 5; j++) {
+				if (driver.getPageSource().contains("允许")) {
+					driver.findElement(By.name("允许")).click();
+					Thread.sleep(2000);
+				}
+			}
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 	}
 
 	private int installApp_OPPO(AndroidDriver driver2) {
@@ -178,7 +207,7 @@ public class MeiRiZhuanDian {
 			}
 		}
 		Log.log.info("开始体验5分钟。。。");
-		Thread.sleep(5*60* 1000);
+		Thread.sleep(5* 1000);
 		AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 		Thread.sleep(2000);
 		return ResultDict.COMMAND_SUCCESS;
