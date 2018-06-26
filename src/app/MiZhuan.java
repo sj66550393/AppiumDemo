@@ -42,10 +42,10 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 0;
-	private boolean isExtraBonusCompleted = false;
+	private int DEFAULT_INSTALL_COUNT  = 21;
+	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = true;
-	private boolean isInstallCompleted = true;
+	private boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
@@ -56,6 +56,7 @@ public class MiZhuan {
 	private boolean isTuituiComleted = false;
 	private boolean isTurnturnComleted = false;
 	private boolean isPackageCompleted = false;
+	private boolean isGetInstallCount = false;
 	private int installCount = 0;
 	public boolean isCompleted = false;
 
@@ -163,8 +164,9 @@ public class MiZhuan {
 				return;
 			}
 		}
-		
-		getInstallCount();
+		if (isGetInstallCount) {
+			getInstallCount();
+		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -183,21 +185,22 @@ public class MiZhuan {
 		}
 		if(!isInstallCompleted){
 			Log.log.info("开始安装任务");
-			switch (Configure.productModel) {
-			case "[OPPO A37m]":
-				result = installApp_OPPO(driver);
-				break;
-			case "[CUN-TL00]":
-				result = installApp_CUN_TL(driver);
-				break;
-			case "[Lenovo TB3-X70N]":
-				break;
-			case "[CUN-AL00]":
-				result = installApp_CUN_AL(driver);
-				break;
-			default:
-				break;
-			}
+			result = universalInstall();
+//			switch (Configure.productModel) {
+//			case "[OPPO A37m]":
+//				result = installApp_OPPO(driver);
+//				break;
+//			case "[CUN-TL00]":
+//				result = installApp_CUN_TL(driver);
+//				break;
+//			case "[Lenovo TB3-X70N]":
+//				break;
+//			case "[CUN-AL00]":
+//				result = installApp_CUN_AL(driver);
+//				break;
+//			default:
+//				break;
+//			}
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 				return;
@@ -1231,7 +1234,7 @@ public class MiZhuan {
 						int result = ResultDict.COMMAND_SUCCESS;
 						switch (Configure.productModel) {
 						case "[OPPO A37m]":
-							result = installApp_OPPO(driver);
+							result = universalInstall_OPPO(driver);
 							break;
 						case "[CUN-TL00]":
 							result = universalInstall_CUN_TL(driver);
@@ -1252,6 +1255,10 @@ public class MiZhuan {
 							Log.log.info("kill " + AdbUtils.getCurrentPackage());
 							AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 							Thread.sleep(2000);
+							if(isElementExistByString("完成")) {
+								driver.findElement(By.name("完成")).click();
+								Thread.sleep(2000);
+							}
 						}
 					} else if ("继续体验".equals(buttomButton.getText())) {
 						Log.log.info("点击继续体验");
@@ -1293,6 +1300,25 @@ public class MiZhuan {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.log.info(e.getMessage());
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private int universalInstall_OPPO(AndroidDriver driver) {
+		try {
+		driver.findElement(By.name("安装")).click();
+		Thread.sleep(30 * 1000);
+		for (int j = 0; j < 5; j++) {
+			if(driver.getPageSource().contains("ͬ同意并继续")){
+				driver.findElement(By.name("ͬ同意并继续")).click();
+				Thread.sleep(2000);
+			}
+		}
+		Log.log.info("开始体验5分钟。。。");
+		Thread.sleep(5*60* 1000);
+		return ResultDict.COMMAND_SUCCESS;
+		}catch(Exception e) {
+			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}

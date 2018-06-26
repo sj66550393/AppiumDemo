@@ -44,23 +44,23 @@ public class ShouZhuan {
 		Configure.deviceId = args[1];
 		AdbUtils.deviceId = args[1];
 		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
-		AdbUtils.adb = "/Users/taoyuehong/Library/Android/sdk/platform-tools/adb -s " + args[1]	+" shell ";
+		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
 		} else {
 			Configure.deviceId = "UCZHUGEU99999999";
 			AdbUtils.deviceId = "UCZHUGEU99999999";
 			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
-			AdbUtils.adb = "/Users/taoyuehong/Library/Android/sdk/platform-tools/adb -s " + "UCZHUGEU99999999"	+" shell ";
+			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999"	+" shell ";
 		}
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4727";
+			Configure.appiumPort = "4723";
 		}
 		
 		if(args.length > 3 && args[3] != null){
 			Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 		} else {
-			Configure.Mizhuan_instlal_count = 10;
+			Configure.Mizhuan_instlal_count = 21;
 		}
 		init();
 //		MiZhuan.getInstance().checkAppList();
@@ -121,25 +121,25 @@ class Task1 extends TimerTask {
 			} catch (Exception e) {
 			}
 		}
-//		if (!MiZhuan.getInstance().isCompleted) {
-//			MiZhuan.getInstance().start(new TaskCallback() {
-//
-//				@Override
-//				public void onSuccess(AndroidDriver driver) {
-//					MiZhuan.getInstance().isCompleted = true;
-//					driver.quit();
-//					restartApp();
-//				}
-//
-//				@Override
-//				public void onRestartApp(AndroidDriver driver) {
-//					driver.quit();
-//					restartApp();
-//					
-//				}
-//
-//			});
-//		} else 
+		if (!MiZhuan.getInstance().isCompleted) {
+			MiZhuan.getInstance().start(new TaskCallback() {
+
+				@Override
+				public void onSuccess(AndroidDriver driver) {
+					MiZhuan.getInstance().isCompleted = true;
+					driver.quit();
+					restartApp();
+				}
+
+				@Override
+				public void onRestartApp(AndroidDriver driver) {
+					driver.quit();
+					restartApp();
+					
+				}
+
+			});
+		} else 
 		if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 				
