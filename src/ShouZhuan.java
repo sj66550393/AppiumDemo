@@ -37,8 +37,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "/Users/taoyuehong/log/";
-			AdbUtils.storageDes = "/Users/taoyuehong/log/";
+			Configure.logDir = "e:\\";
+			AdbUtils.storageDes = "e:\\";
 		}
 		if(args.length > 1 && args[1] != null) {
 		Configure.deviceId = args[1];
@@ -54,7 +54,7 @@ public class ShouZhuan {
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4723";
+			Configure.appiumPort = "4771";
 		}
 		
 		if(args.length > 3 && args[3] != null){
@@ -121,25 +121,25 @@ class Task1 extends TimerTask {
 			} catch (Exception e) {
 			}
 		}
-		if (!MiZhuan.getInstance().isCompleted) {
-			MiZhuan.getInstance().start(new TaskCallback() {
-
-				@Override
-				public void onSuccess(AndroidDriver driver) {
-					MiZhuan.getInstance().isCompleted = true;
-					driver.quit();
-					restartApp();
-				}
-
-				@Override
-				public void onRestartApp(AndroidDriver driver) {
-					driver.quit();
-					restartApp();
-					
-				}
-
-			});
-		} else 
+//		if (!MiZhuan.getInstance().isCompleted) {
+//			MiZhuan.getInstance().start(new TaskCallback() {
+//
+//				@Override
+//				public void onSuccess(AndroidDriver driver) {
+//					MiZhuan.getInstance().isCompleted = true;
+//					driver.quit();
+//					restartApp();
+//				}
+//
+//				@Override
+//				public void onRestartApp(AndroidDriver driver) {
+//					driver.quit();
+//					restartApp();
+//					
+//				}
+//
+//			});
+//		} else 
 		if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 				

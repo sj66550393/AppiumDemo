@@ -1255,9 +1255,26 @@ public class MiZhuan {
 							Log.log.info("kill " + AdbUtils.getCurrentPackage());
 							AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 							Thread.sleep(2000);
-							if(isElementExistByString("完成")) {
-								driver.findElement(By.name("完成")).click();
-								Thread.sleep(2000);
+							switch (Configure.productModel) {
+							case "[OPPO A37m]":
+								if(isElementExistByString("完成")) {
+									driver.findElement(By.name("完成")).click();
+									Thread.sleep(2000);
+								}
+								break;
+							case "[CUN-TL00]":
+								
+								break;
+							case "[Lenovo TB3-X70N]":
+								break;
+							case "[CUN-AL00]":
+								while (isElementExistByString("打开")) {
+									driver.pressKeyCode(AndroidKeyCode.BACK);
+									Thread.sleep(2000);
+								}
+								break;
+							default:
+								break;
 							}
 						}
 					} else if ("继续体验".equals(buttomButton.getText())) {

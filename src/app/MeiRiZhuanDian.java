@@ -20,9 +20,9 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	private boolean isExtraBonusCompleted = true;
+	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = true;
-	private boolean isInstallCompleted = false;
+	private boolean isInstallCompleted = true;
 	private int DEFAULT_INSTALL_COUNT  = 10;
 	private int choujiangji = 0; //欢乐抽奖机
 	private int yangshen = 0; //养生之道
@@ -226,6 +226,8 @@ public class MeiRiZhuanDian {
 		String lastPackage = "";
 		boolean isFirst = true;
 			while (isElementExistById("com.adsmobile.mrzd:id/tm_item")) {
+				AdbUtils.swipe(300, 500, 300, 1000);
+				Thread.sleep(5000);
 				String appName = driver.findElement(By.xpath(
 						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
@@ -233,6 +235,7 @@ public class MeiRiZhuanDian {
 						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
 						.getText();
 				int experienceTime = Integer.parseInt(time.substring(2, 3));
+				System.out.println("experienceTime = " + experienceTime);
 				System.out.println("appName = " + appName);
 				System.out.println("time = " + time);
 				if (isFirst) {
@@ -240,13 +243,10 @@ public class MeiRiZhuanDian {
 					AdbUtils.rootComandEnablePackage(packageName2);
 					isFirst = false;
 				}
-				driver.findElement(By.xpath(
-						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
-						.click();
 				if (isElementExistByXpath(
 						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]")) {
 					String secondAppName = driver.findElement(By.xpath(
-							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
+							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 							.getText();
 					String packageName = Configure.map.get(secondAppName);
 
@@ -261,7 +261,10 @@ public class MeiRiZhuanDian {
 						}).start();
 					}
 				}
-				Thread.sleep(experienceTime * 70);
+				driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+						.click();
+				Thread.sleep(experienceTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				if ("".equals(lastPackage) && (!lastPackage.equals(name))) {
 					AdbUtils.rootComandDisablePackage(lastPackage);
