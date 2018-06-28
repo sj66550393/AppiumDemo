@@ -272,7 +272,7 @@ public class MeiRiZhuanDian {
 				String name = AdbUtils.getCurrentPackage();
 				AdbUtils.killProcess(name);
 				Thread.sleep(3000);
-				if ("".equals(lastPackage) && (!lastPackage.equals(name))) {
+				if ((!"".equals(lastPackage)) && (!lastPackage.equals(name))) {
 					AdbUtils.rootComandDisablePackage(lastPackage);
 				}
 				lastPackage = AdbUtils.getCurrentPackage();
