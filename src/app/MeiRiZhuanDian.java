@@ -225,9 +225,13 @@ public class MeiRiZhuanDian {
 		Thread.sleep(1000);
 		String lastPackage = "";
 		boolean isFirst = true;
-			while (isElementExistById("com.adsmobile.mrzd:id/tm_item")) {
+			while (true) {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(5000);
+				if(isElementExistByString("去做任务")) {
+					isExtraBonusCompleted = true;
+					break;
+				}
 				String appName = driver.findElement(By.xpath(
 						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
@@ -266,11 +270,12 @@ public class MeiRiZhuanDian {
 						.click();
 				Thread.sleep(experienceTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
+				AdbUtils.killProcess(name);
+				Thread.sleep(3000);
 				if ("".equals(lastPackage) && (!lastPackage.equals(name))) {
 					AdbUtils.rootComandDisablePackage(lastPackage);
 				}
 				lastPackage = AdbUtils.getCurrentPackage();
-				AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 				Log.log.info("kill " + name);
 				Thread.sleep(5000);
 				

@@ -42,7 +42,6 @@ public class MiZhuan {
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
 	private int INSTALL_EXPERIWNCE_TIME = 5;
-	private int DEFAULT_INSTALL_COUNT  = 21;
 	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
@@ -56,9 +55,9 @@ public class MiZhuan {
 	private boolean isTuituiComleted = false;
 	private boolean isTurnturnComleted = false;
 	private boolean isPackageCompleted = false;
-	private boolean isGetInstallCount = false;
+	private boolean isGetInstallCount = true;
 	private int installCount = 0;
-	public boolean isCompleted = false;
+	public boolean isCompleted = true;
 
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
@@ -207,6 +206,9 @@ public class MiZhuan {
 			}
 		}
 		
+		if (isGetInstallCount) {
+			getBonus();
+		}
 		
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
@@ -284,19 +286,31 @@ public class MiZhuan {
 	
 	private void getInstallCount() {
 		try {
-		driver.findElement(By.name("领奖励")).click();
-		Thread.sleep(2000);
-		String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
-		str = str.split("/")[1];
-		DEFAULT_INSTALL_COUNT = Integer.parseInt(str);
-		System.out.println("install count = " + str);
-		Thread.sleep(2000);
-		AdbUtils.back();
-		}catch(Exception e) {
+			driver.findElement(By.name("领奖励")).click();
+			Thread.sleep(2000);
+			String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
+			if ("领取".equals(str)) {
+				driver.findElement(By.id("me.mizhuan:id/status")).click();
+				Thread.sleep(5000);
+				AdbUtils.back();
+				isGetInstallCount = true;
+			} else {
+				str = str.split("/")[1];
+				Configure.Mizhuan_instlal_count = Integer.parseInt(str);
+				System.out.println("install count = " + str);
+			}
+		} catch (Exception e) {
+			isGetInstallCount = true;
+			e.printStackTrace();
+		}
+		try {
+			Thread.sleep(2000);
+			AdbUtils.back();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void getBonus() {
 		try {
 		driver.findElement(By.name("领奖励")).click();

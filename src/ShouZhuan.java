@@ -11,6 +11,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -46,15 +48,15 @@ public class ShouZhuan {
 		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
 		} else {
-			Configure.deviceId = "UCZHUGEU99999999";
-			AdbUtils.deviceId = "UCZHUGEU99999999";
-			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
-			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999"	+" shell ";
+			Configure.deviceId = "200add814";
+			AdbUtils.deviceId = "200add814";
+			AdbUtils.storageDir = AdbUtils.storageDes + "200add814" + "/";
+			AdbUtils.adb = "adb -s " + "200add814"	+" shell ";
 		}
 		if(args.length > 2 &&args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4771";
+			Configure.appiumPort = "4801";
 		}
 		
 		if(args.length > 3 && args[3] != null){
@@ -82,7 +84,7 @@ public class ShouZhuan {
 			if(appInfoFile.exists()) {
 			String info = TextUtil.txt2StringUTF8(appInfoFile);
 			Configure.map = new Gson().fromJson(info, HashMap.class);
-			AdbUtils.rootComandDisablePackage();
+			AdbUtils.rootComandEnablePackage();
 			}
 		} catch (Exception e) {
 			System.out.println("error = " + e.getMessage());
@@ -121,25 +123,28 @@ class Task1 extends TimerTask {
 			} catch (Exception e) {
 			}
 		}
-//		if (!MiZhuan.getInstance().isCompleted) {
-//			MiZhuan.getInstance().start(new TaskCallback() {
-//
-//				@Override
-//				public void onSuccess(AndroidDriver driver) {
-//					MiZhuan.getInstance().isCompleted = true;
-//					driver.quit();
-//					restartApp();
-//				}
-//
-//				@Override
-//				public void onRestartApp(AndroidDriver driver) {
-//					driver.quit();
-//					restartApp();
-//					
-//				}
-//
-//			});
-//		} else 
+		if (!MiZhuan.getInstance().isCompleted) {
+			MiZhuan.getInstance().start(new TaskCallback() {
+
+				@Override
+				public void onSuccess(AndroidDriver driver) {
+					MiZhuan.getInstance().isCompleted = true;
+					driver.quit();
+					restartApp();
+				}
+
+				@Override
+				public void onRestartApp(AndroidDriver driver) {
+					if(isElementExistByString(driver, "确定")) {
+						driver.findElement(By.nam)
+					}
+					driver.quit();
+					restartApp();
+					
+				}
+
+			});
+		} else 
 		if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 				
@@ -169,6 +174,15 @@ class Task1 extends TimerTask {
 			run();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	private boolean isElementExistByString(AndroidDriver driver  , String name){
+		try{
+			WebElement element = driver.findElement(By.name(name));
+			element.isDisplayed();
+			return true;
+		}catch(Exception e) {
+			return false;
 		}
 	}
 }
