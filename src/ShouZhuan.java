@@ -136,7 +136,7 @@ class Task1 extends TimerTask {
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
 					if(isElementExistByString(driver, "确定")) {
-						driver.findElement(By.nam)
+						driver.findElement(By.name("确定")).click();
 					}
 					driver.quit();
 					restartApp();
@@ -158,6 +158,9 @@ class Task1 extends TimerTask {
 				
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
+					if(isElementExistByString(driver, "确定")) {
+						driver.findElement(By.name("确定")).click();
+					}
 					driver.quit();
 					restartApp();
 				}
