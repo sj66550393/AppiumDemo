@@ -45,7 +45,7 @@ public class MiZhuan {
 	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = true;
+	private boolean isClickAdsCompleted = false;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -57,7 +57,7 @@ public class MiZhuan {
 	private boolean isPackageCompleted = false;
 	private boolean isGetInstallCount = true;
 	private int installCount = 0;
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
@@ -163,9 +163,6 @@ public class MiZhuan {
 				return;
 			}
 		}
-		if (isGetInstallCount) {
-			getInstallCount();
-		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -185,31 +182,11 @@ public class MiZhuan {
 		if(!isInstallCompleted){
 			Log.log.info("开始安装任务");
 			result = universalInstall();
-//			switch (Configure.productModel) {
-//			case "[OPPO A37m]":
-//				result = installApp_OPPO(driver);
-//				break;
-//			case "[CUN-TL00]":
-//				result = installApp_CUN_TL(driver);
-//				break;
-//			case "[Lenovo TB3-X70N]":
-//				break;
-//			case "[CUN-AL00]":
-//				result = installApp_CUN_AL(driver);
-//				break;
-//			default:
-//				break;
-//			}
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 				return;
 			}
 		}
-		
-		if (isGetInstallCount) {
-			getBonus();
-		}
-		
 		if (!isLooklookCompleted) {
 			result = startLooklookTaskFromBottomGame();
 			if (ResultDict.COMMAND_SUCCESS != result) {
@@ -286,6 +263,8 @@ public class MiZhuan {
 	
 	private void getInstallCount() {
 		try {
+			driver.findElement(By.name("推荐")).click();
+			Thread.sleep(5000);
 			driver.findElement(By.name("领奖励")).click();
 			Thread.sleep(2000);
 			String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
@@ -293,21 +272,23 @@ public class MiZhuan {
 				driver.findElement(By.id("me.mizhuan:id/status")).click();
 				Thread.sleep(5000);
 				AdbUtils.back();
-				isGetInstallCount = true;
-			} else {
+				isGetInstallCount = false;
+				isInstallCompleted = true;
+			} else if("已领取".equals(str)){
+				isGetInstallCount = false;
+				isInstallCompleted = true;
+			} else{
 				str = str.split("/")[1];
 				Configure.Mizhuan_instlal_count = Integer.parseInt(str);
 				System.out.println("install count = " + str);
 			}
 		} catch (Exception e) {
-			isGetInstallCount = true;
 			e.printStackTrace();
 		}
 		try {
 			Thread.sleep(2000);
 			AdbUtils.back();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -727,11 +708,26 @@ public class MiZhuan {
 			int position = 1;
 			while (true) {
 				Thread.sleep(1000);
+				if(Configure.isPad){
+					if (isElementExistById("me.mizhuan:id/mituo_status")) {
+						String mituo = driver.findElement(By.id("me.mizhuan:id/mituo_status")).getText();
+						if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "0万".equals(mituo.substring(mituo.length()-2))) {
+							Log.log.info("额外任务完成");
+							isExtraBonusCompleted = true;
+							break;
+						} else {
+							driver.findElement(By.id("me.mizhuan:id/mituo_status")).click();
+						}
+						} else {
+							continue;
+						}
+				}else{
 				if (isElementExistByXpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")) {
 					String mituo = driver.findElement(By.xpath("//android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).getText();
 					String type = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,2)]")).getText().substring(1, 3);
 					System.out.println("mituo = " + mituo);
 					System.out.println("type = " + type);
+					
 					try {
 					if(isFirst) {
 						String firstAppName = driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.TextView[contains(@index,1)]")).getText();
@@ -777,6 +773,7 @@ public class MiZhuan {
 					}catch(Exception e) {
 						e.printStackTrace();
 					}
+					
 					System.out.println("type = " + type);
 					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");
@@ -788,6 +785,7 @@ public class MiZhuan {
 				} else {
 					continue;
 				}
+			}
 				Log.log.info("额外奖励开始计时。。。");
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
@@ -1178,6 +1176,29 @@ public class MiZhuan {
 	private int universalInstall(){
 		try {
 			Thread.sleep(10000);
+			//获取安装数量
+			if(isGetInstallCount){
+				driver.findElement(By.name("领奖励")).click();
+				Thread.sleep(2000);
+				String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
+				if ("领取".equals(str)) {
+					driver.findElement(By.id("me.mizhuan:id/status")).click();
+					Thread.sleep(5000);
+					AdbUtils.back();
+					isInstallCompleted = true;
+					return ResultDict.COMMAND_SUCCESS;
+				} else if("已领取".equals(str)){
+					isInstallCompleted = true;
+					AdbUtils.back();
+					return ResultDict.COMMAND_SUCCESS;
+				} else{
+					Configure.Mizhuan_instlal_count = Integer.parseInt(str.split("/")[1]) -  Integer.parseInt(str.split("/")[0]);
+					AdbUtils.back();
+					System.out.println("install count = " + str);
+				}
+			}else{
+				Configure.Mizhuan_instlal_count = 0;
+			}
 			Log.log.info("点击应用赚");
 			driver.findElement(By.name("应用赚")).click();
 			Thread.sleep(1000);
@@ -1327,6 +1348,15 @@ public class MiZhuan {
 				SwipeScreen.swipe(driver, 300, 800, 300, 665);
 			}
 			Thread.sleep(2000);
+			driver.findElement(By.name("推荐")).click();
+			Thread.sleep(5000);
+			driver.findElement(By.name("领奖励")).click();
+			Thread.sleep(2000);
+			driver.findElement(By.name("领取")).click();
+			Thread.sleep(5000);
+			AdbUtils.back();
+			Thread.sleep(2000);
+			AdbUtils.back();
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

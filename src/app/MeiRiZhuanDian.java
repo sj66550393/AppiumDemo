@@ -275,7 +275,7 @@ public class MeiRiZhuanDian {
 				if ((!"".equals(lastPackage)) && (!lastPackage.equals(name))) {
 					AdbUtils.rootComandDisablePackage(lastPackage);
 				}
-				lastPackage = AdbUtils.getCurrentPackage();
+				lastPackage = name;
 				Log.log.info("kill " + name);
 				Thread.sleep(5000);
 				

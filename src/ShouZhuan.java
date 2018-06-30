@@ -84,7 +84,7 @@ public class ShouZhuan {
 			if(appInfoFile.exists()) {
 			String info = TextUtil.txt2StringUTF8(appInfoFile);
 			Configure.map = new Gson().fromJson(info, HashMap.class);
-			AdbUtils.rootComandEnablePackage();
+			AdbUtils.rootComandDisablePackage();
 			}
 		} catch (Exception e) {
 			System.out.println("error = " + e.getMessage());
