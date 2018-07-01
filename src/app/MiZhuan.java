@@ -41,23 +41,23 @@ public class MiZhuan {
 	private int eighteenNum = 0; // 18头条
 	private int loveNewsNum = 0; // 我爱头条 
 	private int DEFAULT_EXTRABONUS_TIME = 1;
-	private int INSTALL_EXPERIWNCE_TIME = 5;
+	private int INSTALL_EXPERIWNCE_TIME = 5; 
 	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = false;
-	private boolean isSigninCompleted = false;
-	private boolean isSigninMorning = false;
-	private boolean isSigninNoon = false;
-	private boolean isSigninAfternoon =false;
-	private boolean isSigninNight = false;
-	private boolean is360Completed = false;
-	private boolean isTuituiComleted = false;
-	private boolean isTurnturnComleted = false;
-	private boolean isPackageCompleted = false;
+	private boolean isClickAdsCompleted = true;
+	private boolean isSigninCompleted = true;
+	private boolean isSigninMorning = true;
+	private boolean isSigninNoon = true;
+	private boolean isSigninAfternoon =true;
+	private boolean isSigninNight = true;
+	private boolean is360Completed = true;
+	private boolean isTuituiComleted = true;
+	private boolean isTurnturnComleted = true;
+	private boolean isPackageCompleted = true;
 	private boolean isGetInstallCount = true;
-	private int installCount = 0;
-	public boolean isCompleted = false;
+	private int installCount = 0; 
+	public boolean isCompleted = true;
 
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
@@ -194,11 +194,11 @@ public class MiZhuan {
 				return;
 			}
 		}
-		if(DateUtils.getHour() <= 12) {
-			isExtraBonusCompleted = false;
-			callback.onRestartApp(driver);
-			return;
-		}
+//		if(DateUtils.getHour() <= 12) {
+//			isExtraBonusCompleted = false;
+//			callback.onRestartApp(driver);
+//			return;
+//		}
 		callback.onSuccess(driver);
 	}
 	
@@ -310,9 +310,9 @@ public class MiZhuan {
 	public boolean clickTuitui() {
 		try {
 			Thread.sleep(3000);
-			if(isElementExistByString("֪知道了")) {
+			if(isElementExistByString("知道了")) {
 				System.out.println("find know");
-				driver.findElement(By.name("֪知道了")).click();
+				driver.findElement(By.name("知道了")).click();
 				isTuituiComleted = true;
 				return true;
 			}
@@ -558,9 +558,9 @@ public class MiZhuan {
 			Log.log.info("点击360新闻");
 			driver.findElement(By.name("360新闻")).click();
 			Thread.sleep(10000);
-			if(isElementExistByString("֪知道了")) {
+			if(isElementExistByString("知道了")) {
 				System.out.println("find know");
-				driver.findElement(By.name("֪知道了")).click();
+				driver.findElement(By.name("知道了")).click();
 				is360Completed = true;
 				return true;
 			}
@@ -778,7 +778,7 @@ public class MiZhuan {
 					if("已抢完".equals(mituo) || "未到时间".equals(mituo) || "深度".equals(type)) {
 						Log.log.info("额外任务完成");
 						isExtraBonusCompleted = true;
-						break;
+						return ResultDict.COMMAND_SUCCESS;
 					} else {
 						driver.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"+ position+")]/android.widget.LinearLayout/android.widget.Button")).click();
 					}
@@ -1194,7 +1194,7 @@ public class MiZhuan {
 				} else{
 					Configure.Mizhuan_instlal_count = Integer.parseInt(str.split("/")[1]) -  Integer.parseInt(str.split("/")[0]);
 					AdbUtils.back();
-					System.out.println("install count = " + str);
+					System.out.println("install count = " + Configure.Mizhuan_instlal_count);
 				}
 			}else{
 				Configure.Mizhuan_instlal_count = 0;
@@ -1314,6 +1314,12 @@ public class MiZhuan {
 						}
 					} else if ("继续体验".equals(buttomButton.getText())) {
 						Log.log.info("点击继续体验");
+						if(AdbUtils.isRoot()){
+							String name = driver.findElement(By.id("me.mizhuan:id/mituo_tvTitle")).getText();
+							String packageName = Configure.map.get(name);
+							AdbUtils.rootComandEnablePackage(packageName);
+							Thread.sleep(3000);
+						}
 						buttomButton.click();
 						Thread.sleep(20 *1000);
 						for(int j=0;j<5;j++){

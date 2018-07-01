@@ -35,70 +35,68 @@ import common.ResultDict;
 public class ShouZhuan {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
-		if(args.length > 0 && args[0] != null) {
+		if (args.length > 0 && args[0] != null) {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "e:\\";
-			AdbUtils.storageDes = "e:\\";
+			Configure.logDir = "d:\\";
+			AdbUtils.storageDes = "d:\\";
 		}
-		if(args.length > 1 && args[1] != null) {
-		Configure.deviceId = args[1];
-		AdbUtils.deviceId = args[1];
-		AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
-		AdbUtils.adb = "adb -s " + args[1]	+" shell ";
+		if (args.length > 1 && args[1] != null) {
+			Configure.deviceId = args[1];
+			AdbUtils.deviceId = args[1];
+			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
+			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "200add814";
-			AdbUtils.deviceId = "200add814";
-			AdbUtils.storageDir = AdbUtils.storageDes + "200add814" + "/";
-			AdbUtils.adb = "adb -s " + "200add814"	+" shell ";
+			Configure.deviceId = "UCZHUGEU99999999";
+			AdbUtils.deviceId = "UCZHUGEU99999999";
+			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
+			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999" + " shell ";
 		}
-		if(args.length > 2 &&args[2] != null) {
+		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4801";
+			Configure.appiumPort = "4811";
 		}
-		
-		if(args.length > 3 && args[3] != null){
+
+		if (args.length > 3 && args[3] != null) {
 			Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 		} else {
 			Configure.Mizhuan_instlal_count = 21;
 		}
 		init();
-//		MiZhuan.getInstance().checkAppList();
-//		MiZhuan.getInstance().checkAllApp();
+		// MiZhuan.getInstance().checkAppList();
+		// MiZhuan.getInstance().checkAllApp();
 		Timer t = new Timer();
 		t.schedule(new Task1(), 1000);
 	}
-	
+
 	private static void init() {
 		Configure.isPad = AdbUtils.isPad();
 		String productModel = AdbUtils.getProductModel();
 		Configure.productModel = productModel;
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
-			
-		try {
-			MyApplicationList.getInstance().getApplicationList();
-			AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId );
-			File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
-			if(appInfoFile.exists()) {
-			String info = TextUtil.txt2StringUTF8(appInfoFile);
-			Configure.map = new Gson().fromJson(info, HashMap.class);
-			AdbUtils.rootComandDisablePackage();
+		if (AdbUtils.isRoot()) {
+			try {
+				MyApplicationList.getInstance().getApplicationList();
+				AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId);
+				File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
+				if (appInfoFile.exists()) {
+					String info = TextUtil.txt2StringUTF8(appInfoFile);
+					Configure.map = new Gson().fromJson(info, HashMap.class);
+					AdbUtils.rootComandDisablePackage();
+				}
+			} catch (Exception e) {
+				System.out.println("error = " + e.getMessage());
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			System.out.println("error = " + e.getMessage());
-			e.printStackTrace();
 		}
-		if(!file.exists()) {
+		if (!file.exists()) {
 			file.mkdirs();
 		}
 	}
-	
+
 }
-
-
-
 
 class Task1 extends TimerTask {
 	ExecutorService fixedThreadPool;
@@ -135,30 +133,29 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
-					if(isElementExistByString(driver, "确定")) {
+					if (isElementExistByString(driver, "确定")) {
 						driver.findElement(By.name("确定")).click();
 					}
 					driver.quit();
 					restartApp();
-					
+
 				}
 
 			});
-		} else 
-		if (!MeiRiZhuanDian.getInstance().isCompleted) {
+		} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
-				
+
 				@Override
 				public void onSuccess(AndroidDriver driver) {
 					MeiRiZhuanDian.getInstance().isCompleted = true;
 					driver.quit();
 					restartApp();
-					
+
 				}
-				
+
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
-					if(isElementExistByString(driver, "确定")) {
+					if (isElementExistByString(driver, "确定")) {
 						driver.findElement(By.name("确定")).click();
 					}
 					driver.quit();
@@ -167,7 +164,7 @@ class Task1 extends TimerTask {
 			});
 		}
 	}
-	
+
 	public void restartApp() {
 		try {
 			while (!AdbUtils.getCurrentPackage().contains("launcher")) {
@@ -179,12 +176,13 @@ class Task1 extends TimerTask {
 			e.printStackTrace();
 		}
 	}
-	private boolean isElementExistByString(AndroidDriver driver  , String name){
-		try{
+
+	private boolean isElementExistByString(AndroidDriver driver, String name) {
+		try {
 			WebElement element = driver.findElement(By.name(name));
 			element.isDisplayed();
 			return true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}

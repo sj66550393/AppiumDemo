@@ -24,6 +24,21 @@ public class AdbUtils {
     	return  execResult.split(" ")[5];
     }
     
+    public static boolean isRoot(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		Thread.sleep(1000);
+            os.writeBytes("exit\n");
+            os.flush();
+            os.close();
+            return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
     public static String isAwake(){
     	String execResult = printf(adb + "dumpsys window policy | grep mAwake");
     	return execResult.substring(11, 16);
