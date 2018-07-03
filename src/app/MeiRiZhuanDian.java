@@ -20,8 +20,8 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	private boolean isExtraBonusCompleted = true;
-	private boolean isLooklookCompleted = true;
+	private boolean isExtraBonusCompleted = false;
+	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
 	private boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
@@ -30,7 +30,7 @@ public class MeiRiZhuanDian {
 	private int yangshen = 0; // 养生之道
 	private int paihongbao = 0; // 全民派红包
 	private int wajinkuang = 0; //
-	private int quanjiatong = 0;
+	private int quanjiatong = 0; 
 	private int xianjinghongbao = 0;
 	private int dahuayule = 0;
 	private int yingdajiang = 0;
@@ -320,6 +320,8 @@ public class MeiRiZhuanDian {
 			startAds("养生之道");
 			startAds("巨头条");
 			startAds("今日宜抢红包");
+			startAds("翻牌赢大奖");
+			startAds("抽现金红包");
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -342,13 +344,13 @@ public class MeiRiZhuanDian {
 					AdbUtils.swipe(300, 1100, 300, 500);
 					Thread.sleep(1000);
 				}
-				AdbUtils.back();
 				if (!isElementExistByString("新闻阅读")) {
-					AdbUtils.back();
+					AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 					Thread.sleep(3000);
 				}else{
+					AdbUtils.back();
 					currentNewsCount++;
-					Thread.sleep(70*1000);
+					Thread.sleep(80*1000);
 				}
 				AdbUtils.swipe(300, 1100, 300, 500);
 			}
@@ -363,6 +365,10 @@ public class MeiRiZhuanDian {
 		try {
 			for (int i = 0; i < 5; i++) {
 				driver.findElement(By.name(name)).click();
+				String str = driver.findElement(By.id("com.adsmobile.mrzd:id/news_api_task_surplus")).getText();
+				if(str.contains("已完成")){
+					return ResultDict.COMMAND_SUCCESS;
+				}
 				Thread.sleep(15 * 1000);
 				driver.findElement(By.name("关闭")).click();
 				Thread.sleep(3000);
