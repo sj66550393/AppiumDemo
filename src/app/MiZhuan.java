@@ -803,7 +803,7 @@ public class MiZhuan {
 				Thread.sleep(appUseTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 
-				if ((!"".equals(lastPackage)) && (!lastPackage.equals(name))) {
+				if ((!"".equals(lastPackage)) && (!lastPackage.equals(name)) && AdbUtils.isRoot()) {
 					AdbUtils.rootComandDisablePackage(lastPackage);
 				}
 				lastPackage = AdbUtils.getCurrentPackage();

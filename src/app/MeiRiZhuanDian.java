@@ -369,7 +369,7 @@ public class MeiRiZhuanDian {
 				if(str.contains("已完成")){
 					return ResultDict.COMMAND_SUCCESS;
 				}
-				Thread.sleep(15 * 1000);
+				Thread.sleep(25 * 1000);
 				driver.findElement(By.name("关闭")).click();
 				Thread.sleep(3000);
 			}
