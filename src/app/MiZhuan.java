@@ -45,7 +45,7 @@ public class MiZhuan {
 	private boolean isExtraBonusCompleted = false;
 	private boolean isLooklookCompleted = true;
 	private boolean isInstallCompleted = false;
-	private boolean isClickAdsCompleted = false;
+	private boolean isClickAdsCompleted = true;
 	private boolean isSigninCompleted = false;
 	private boolean isSigninMorning = false;
 	private boolean isSigninNoon = false;
@@ -55,7 +55,7 @@ public class MiZhuan {
 	private boolean isTuituiComleted = true;
 	private boolean isTurnturnComleted = true;
 	private boolean isPackageCompleted = true;
-	private boolean isGetInstallCount = true;
+	public  boolean isGetInstallCount = false;
 	private int installCount = 0;
 	public boolean isCompleted = false;
 
@@ -800,7 +800,7 @@ public class MiZhuan {
 					}
 				}
 				Log.log.info("额外奖励开始计时。。。");
-				Thread.sleep(appUseTime * 70 * 1000);
+				Thread.sleep(appUseTime * 70 * 1000); 
 				String name = AdbUtils.getCurrentPackage();
 
 				if ((!"".equals(lastPackage)) && (!lastPackage.equals(name)) && AdbUtils.isRoot()) {

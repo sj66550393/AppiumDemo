@@ -64,6 +64,14 @@ public class ShouZhuan {
 		} else {
 			Configure.Mizhuan_instlal_count = 21;
 		}
+		
+		if(args.length > 4 && args[4] != null && "1".equals(args[4])) {
+		   MiZhuan.getInstance().isGetInstallCount = true;
+		} else {
+		   MiZhuan.getInstance().isGetInstallCount = false;
+		}
+		
+		
 		init();
 		// MiZhuan.getInstance().checkAppList();
 		// MiZhuan.getInstance().checkAllApp();
