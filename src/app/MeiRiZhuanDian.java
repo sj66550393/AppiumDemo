@@ -20,7 +20,7 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	private boolean isExtraBonusCompleted = false;
+	private boolean isExtraBonusCompleted = true;
 	private boolean isLooklookCompleted = false;
 	private boolean isInstallCompleted = true;
 	private boolean isReadNewsCompleted = false;
@@ -85,6 +85,17 @@ public class MeiRiZhuanDian {
 				return;
 			}
 		}
+	
+		try {
+			Thread.sleep(3000);
+			if(isElementExistByString("狠心拒绝")){
+				driver.findElement(By.name("狠心拒绝")).click();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			callback.onRestartApp(driver);
+			return;
+		}
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -115,7 +126,7 @@ public class MeiRiZhuanDian {
 				return;
 			}
 		}
-		
+		callback.onSuccess(driver);
 	}
 
 	private int install() {
@@ -310,6 +321,7 @@ public class MeiRiZhuanDian {
 
 	private int startLooklookTask() {
 
+		
 		try {
 			driver.findElement(By.name("简单赚钱")).click();
 			Thread.sleep(4000);
@@ -322,6 +334,11 @@ public class MeiRiZhuanDian {
 			startAds("今日宜抢红包");
 			startAds("翻牌赢大奖");
 			startAds("抽现金红包");
+			startAds("红包最真情");
+			System.out.println("lookAds end");
+			Thread.sleep(3000);
+			AdbUtils.back();
+			isLooklookCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -333,8 +350,12 @@ public class MeiRiZhuanDian {
 	private int startNews() {
 		try {
 			driver.findElement(By.name("阅读赚钱")).click();
-			Thread.sleep(4000);
-			while (currentNewsCount < 80) {
+			Thread.sleep(4000); 
+			int count = 0;
+			while (currentNewsCount < 800) {
+				if(count == 6){
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 				if (!isElementExistByString("新闻阅读")) {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
@@ -353,6 +374,7 @@ public class MeiRiZhuanDian {
 					Thread.sleep(80*1000);
 				}
 				AdbUtils.swipe(300, 1100, 300, 500);
+				count++;
 			}
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
@@ -361,15 +383,18 @@ public class MeiRiZhuanDian {
 		}
 	}
 
-	private int startAds(String name) {
+	private int startAds(String name) throws Exception{ 
 		try {
 			for (int i = 0; i < 5; i++) {
 				driver.findElement(By.name(name)).click();
+				Thread.sleep(2000);
 				String str = driver.findElement(By.id("com.adsmobile.mrzd:id/news_api_task_surplus")).getText();
 				if(str.contains("已完成")){
+					driver.findElement(By.name("关闭")).click();
+					Thread.sleep(3000);
 					return ResultDict.COMMAND_SUCCESS;
 				}
-				Thread.sleep(25 * 1000);
+				Thread.sleep(20 * 1000);
 				driver.findElement(By.name("关闭")).click();
 				Thread.sleep(3000);
 			}

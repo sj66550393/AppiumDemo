@@ -66,6 +66,7 @@ public class ShouZhuan {
 		}
 		
 		if(args.length > 4 && args[4] != null && "1".equals(args[4])) {
+			System.out.println("set isGetInstallCount true");
 		   MiZhuan.getInstance().isGetInstallCount = true;
 		} else {
 		   MiZhuan.getInstance().isGetInstallCount = false;
@@ -157,8 +158,7 @@ class Task1 extends TimerTask {
 				public void onSuccess(AndroidDriver driver) {
 					MeiRiZhuanDian.getInstance().isCompleted = true;
 					driver.quit();
-					restartApp();
-
+//					restartApp();
 				}
 
 				@Override
