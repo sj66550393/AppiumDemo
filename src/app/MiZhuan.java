@@ -57,7 +57,7 @@ public class MiZhuan {
 	private boolean isPackageCompleted = true;
 	public boolean isGetInstallCount = false;
 	private int installCount = 0;
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
@@ -377,9 +377,9 @@ public class MiZhuan {
 	public boolean clickRedPackage() {
 		try {
 			Thread.sleep(3000);
-			if (isElementExistByString("֪知道了")) {
+			if (isElementExistByString("知道了")) {
 				System.out.println("find know");
-				driver.findElement(By.name("֪知道了")).click();
+				driver.findElement(By.name("知道了")).click();
 				isPackageCompleted = true;
 				return true;
 			}
@@ -716,8 +716,8 @@ public class MiZhuan {
 						continue;
 					}
 				} else {
-					if (isElementExistByXpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
-							+ position + ")]/android.widget.LinearLayout/android.widget.Button")) {
+//					if (isElementExistByXpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
+//							+ position + ")]/android.widget.LinearLayout/android.widget.Button")) {
 						String mituo = driver
 								.findElement(By
 										.xpath("//android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
@@ -795,9 +795,10 @@ public class MiZhuan {
 											+ position + ")]/android.widget.LinearLayout/android.widget.Button"))
 									.click();
 						}
-					} else {
-						continue;
-					}
+//					}
+//				else {
+//						continue;
+//					}
 				}
 				Log.log.info("额外奖励开始计时。。。");
 				Thread.sleep(appUseTime * 70 * 1000);
