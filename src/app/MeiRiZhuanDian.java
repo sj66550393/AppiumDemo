@@ -20,10 +20,10 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	private boolean isExtraBonusCompleted = false;
-	private boolean isLooklookCompleted = false;
-	private boolean isInstallCompleted = true;
-	private boolean isReadNewsCompleted = false;
+	public boolean isExtraBonusCompleted = true;
+	public boolean isLooklookCompleted = false;
+	public boolean isInstallCompleted = true;
+	public boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
 	private int currentNewsCount = 0;
 	private int choujiangji = 0; // 欢乐抽奖机
@@ -49,10 +49,6 @@ public class MeiRiZhuanDian {
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
 		capabilities.setCapability("udid", Configure.deviceId);
-		// extraBonusManager = new ExtraBonusManager(driver);
-		// looklookManager = new LooklookManager(driver);
-		// installAppManager = new InstallAppManager(driver);
-		// signinManager = new SigninManager(driver);
 	}
 
 	public static MeiRiZhuanDian getInstance() {
@@ -75,6 +71,8 @@ public class MeiRiZhuanDian {
 			return;
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
+		
+		//首页弹框
 		if (isElementExistById("com.adsmobile.mrzd:id/window_image_dismiss")) {
 			driver.findElement(By.id("com.adsmobile.mrzd:id/window_image_dismiss")).click();
 			try {
@@ -86,6 +84,7 @@ public class MeiRiZhuanDian {
 			}
 		}
 	
+		//升级弹框
 		try {
 			Thread.sleep(3000);
 			if(isElementExistByString("狠心拒绝")){
@@ -96,6 +95,8 @@ public class MeiRiZhuanDian {
 			callback.onRestartApp(driver);
 			return;
 		}
+		
+		
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -247,59 +248,47 @@ public class MeiRiZhuanDian {
 
 	private int startSigninAppTask() {
 		try {
-			// ���Ӧ��׬
+			Thread.sleep(2000);
 			driver.findElement(By.name("快速任务")).click();
 			Thread.sleep(1000);
 			driver.findElement(By.name("软件签到")).click();
 			Thread.sleep(1000);
 			String lastPackage = "";
 			boolean isFirst = true;
+			String taskAppName = "";
+			String taskTime = "1";
 			while (true) {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(5000);
+				//额外奖励完成
 				if (isElementExistByString("去做任务")) {
 					isExtraBonusCompleted = true;
 					break;
 				}
-				String appName = driver
+				taskAppName = driver
 						.findElement(By
 								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				String time = driver
+				taskTime = driver
 						.findElement(By
 								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
 						.getText();
-				int experienceTime = Integer.parseInt(time.substring(2, 3));
-				System.out.println("experienceTime = " + experienceTime);
-				System.out.println("appName = " + appName);
-				System.out.println("time = " + time);
-				if (isFirst) {
-					String packageName2 = Configure.map.get(appName);
-					AdbUtils.rootComandEnablePackage(packageName2);
-					isFirst = false;
+				int experienceTime = Integer.parseInt(taskTime.substring(2, 3)); 
+				System.out.println("appName = " + taskAppName + "    experienceTime = " + experienceTime);
+				String packageName = Configure.map.get(taskAppName); 
+				if (packageName != null) {
+					AdbUtils.rootComandEnablePackage(packageName);
+					driver.findElement(By
+							.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+							.click();
+				} else {
+					isExtraBonusCompleted = true;
+					break;
 				}
-				if (isElementExistByXpath(
-						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]")) {
-					String secondAppName = driver
-							.findElement(By
-									.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
-							.getText();
-					String packageName = Configure.map.get(secondAppName);
-
-					if (packageName != null) {
-						System.out.println("packageName = " + packageName);
-						new Thread(new Runnable() {
-
-							@Override
-							public void run() {
-								AdbUtils.rootComandEnablePackage(packageName);
-							}
-						}).start();
-					}
-				}
-				driver.findElement(By
-						.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
-						.click();
+//					String secondAppName = driver
+//							.findElement(By
+//									.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+//							.getText();
 				Thread.sleep(experienceTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				AdbUtils.killProcess(name);
@@ -310,18 +299,15 @@ public class MeiRiZhuanDian {
 				lastPackage = name;
 				Log.log.info("kill " + name);
 				Thread.sleep(5000);
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
-		return 0;
+		return ResultDict.COMMAND_SUCCESS;
 	}
 
 	private int startLooklookTask() {
-
-		
 		try {
 			driver.findElement(By.name("简单赚钱")).click();
 			Thread.sleep(4000);
@@ -335,6 +321,9 @@ public class MeiRiZhuanDian {
 			startAds("翻牌赢大奖");
 			startAds("抽现金红包");
 			startAds("红包最真情");
+			startAds("娱乐圈秘闻");
+			startAds("天降红包");
+			startAds("健康养生");
 			System.out.println("lookAds end");
 			Thread.sleep(3000);
 			AdbUtils.back();
@@ -383,25 +372,22 @@ public class MeiRiZhuanDian {
 		}
 	}
 
-	private int startAds(String name) throws Exception{ 
+	private void startAds(String name){
 		try {
-			for (int i = 0; i < 5; i++) {
+			while (true) {
 				driver.findElement(By.name(name)).click();
 				Thread.sleep(2000);
 				String str = driver.findElement(By.id("com.adsmobile.mrzd:id/news_api_task_surplus")).getText();
 				if(str.contains("已完成")){
 					driver.findElement(By.name("关闭")).click();
 					Thread.sleep(3000);
-					return ResultDict.COMMAND_SUCCESS;
+					return;
 				}
 				Thread.sleep(20 * 1000);
 				driver.findElement(By.name("关闭")).click();
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 			}
-			return ResultDict.COMMAND_SUCCESS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResultDict.COMMAND_RESTART_APP;
+		} catch (Exception e) { 
 		}
 	}
 

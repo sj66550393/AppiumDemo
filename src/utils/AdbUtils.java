@@ -61,7 +61,6 @@ public class AdbUtils {
             os.flush();
             os.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -77,8 +76,8 @@ public class AdbUtils {
             os.writeBytes("pm disable " + packageName + "\n");
             os.writeBytes("exit\n");
             os.flush();       
+            process.waitFor();
 		} catch (Exception e) {
-			System.out.println("error");
 			e.printStackTrace();
 		}
     }
@@ -92,9 +91,11 @@ public class AdbUtils {
     		Thread.sleep(1000);
             os.writeBytes("pm enable " + packageName + "\n");
             os.writeBytes("exit\n");
-            os.flush();           
+            os.flush();
+            System.out.println("before enable");
+            process.waitFor();
+            System.out.println("after enable");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -297,6 +298,25 @@ public class AdbUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+    }
+    
+    public static int getScreenTimeout(){
+    	try {
+    		String str = printf(adb + "settings get system screen_off_timeout");
+    		System.out.println(str);
+    		return Integer.parseInt(str.trim());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+    }
+    
+    public static void setScreenTimeout(int time){
+    	try {
+    		String str = printf(adb + "settings put system screen_off_timeout " + time);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
     }
 }

@@ -72,7 +72,6 @@ public class ShouZhuan {
 		   MiZhuan.getInstance().isGetInstallCount = false;
 		}
 		
-		
 		init();
 		// MiZhuan.getInstance().checkAppList();
 		// MiZhuan.getInstance().checkAllApp();
@@ -87,7 +86,7 @@ public class ShouZhuan {
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
 		if (AdbUtils.isRoot()) {
 			try {
-				MyApplicationList.getInstance().getApplicationList();
+//				MyApplicationList.getInstance().getApplicationList();
 				AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId);
 				File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
 				if (appInfoFile.exists()) {
@@ -136,38 +135,32 @@ class Task1 extends TimerTask {
 				@Override
 				public void onSuccess(AndroidDriver driver) {
 					MiZhuan.getInstance().isCompleted = true;
-					driver.quit();
-					restartApp();
+					checkWhenRestartApp(driver);
 				}
 
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
-					if (isElementExistByString(driver, "确定")) {
-						driver.findElement(By.name("确定")).click();
-					}
-					driver.quit();
-					restartApp();
-
+					checkWhenRestartApp(driver);
 				}
-
 			});
 		} else if (!MeiRiZhuanDian.getInstance().isCompleted) {
 			MeiRiZhuanDian.getInstance().start(new TaskCallback() {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
-					MeiRiZhuanDian.getInstance().isCompleted = true;
-					driver.quit();
-//					restartApp();
+					MeiRiZhuanDian.getInstance().isCompleted = false;
+					MeiRiZhuanDian.getInstance().isExtraBonusCompleted = true;
+					MeiRiZhuanDian.getInstance().isLooklookCompleted = true;
+					MeiRiZhuanDian.getInstance().isReadNewsCompleted = true;
+					MiZhuan.getInstance().isCompleted = false;
+					MiZhuan.getInstance().isExtraBonusCompleted = true;
+					MiZhuan.getInstance().isInstallCompleted = false;
+					checkWhenRestartApp(driver);
 				}
 
 				@Override
 				public void onRestartApp(AndroidDriver driver) {
-					if (isElementExistByString(driver, "确定")) {
-						driver.findElement(By.name("确定")).click();
-					}
-					driver.quit();
-					restartApp();
+					checkWhenRestartApp(driver); 
 				}
 			});
 		}
@@ -183,6 +176,20 @@ class Task1 extends TimerTask {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void checkWhenRestartApp(AndroidDriver driver){
+		if (isElementExistByString(driver, "确定")) {
+			driver.findElement(By.name("确定")).click();
+		}
+		AdbUtils.setScreenTimeout(1800 * 1000);
+		if((System.currentTimeMillis() - Configure.mizhuanInstallNoAppTime > 4 * 60 * 60 * 1000) && MiZhuan.getInstance().isInstallNoApp == true){
+			MiZhuan.getInstance().isCompleted = false;
+			MiZhuan.getInstance().isInstallNoApp = false;
+			MiZhuan.getInstance().isInstallCompleted = false;
+		}
+		driver.quit();
+		restartApp();
 	}
 
 	private boolean isElementExistByString(AndroidDriver driver, String name) {
