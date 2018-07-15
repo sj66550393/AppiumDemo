@@ -1,10 +1,13 @@
 package common;
 
+import java.util.HashMap;
+
 public class Configure {
 	public static boolean isPad;
 	public static String productModel;
-	public static int Mizhuan_instlal_count;//安装应用数
+	public static int Mizhuan_instlal_count;
 	public static String deviceId;//deviceId
 	public static String appiumPort;
 	public static String logDir;//log目录
+	public static HashMap<String, String> map;
 }

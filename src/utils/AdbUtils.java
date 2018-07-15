@@ -1,5 +1,6 @@
 package utils;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ public class AdbUtils {
 	public static String storageDes = "e:/";
 	public static String storageDir = storageDes + deviceId + "/";
 	public static String adb =  "adb -s " + deviceId	+" shell ";
+	public static String adb1 = "adb";
     public static String getTopActivity(){
     	if(Configure.isPad){
     		String execResult = printf(adb + "dumpsys activity activities | grep mResumedActivity").trim();
@@ -22,9 +24,106 @@ public class AdbUtils {
     	return  execResult.split(" ")[5];
     }
     
+    public static boolean isRoot(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		Thread.sleep(1000);
+            os.writeBytes("exit\n");
+            os.flush();
+            os.close();
+            return true;
+		} catch (Exception e) {
+			return false;
+		}
+    }
+    
     public static String isAwake(){
     	String execResult = printf(adb + "dumpsys window policy | grep mAwake");
     	return execResult.substring(11, 16);
+    }
+    
+    public static void rootComandDisablePackage(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		Thread.sleep(1000);
+    	    for (String value : Configure.map.values()) {
+    	        System.out.println(value);
+    	        if(value.equals("me.mizhuan") || value.equals("io.appium.unlock")|| value.equals("io.appium.settings") || value.equals("com.jiesong.myapplicationlist") || value.equals("com.adsmobile.mrzd")||value.equals("com.qihoo.permmgr")){
+    	        	continue;
+    	        }
+    	        Thread.sleep(50);
+    	        os.writeBytes("pm disable " + value + "\n");
+    	      }       
+    	    Thread.sleep(1000);
+            os.writeBytes("exit\n");
+            os.flush();
+            os.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void rootComandDisablePackage(String packageName){
+    	try {
+    		BufferedReader input = null;
+    		System.out.println("adb = " + adb);
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		Thread.sleep(1000);
+            os.writeBytes("pm disable " + packageName + "\n");
+            os.writeBytes("exit\n");
+            os.flush();       
+		} catch (Exception e) {
+			System.out.println("error");
+			e.printStackTrace();
+		}
+    }
+    
+    public static void rootComandEnablePackage(String packageName){
+    	try {
+    		BufferedReader input = null;
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    		Thread.sleep(1000);
+            os.writeBytes("pm enable " + packageName + "\n");
+            os.writeBytes("exit\n");
+            os.flush();           
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void rootComandEnablePackage(){
+    	try {
+    		Process process = Runtime.getRuntime().exec(adb + " su\n");
+    		DataOutputStream os = new DataOutputStream(process.getOutputStream());
+    		Thread.sleep(1000);
+    	    for (String value : Configure.map.values()) {
+    	        System.out.println(value);
+    	        os.writeBytes("pm enable " + value + "\n");
+    	      }
+            os.writeBytes("pm disable me.miyou.game.by\n");
+            os.writeBytes("exit\n");
+            os.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void pull(String sourcePath , String desPath) {
+    	try {
+    		exec(adb1 +" -s " + deviceId + " pull " + sourcePath + " " + desPath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public static String isAwake2(){
@@ -91,7 +190,6 @@ public class AdbUtils {
     	try {
 			exec(adb + "input tap " + x + " " + y);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -191,6 +289,7 @@ public class AdbUtils {
     public static boolean isPad(){
     	try {
     		String str = printf(adb + "wm size");
+    		System.out.println(str);
     		String[] splitStr = str.split(":")[1].split("x");
     		int width = Integer.parseInt(splitStr[0].trim());
     		int height = Integer.parseInt(splitStr[1].trim());
