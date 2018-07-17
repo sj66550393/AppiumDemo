@@ -30,7 +30,7 @@ public class MeiRiZhuanDian {
 	private int yangshen = 0; // 养生之道
 	private int paihongbao = 0; // 全民派红包
 	private int wajinkuang = 0; //
-	private int quanjiatong = 0; 
+	private int quanjiatong = 0;
 	private int xianjinghongbao = 0;
 	private int dahuayule = 0;
 	private int yingdajiang = 0;
@@ -71,8 +71,8 @@ public class MeiRiZhuanDian {
 			return;
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
-		
-		//首页弹框
+
+		// 首页弹框
 		if (isElementExistById("com.adsmobile.mrzd:id/window_image_dismiss")) {
 			driver.findElement(By.id("com.adsmobile.mrzd:id/window_image_dismiss")).click();
 			try {
@@ -83,11 +83,11 @@ public class MeiRiZhuanDian {
 				return;
 			}
 		}
-	
-		//升级弹框
+
+		// 升级弹框
 		try {
 			Thread.sleep(3000);
-			if(isElementExistByString("狠心拒绝")){
+			if (isElementExistByString("狠心拒绝")) {
 				driver.findElement(By.name("狠心拒绝")).click();
 			}
 		} catch (InterruptedException e) {
@@ -95,8 +95,7 @@ public class MeiRiZhuanDian {
 			callback.onRestartApp(driver);
 			return;
 		}
-		
-		
+
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -106,7 +105,7 @@ public class MeiRiZhuanDian {
 			}
 		}
 		if (!isInstallCompleted) {
-			result = install();
+			result = installAndGetPackage();
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 				return;
@@ -119,7 +118,7 @@ public class MeiRiZhuanDian {
 				return;
 			}
 		}
-		
+
 		if (!isReadNewsCompleted) {
 			result = startNews();
 			if (result != ResultDict.COMMAND_SUCCESS) {
@@ -130,9 +129,65 @@ public class MeiRiZhuanDian {
 		callback.onSuccess(driver);
 	}
 
-	private int install() {
+	private int installAndGetPackage() {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
+
+			while (true) {
+				// 获取是否已经领取红包
+				driver.findElement(By.name("每日红包")).click();
+				Thread.sleep(2000);
+				if (isElementExistById("com.adsmobile.mrzd:id/share_red_packed_tips")) {
+					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
+					Thread.sleep(2000);
+					driver.findElement(By.name("快速任务")).click();
+					Thread.sleep(5000);
+					driver.findElement(By.name("在线任务")).click();
+					Thread.sleep(1000);
+					if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
+						driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
+						Thread.sleep(2000);
+						if (isElementExistByString("开始任务")) {
+							driver.findElement(By.name("开始任务")).click();
+							Thread.sleep(60 * 1000);
+							switch (Configure.productModel) {
+							case "[OPPO A37m]":
+								result = installApp_OPPO(driver);
+								break;
+							case "[CUN-TL00]":
+								result = installApp_CUN_TL(driver);
+								break;
+							case "[Lenovo TB3-X70N]":
+								break;
+							case "[CUN-AL00]":
+								result = installApp_CUN_AL(driver);
+								break;
+							default:
+								break;
+							}
+							if (result != ResultDict.COMMAND_SUCCESS) {
+								return result;
+							} else {
+								AdbUtils.back();
+								Thread.sleep(2000);
+								if (isElementExistByString("不了")) {
+									driver.findElement(By.name("不了")).click();
+									Thread.sleep(1000);
+								}
+							}
+						} else {
+							return ResultDict.COMMAND_RESTART_APP;
+						}
+					} else {
+						break;
+					}
+					
+				} else {
+					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_openrl_close"));
+					break;
+				}
+			}
+
 			driver.findElement(By.name("快速任务")).click();
 			Thread.sleep(5000);
 			driver.findElement(By.name("在线任务")).click();
@@ -260,35 +315,33 @@ public class MeiRiZhuanDian {
 			while (true) {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(5000);
-				//额外奖励完成
+				// 额外奖励完成
 				if (isElementExistByString("去做任务")) {
 					isExtraBonusCompleted = true;
 					break;
 				}
-				taskAppName = driver
-						.findElement(By
-								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				taskAppName = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				taskTime = driver
-						.findElement(By
-								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
+				taskTime = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
 						.getText();
-				int experienceTime = Integer.parseInt(taskTime.substring(2, 3)); 
+				int experienceTime = Integer.parseInt(taskTime.substring(2, 3));
 				System.out.println("appName = " + taskAppName + "    experienceTime = " + experienceTime);
-				String packageName = Configure.map.get(taskAppName); 
+				String packageName = Configure.map.get(taskAppName);
 				if (packageName != null) {
 					AdbUtils.rootComandEnablePackage(packageName);
-					driver.findElement(By
-							.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+					driver.findElement(By.xpath(
+							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
 							.click();
 				} else {
 					isExtraBonusCompleted = true;
 					break;
 				}
-//					String secondAppName = driver
-//							.findElement(By
-//									.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
-//							.getText();
+				// String secondAppName = driver
+				// .findElement(By
+				// .xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				// .getText();
 				Thread.sleep(experienceTime * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				AdbUtils.killProcess(name);
@@ -339,10 +392,10 @@ public class MeiRiZhuanDian {
 	private int startNews() {
 		try {
 			driver.findElement(By.name("阅读赚钱")).click();
-			Thread.sleep(4000); 
+			Thread.sleep(4000);
 			int count = 0;
 			while (currentNewsCount < 800) {
-				if(count == 6){
+				if (count == 6) {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 				if (!isElementExistByString("新闻阅读")) {
@@ -357,10 +410,10 @@ public class MeiRiZhuanDian {
 				if (!isElementExistByString("新闻阅读")) {
 					AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 					Thread.sleep(3000);
-				}else{
+				} else {
 					AdbUtils.back();
 					currentNewsCount++;
-					Thread.sleep(80*1000);
+					Thread.sleep(80 * 1000);
 				}
 				AdbUtils.swipe(300, 1100, 300, 500);
 				count++;
@@ -372,13 +425,13 @@ public class MeiRiZhuanDian {
 		}
 	}
 
-	private void startAds(String name){
+	private void startAds(String name) {
 		try {
 			while (true) {
 				driver.findElement(By.name(name)).click();
 				Thread.sleep(2000);
 				String str = driver.findElement(By.id("com.adsmobile.mrzd:id/news_api_task_surplus")).getText();
-				if(str.contains("已完成")){
+				if (str.contains("已完成")) {
 					driver.findElement(By.name("关闭")).click();
 					Thread.sleep(3000);
 					return;
@@ -387,7 +440,7 @@ public class MeiRiZhuanDian {
 				driver.findElement(By.name("关闭")).click();
 				Thread.sleep(5000);
 			}
-		} catch (Exception e) { 
+		} catch (Exception e) {
 		}
 	}
 
