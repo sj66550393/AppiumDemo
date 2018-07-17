@@ -39,8 +39,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "d:\\";
-			AdbUtils.storageDes = "d:\\";
+			Configure.logDir = "e:\\";
+			AdbUtils.storageDes = "e:\\";
 		}
 		if (args.length > 1 && args[1] != null) {
 			Configure.deviceId = args[1];
@@ -48,15 +48,15 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "UCZHUGEU99999999";
-			AdbUtils.deviceId = "UCZHUGEU99999999";
-			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
-			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999" + " shell ";
+			Configure.deviceId = "196add1023";
+			AdbUtils.deviceId = "196add1023";
+			AdbUtils.storageDir = AdbUtils.storageDes + "196add1023" + "/";
+			AdbUtils.adb = "adb -s " + "196add1023" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4811";
+			Configure.appiumPort = "4801";
 		}
 
 		if (args.length > 3 && args[3] != null) {
@@ -86,7 +86,7 @@ public class ShouZhuan {
 		File file = new File(Configure.logDir + AdbUtils.deviceId);
 		if (AdbUtils.isRoot()) {
 			try {
-//				MyApplicationList.getInstance().getApplicationList();
+				MyApplicationList.getInstance().getApplicationList();
 				AdbUtils.pull("sdcard/appInfo.txt", AdbUtils.storageDes + AdbUtils.deviceId);
 				File appInfoFile = new File(AdbUtils.storageDir + "appInfo.txt");
 				if (appInfoFile.exists()) {

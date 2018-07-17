@@ -54,11 +54,11 @@ public class MiZhuan {
 	private boolean isPackageCompleted = true;
 	
 	
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 	public boolean isGetInstallCount = false;
 	public boolean isInstallNoApp = false;
 	private int installCount = 0;
-	public boolean isExtraBonusCompleted = false;
+	public boolean isExtraBonusCompleted = true;
 	public boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	
@@ -758,6 +758,7 @@ public class MiZhuan {
 		try {
 			Thread.sleep(10000);
 			// 获取安装数量
+			System.out.println("isGetInstallCount = " + isGetInstallCount);
 			if (isGetInstallCount) {
 				driver.findElement(By.name("推荐")).click();
 				Thread.sleep(2000);
@@ -782,6 +783,8 @@ public class MiZhuan {
 					System.out.println("install count = " + Configure.Mizhuan_instlal_count);
 				}
 			}
+			driver.findElement(By.name("推荐")).click();
+			Thread.sleep(2000);
 			Log.log.info("点击应用赚");
 			driver.findElement(By.name("应用赚")).click();
 			Thread.sleep(1000);

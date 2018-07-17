@@ -10,5 +10,5 @@ public class Configure {
 	public static String appiumPort;
 	public static String logDir;//logĿ¼
 	public static HashMap<String, String> map;
-	public static Long mizhuanInstallNoAppTime; 
+	public static Long mizhuanInstallNoAppTime = Long.MAX_VALUE;
 }

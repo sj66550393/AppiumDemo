@@ -289,6 +289,7 @@ public class AdbUtils {
     
     public static boolean isPad(){
     	try {
+    		System.out.println(adb + "wm size" );
     		String str = printf(adb + "wm size");
     		System.out.println(str);
     		String[] splitStr = str.split(":")[1].split("x");
@@ -314,6 +315,7 @@ public class AdbUtils {
     
     public static void setScreenTimeout(int time){
     	try {
+    		System.out.println(adb + "settings put system screen_off_timeout " + time);
     		String str = printf(adb + "settings put system screen_off_timeout " + time);
 		} catch (Exception e) {
 			e.printStackTrace();
