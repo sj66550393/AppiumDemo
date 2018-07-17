@@ -132,73 +132,48 @@ public class MeiRiZhuanDian {
 	private int installAndGetPackage() {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
-
 			while (true) {
 				// 获取是否已经领取红包
 				driver.findElement(By.name("每日红包")).click();
 				Thread.sleep(2000);
 				if (isElementExistById("com.adsmobile.mrzd:id/share_red_packed_tips")) {
+					// 未能领取红包
 					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
 					Thread.sleep(2000);
-					driver.findElement(By.name("快速任务")).click();
-					Thread.sleep(5000);
-					driver.findElement(By.name("在线任务")).click();
-					Thread.sleep(1000);
-					if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
-						driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
-						Thread.sleep(2000);
-						if (isElementExistByString("开始任务")) {
-							driver.findElement(By.name("开始任务")).click();
-							Thread.sleep(60 * 1000);
-							switch (Configure.productModel) {
-							case "[OPPO A37m]":
-								result = installApp_OPPO(driver);
-								break;
-							case "[CUN-TL00]":
-								result = installApp_CUN_TL(driver);
-								break;
-							case "[Lenovo TB3-X70N]":
-								break;
-							case "[CUN-AL00]":
-								result = installApp_CUN_AL(driver);
-								break;
-							default:
-								break;
-							}
-							if (result != ResultDict.COMMAND_SUCCESS) {
-								return result;
-							} else {
-								AdbUtils.back();
-								Thread.sleep(2000);
-								if (isElementExistByString("不了")) {
-									driver.findElement(By.name("不了")).click();
-									Thread.sleep(1000);
-								}
-							}
-						} else {
-							return ResultDict.COMMAND_RESTART_APP;
-						}
-					} else {
+					result = installApp(1);
+					if(result == ResultDict.COMMAND_RESTART_APP){
+						return ResultDict.COMMAND_RESTART_APP;
+					}else if(result == ResultDict.COMMAND_MEIZHUAN_INSTALL_NOAPP){
+						isInstallCompleted = true;
 						break;
 					}
-					
+					AdbUtils.back();
 				} else {
+					// 已领取红包
 					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_openrl_close"));
 					break;
 				}
 			}
+			return ResultDict.COMMAND_SUCCESS;
+		}catch(Exception e){
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
 
+	private int installApp(int count) {
+		try {
+			int result = ResultDict.COMMAND_SUCCESS;
 			driver.findElement(By.name("快速任务")).click();
 			Thread.sleep(5000);
 			driver.findElement(By.name("在线任务")).click();
 			Thread.sleep(1000);
 			int installCount = 0;
-			while (installCount < DEFAULT_INSTALL_COUNT) {
+			while (installCount < count) {
 				if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
 					driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
 					Thread.sleep(2000);
-					if (isElementExistByString("下载")) {
-						driver.findElement(By.name("下载")).click();
+					if (isElementExistByString("开始任务")) {
+						driver.findElement(By.name("开始任务")).click();
 						Thread.sleep(60 * 1000);
 						switch (Configure.productModel) {
 						case "[OPPO A37m]":
@@ -229,8 +204,10 @@ public class MeiRiZhuanDian {
 					} else {
 						return ResultDict.COMMAND_RESTART_APP;
 					}
-				} else {
-					break;
+				} else if(isElementExistById("com.adsmobile.mrzd:id/image_done")){
+					return ResultDict.COMMAND_MEIZHUAN_INSTALL_NOAPP;
+				} else{
+					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
 		} catch (Exception e) {
@@ -257,20 +234,8 @@ public class MeiRiZhuanDian {
 			WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
 			buttomButton1.click();
 			Thread.sleep(10 * 1000);
-			for (int j = 0; j < 5; j++) {
-				if (driver.getPageSource().contains("允许")) {
-					driver.findElement(By.name("允许")).click();
-					Thread.sleep(2000);
-				}
-			}
 			Log.log.info("开始体验5分钟。。。");
 			Thread.sleep(5 * 60 * 1000);
-			for (int j = 0; j < 5; j++) {
-				if (driver.getPageSource().contains("允许")) {
-					driver.findElement(By.name("允许")).click();
-					Thread.sleep(2000);
-				}
-			}
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,19 +285,21 @@ public class MeiRiZhuanDian {
 					isExtraBonusCompleted = true;
 					break;
 				}
-				taskAppName = driver.findElement(By.xpath(
-						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				taskAppName = driver
+						.findElement(By
+								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				taskTime = driver.findElement(By.xpath(
-						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
+				taskTime = driver
+						.findElement(By
+								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
 						.getText();
 				int experienceTime = Integer.parseInt(taskTime.substring(2, 3));
 				System.out.println("appName = " + taskAppName + "    experienceTime = " + experienceTime);
 				String packageName = Configure.map.get(taskAppName);
 				if (packageName != null) {
 					AdbUtils.rootComandEnablePackage(packageName);
-					driver.findElement(By.xpath(
-							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+					driver.findElement(By
+							.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
 							.click();
 				} else {
 					isExtraBonusCompleted = true;
