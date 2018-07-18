@@ -19,10 +19,10 @@ import utils.Log;
 
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 	public boolean isExtraBonusCompleted = true;
 	public boolean isLooklookCompleted = false;
-	public boolean isInstallCompleted = true;
+	public boolean isInstallCompleted = false;
 	public boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
 	private int currentNewsCount = 0;
@@ -137,25 +137,36 @@ public class MeiRiZhuanDian {
 				driver.findElement(By.name("每日红包")).click();
 				Thread.sleep(2000);
 				if (isElementExistById("com.adsmobile.mrzd:id/share_red_packed_tips")) {
-					// 未能领取红包
-					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
-					Thread.sleep(2000);
-					result = installApp(1);
-					if(result == ResultDict.COMMAND_RESTART_APP){
-						return ResultDict.COMMAND_RESTART_APP;
-					}else if(result == ResultDict.COMMAND_MEIZHUAN_INSTALL_NOAPP){
+					String text = driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_tips")).getText();
+					if("继续赚钱吧~".equals(text)) {
+						// 未能领取红包
+						driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
+						Thread.sleep(2000);
+						result = installApp(1);
+						if (result == ResultDict.COMMAND_RESTART_APP) {
+							return ResultDict.COMMAND_RESTART_APP;
+						} else if (result == ResultDict.COMMAND_MEIZHUAN_INSTALL_NOAPP) {
+							isInstallCompleted = true;
+							break;
+						}
+						AdbUtils.back();
+					}else if("恭喜发财,大吉大利".equals(text)) {
+						driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_open")).click();
+						Thread.sleep(2000);
+						driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
 						isInstallCompleted = true;
 						break;
 					}
-					AdbUtils.back();
-				} else {
+				}else {
 					// 已领取红包
 					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_openrl_close"));
 					break;
 				}
 			}
 			return ResultDict.COMMAND_SUCCESS;
-		}catch(Exception e){
+		} catch (
+
+		Exception e) {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -204,9 +215,9 @@ public class MeiRiZhuanDian {
 					} else {
 						return ResultDict.COMMAND_RESTART_APP;
 					}
-				} else if(isElementExistById("com.adsmobile.mrzd:id/image_done")){
+				} else if (isElementExistById("com.adsmobile.mrzd:id/image_done")) {
 					return ResultDict.COMMAND_MEIZHUAN_INSTALL_NOAPP;
-				} else{
+				} else {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
@@ -231,7 +242,7 @@ public class MeiRiZhuanDian {
 			}
 			AdbUtils.back();
 			Thread.sleep(3 * 1000);
-			WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
+			WebElement buttomButton1 = driver.findElement(By.name("打开"));
 			buttomButton1.click();
 			Thread.sleep(10 * 1000);
 			Log.log.info("开始体验5分钟。。。");
@@ -285,21 +296,19 @@ public class MeiRiZhuanDian {
 					isExtraBonusCompleted = true;
 					break;
 				}
-				taskAppName = driver
-						.findElement(By
-								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				taskAppName = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				taskTime = driver
-						.findElement(By
-								.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
+				taskTime = driver.findElement(By.xpath(
+						"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.TextView[contains(@index,2)]"))
 						.getText();
 				int experienceTime = Integer.parseInt(taskTime.substring(2, 3));
 				System.out.println("appName = " + taskAppName + "    experienceTime = " + experienceTime);
 				String packageName = Configure.map.get(taskAppName);
 				if (packageName != null) {
 					AdbUtils.rootComandEnablePackage(packageName);
-					driver.findElement(By
-							.xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
+					driver.findElement(By.xpath(
+							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
 							.click();
 				} else {
 					isExtraBonusCompleted = true;
