@@ -729,6 +729,7 @@ public class MiZhuan {
 				} else {
 					String pkgName = Configure.map.get(taskName);
 					if (pkgName != null) {
+						System.out.println("pkgName = " + pkgName);
 						AdbUtils.rootComandEnablePackage(pkgName);
 						button.click();
 					} else {

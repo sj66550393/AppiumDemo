@@ -19,10 +19,10 @@ import utils.Log;
 
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
-	public boolean isCompleted = false;
+	public boolean isCompleted = true;
 	public boolean isExtraBonusCompleted = false;
 	public boolean isLooklookCompleted = false;
-	public boolean isInstallCompleted = false;
+	public boolean isInstallCompleted = true;
 	public boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
 	private int currentNewsCount = 0;
@@ -379,7 +379,12 @@ public class MeiRiZhuanDian {
 			driver.findElement(By.name("阅读赚钱")).click();
 			Thread.sleep(4000);
 			int count = 0;
-			while (currentNewsCount < 800) {
+			while (true) {
+				String bottomText = driver.findElement(By.id("com.adsmobile.mrzd:id/new_news_task_surplus")).getText();
+				if(bottomText.contains("今日剩余:0次")){
+					isReadNewsCompleted = true;
+					break;
+				}
 				if (count == 6) {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
