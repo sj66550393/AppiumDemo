@@ -69,7 +69,7 @@ public class ShouZhuan {
 			System.out.println("set isGetInstallCount true");
 		   MiZhuan.getInstance().isGetInstallCount = true;
 		} else {
-		   MiZhuan.getInstance().isGetInstallCount = false;
+		   MiZhuan.getInstance().isGetInstallCount = true;
 		}
 		
 		init();

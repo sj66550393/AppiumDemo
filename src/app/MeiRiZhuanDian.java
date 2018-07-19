@@ -20,7 +20,7 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	public boolean isExtraBonusCompleted = true;
+	public boolean isExtraBonusCompleted = false;
 	public boolean isLooklookCompleted = false;
 	public boolean isInstallCompleted = false;
 	public boolean isReadNewsCompleted = false;
@@ -138,9 +138,12 @@ public class MeiRiZhuanDian {
 				Thread.sleep(2000);
 				if (isElementExistById("com.adsmobile.mrzd:id/share_red_packed_tips")) {
 					String text = driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_tips")).getText();
-					if("继续赚钱吧~".equals(text)) {
+					System.out.println("text = " + text);
+					if("继续赚钱吧～".equals(text)) {
 						// 未能领取红包
+						System.out.println("未能领取红包");
 						driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
+						System.out.println("click close");
 						Thread.sleep(2000);
 						result = installApp(1);
 						if (result == ResultDict.COMMAND_RESTART_APP) {
@@ -151,7 +154,9 @@ public class MeiRiZhuanDian {
 						}
 						AdbUtils.back();
 					}else if("恭喜发财,大吉大利".equals(text)) {
+						System.out.println("恭喜发财,大吉大利");
 						driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_open")).click();
+						System.out.println("click close");
 						Thread.sleep(2000);
 						driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
 						isInstallCompleted = true;
@@ -159,14 +164,16 @@ public class MeiRiZhuanDian {
 					}
 				}else {
 					// 已领取红包
+					System.out.println("已领取红包");
+					isInstallCompleted = true;
 					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_openrl_close"));
+					System.out.println("click close");
 					break;
 				}
 			}
 			return ResultDict.COMMAND_SUCCESS;
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
@@ -294,6 +301,7 @@ public class MeiRiZhuanDian {
 				// 额外奖励完成
 				if (isElementExistByString("去做任务")) {
 					isExtraBonusCompleted = true;
+					AdbUtils.back();
 					break;
 				}
 				taskAppName = driver.findElement(By.xpath(
@@ -338,6 +346,7 @@ public class MeiRiZhuanDian {
 
 	private int startLooklookTask() {
 		try {
+			Thread.sleep(2000);
 			driver.findElement(By.name("简单赚钱")).click();
 			Thread.sleep(4000);
 			startAds("欢乐抽奖机");

@@ -54,11 +54,11 @@ public class MiZhuan {
 	private boolean isPackageCompleted = true;
 	
 	
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 	public boolean isGetInstallCount = false;
 	public boolean isInstallNoApp = false;
 	private int installCount = 0;
-	public boolean isExtraBonusCompleted = true;
+	public boolean isExtraBonusCompleted = false;
 	public boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
 	
@@ -718,7 +718,8 @@ public class MiZhuan {
 				System.out.println("buttonText = " + buttonText + "    taskType = " + taskType + "    taskName = "
 						+ taskName + "    taskTime = " + taskTime);
 				if ("已抢完".equals(buttonText) || "未到时间".equals(buttonText)
-						|| "0万".equals(buttonText.substring(buttonText.length() - 2))) {
+//						|| "0万".equals(buttonText.substring(buttonText.length() - 2))
+						|| "深度".equals(taskType)) {
 					Log.log.info("额外任务完成");
 					isExtraBonusCompleted = true;
 					break;
