@@ -19,16 +19,16 @@ import utils.Log;
 
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
-	public boolean isCompleted = true;
+	public boolean isCompleted = false;
 	public boolean isExtraBonusCompleted = false;
 	public boolean isLooklookCompleted = false;
 	public boolean isInstallCompleted = true;
 	public boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
 	private int currentNewsCount = 0;
-	private int choujiangji = 0; // 欢乐抽奖机
-	private int yangshen = 0; // 养生之道
-	private int paihongbao = 0; // 全民派红包
+	private int choujiangji = 0; // 娆箰鎶藉鏈�
+	private int yangshen = 0; // 鍏荤敓涔嬮亾
+	private int paihongbao = 0; // 鍏ㄦ皯娲剧孩鍖�
 	private int wajinkuang = 0; //
 	private int quanjiatong = 0;
 	private int xianjinghongbao = 0;
@@ -65,14 +65,13 @@ public class MeiRiZhuanDian {
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			System.out.println("error" + e.getMessage());
-			driver.quit();
 			e.printStackTrace();
 			callback.onRestartApp(driver);
 			return;
 		}
 		int result = ResultDict.COMMAND_SUCCESS;
 
-		// 首页弹框
+		// 棣栭〉寮规
 		if (isElementExistById("com.adsmobile.mrzd:id/window_image_dismiss")) {
 			driver.findElement(By.id("com.adsmobile.mrzd:id/window_image_dismiss")).click();
 			try {
@@ -84,11 +83,11 @@ public class MeiRiZhuanDian {
 			}
 		}
 
-		// 升级弹框
+		// 鍗囩骇寮规
 		try {
 			Thread.sleep(3000);
-			if (isElementExistByString("狠心拒绝")) {
-				driver.findElement(By.name("狠心拒绝")).click();
+			if (isElementExistByString("鐙犲績鎷掔粷")) {
+				driver.findElement(By.name("鐙犲績鎷掔粷")).click();
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -97,7 +96,7 @@ public class MeiRiZhuanDian {
 		}
 
 		if (!isExtraBonusCompleted) {
-			Log.log.info("开始额外任务");
+			Log.log.info("寮�濮嬮澶栦换鍔�");
 			result = startSigninAppTask();
 			if (ResultDict.COMMAND_SUCCESS != result) {
 				callback.onRestartApp(driver);
@@ -133,15 +132,15 @@ public class MeiRiZhuanDian {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
 			while (true) {
-				// 获取是否已经领取红包
-				driver.findElement(By.name("每日红包")).click();
+				// 鑾峰彇鏄惁宸茬粡棰嗗彇绾㈠寘
+				driver.findElement(By.name("姣忔棩绾㈠寘")).click();
 				Thread.sleep(2000);
 				if (isElementExistById("com.adsmobile.mrzd:id/share_red_packed_tips")) {
 					String text = driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_tips")).getText();
 					System.out.println("text = " + text);
-					if("继续赚钱吧～".equals(text)) {
-						// 未能领取红包
-						System.out.println("未能领取红包");
+					if("缁х画璧氶挶鍚э綖".equals(text)) {
+						// 鏈兘棰嗗彇绾㈠寘
+						System.out.println("鏈兘棰嗗彇绾㈠寘");
 						driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_close")).click();
 						System.out.println("click close");
 						Thread.sleep(2000);
@@ -153,8 +152,8 @@ public class MeiRiZhuanDian {
 							break;
 						}
 						AdbUtils.back();
-					}else if("恭喜发财,大吉大利".equals(text)) {
-						System.out.println("恭喜发财,大吉大利");
+					}else if("鎭枩鍙戣储,澶у悏澶у埄".equals(text)) {
+						System.out.println("鎭枩鍙戣储,澶у悏澶у埄");
 						driver.findElement(By.id("com.adsmobile.mrzd:id/share_red_packed_open")).click();
 						System.out.println("click close");
 						Thread.sleep(2000);
@@ -163,8 +162,8 @@ public class MeiRiZhuanDian {
 						break;
 					}
 				}else {
-					// 已领取红包
-					System.out.println("已领取红包");
+					// 宸查鍙栫孩鍖�
+					System.out.println("宸查鍙栫孩鍖�");
 					isInstallCompleted = true;
 					driver.findElement(By.id("com.adsmobile.mrzd:id/open_red_packed_openrl_close"));
 					System.out.println("click close");
@@ -181,17 +180,17 @@ public class MeiRiZhuanDian {
 	private int installApp(int count) {
 		try {
 			int result = ResultDict.COMMAND_SUCCESS;
-			driver.findElement(By.name("快速任务")).click();
+			driver.findElement(By.name("蹇�熶换鍔�")).click();
 			Thread.sleep(5000);
-			driver.findElement(By.name("在线任务")).click();
+			driver.findElement(By.name("鍦ㄧ嚎浠诲姟")).click();
 			Thread.sleep(1000);
 			int installCount = 0;
 			while (installCount < count) {
 				if (isElementExistById("com.adsmobile.mrzd:id/txt_status")) {
 					driver.findElement(By.id("com.adsmobile.mrzd:id/limit_item")).click();
 					Thread.sleep(2000);
-					if (isElementExistByString("开始任务")) {
-						driver.findElement(By.name("开始任务")).click();
+					if (isElementExistByString("寮�濮嬩换鍔�")) {
+						driver.findElement(By.name("寮�濮嬩换鍔�")).click();
 						Thread.sleep(60 * 1000);
 						switch (Configure.productModel) {
 						case "[OPPO A37m]":
@@ -214,8 +213,8 @@ public class MeiRiZhuanDian {
 							AdbUtils.back();
 							installCount++;
 							Thread.sleep(2000);
-							if (isElementExistByString("不了")) {
-								driver.findElement(By.name("不了")).click();
+							if (isElementExistByString("涓嶄簡")) {
+								driver.findElement(By.name("涓嶄簡")).click();
 								Thread.sleep(1000);
 							}
 						}
@@ -241,7 +240,7 @@ public class MeiRiZhuanDian {
 
 	private int installApp_CUN_TL(AndroidDriver driver2) {
 		try {
-			driver.findElement(By.name("安装")).click();
+			driver.findElement(By.name("瀹夎")).click();
 			Thread.sleep(60 * 1000);
 			while (AdbUtils.getCurrentPackage().equals("packageinstaller")) {
 				AdbUtils.back();
@@ -249,10 +248,10 @@ public class MeiRiZhuanDian {
 			}
 			AdbUtils.back();
 			Thread.sleep(3 * 1000);
-			WebElement buttomButton1 = driver.findElement(By.name("打开"));
+			WebElement buttomButton1 = driver.findElement(By.name("鎵撳紑"));
 			buttomButton1.click();
 			Thread.sleep(10 * 1000);
-			Log.log.info("开始体验5分钟。。。");
+			Log.log.info("寮�濮嬩綋楠�5鍒嗛挓銆傘�傘��");
 			Thread.sleep(5 * 60 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
@@ -263,18 +262,18 @@ public class MeiRiZhuanDian {
 
 	private int installApp_OPPO(AndroidDriver driver2) {
 		try {
-			driver.findElement(By.name("安装")).click();
+			driver.findElement(By.name("瀹夎")).click();
 			Thread.sleep(30 * 1000);
-			driver.findElement(By.name("完成")).click();
+			driver.findElement(By.name("瀹屾垚")).click();
 			Thread.sleep(3000);
-			driver.findElement(By.name("重新体验")).click();
+			driver.findElement(By.name("閲嶆柊浣撻獙")).click();
 			for (int j = 0; j < 5; j++) {
-				if (driver.getPageSource().contains("ͬ同意并继续")) {
-					driver.findElement(By.name("ͬ同意并继续")).click();
+				if (driver.getPageSource().contains("同鍚屾剰骞剁户缁�")) {
+					driver.findElement(By.name("同鍚屾剰骞剁户缁�")).click();
 					Thread.sleep(2000);
 				}
 			}
-			Log.log.info("开始体验5分钟。。。");
+			Log.log.info("寮�濮嬩綋楠�5鍒嗛挓銆傘�傘��");
 			Thread.sleep(5 * 1000);
 			AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 			Thread.sleep(2000);
@@ -287,9 +286,9 @@ public class MeiRiZhuanDian {
 	private int startSigninAppTask() {
 		try {
 			Thread.sleep(2000);
-			driver.findElement(By.name("快速任务")).click();
+			driver.findElement(By.name("蹇�熶换鍔�")).click();
 			Thread.sleep(1000);
-			driver.findElement(By.name("软件签到")).click();
+			driver.findElement(By.name("杞欢绛惧埌")).click();
 			Thread.sleep(1000);
 			String lastPackage = "";
 			boolean isFirst = true;
@@ -298,8 +297,8 @@ public class MeiRiZhuanDian {
 			while (true) {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(5000);
-				// 额外奖励完成
-				if (isElementExistByString("去做任务")) {
+				// 棰濆濂栧姳瀹屾垚
+				if (isElementExistByString("鍘诲仛浠诲姟")) {
 					isExtraBonusCompleted = true;
 					AdbUtils.back();
 					break;
@@ -347,21 +346,21 @@ public class MeiRiZhuanDian {
 	private int startLooklookTask() {
 		try {
 			Thread.sleep(2000);
-			driver.findElement(By.name("简单赚钱")).click();
+			driver.findElement(By.name("绠�鍗曡禋閽�")).click();
 			Thread.sleep(4000);
-			startAds("欢乐抽奖机");
-			startAds("全民派红包");
-			startAds("让红包飞");
-			startAds("福利大放送");
-			startAds("养生之道");
-			startAds("巨头条");
-			startAds("今日宜抢红包");
-			startAds("翻牌赢大奖");
-			startAds("抽现金红包");
-			startAds("红包最真情");
-			startAds("娱乐圈秘闻");
-			startAds("天降红包");
-			startAds("健康养生");
+			startAds("娆箰鎶藉鏈�");
+			startAds("鍏ㄦ皯娲剧孩鍖�");
+			startAds("璁╃孩鍖呴");
+			startAds("绂忓埄澶ф斁閫�");
+			startAds("鍏荤敓涔嬮亾");
+			startAds("宸ㄥご鏉�");
+			startAds("浠婃棩瀹滄姠绾㈠寘");
+			startAds("缈荤墝璧㈠ぇ濂�");
+			startAds("鎶界幇閲戠孩鍖�");
+			startAds("绾㈠寘鏈�鐪熸儏");
+			startAds("濞变箰鍦堢闂�");
+			startAds("澶╅檷绾㈠寘");
+			startAds("鍋ュ悍鍏荤敓");
 			System.out.println("lookAds end");
 			Thread.sleep(3000);
 			AdbUtils.back();
@@ -376,19 +375,19 @@ public class MeiRiZhuanDian {
 
 	private int startNews() {
 		try {
-			driver.findElement(By.name("阅读赚钱")).click();
+			driver.findElement(By.name("闃呰璧氶挶")).click();
 			Thread.sleep(4000);
 			int count = 0;
 			while (true) {
 				String bottomText = driver.findElement(By.id("com.adsmobile.mrzd:id/new_news_task_surplus")).getText();
-				if(bottomText.contains("今日剩余:0次")){
+				if(bottomText.contains("浠婃棩鍓╀綑:0娆�")){
 					isReadNewsCompleted = true;
 					break;
 				}
 				if (count == 6) {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
-				if (!isElementExistByString("新闻阅读")) {
+				if (!isElementExistByString("鏂伴椈闃呰")) {
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 				AdbUtils.click(300, 600);
@@ -397,7 +396,7 @@ public class MeiRiZhuanDian {
 					AdbUtils.swipe(300, 1100, 300, 500);
 					Thread.sleep(1000);
 				}
-				if (!isElementExistByString("新闻阅读")) {
+				if (!isElementExistByString("鏂伴椈闃呰")) {
 					AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 					Thread.sleep(3000);
 				} else {
@@ -421,13 +420,13 @@ public class MeiRiZhuanDian {
 				driver.findElement(By.name(name)).click();
 				Thread.sleep(2000);
 				String str = driver.findElement(By.id("com.adsmobile.mrzd:id/news_api_task_surplus")).getText();
-				if (str.contains("已完成")) {
-					driver.findElement(By.name("关闭")).click();
+				if (str.contains("宸插畬鎴�")) {
+					driver.findElement(By.name("鍏抽棴")).click();
 					Thread.sleep(3000);
 					return;
 				}
 				Thread.sleep(20 * 1000);
-				driver.findElement(By.name("关闭")).click();
+				driver.findElement(By.name("鍏抽棴")).click();
 				Thread.sleep(5000);
 			}
 		} catch (Exception e) {

@@ -48,15 +48,15 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "UCZHUGEU99999999";
-			AdbUtils.deviceId = "UCZHUGEU99999999";
-			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
-			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999" + " shell ";
+			Configure.deviceId = "196add1023";
+			AdbUtils.deviceId = "196add1023";
+			AdbUtils.storageDir = AdbUtils.storageDes + "196add1023" + "/";
+			AdbUtils.adb = "adb -s " + "196add1023" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4801";
+			Configure.appiumPort = "4731";
 		}
 
 		if (args.length > 3 && args[3] != null) {
@@ -69,7 +69,7 @@ public class ShouZhuan {
 			System.out.println("set isGetInstallCount true");
 			MiZhuan.getInstance().isGetInstallCount = true;
 		} else {
-			MiZhuan.getInstance().isGetInstallCount = false;
+			MiZhuan.getInstance().isGetInstallCount = true;
 		}
 
 		init();
