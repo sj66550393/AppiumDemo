@@ -813,9 +813,11 @@ public class MiZhuan {
 						.getText();
 				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName" +  taskAppName);
 				
+				System.out.println("taskAppName = " + taskAppName);
+				System.out.println("lastAppName = " + lastAppName);
 				if(taskAppName.equals(lastAppName)){
 					repeatCount ++;
-					if(repeatCount == 3){ 
+					if(repeatCount == 5){ 
 						isInstallCompleted = true;
 						isInstallNoApp = true;
 						Configure.mizhuanInstallNoAppTime = System.currentTimeMillis();
