@@ -83,6 +83,7 @@ public class YueTouTiao {
 				callback.onRestartApp(driver);
 			}
 		}
+		isCompleted = true;
 		callback.onSuccess(driver);
 	}
 
@@ -149,6 +150,12 @@ public class YueTouTiao {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public void reset(){
+		isCompleted = false;
+		isLookNewCompleted = false;
+		isLookVideoCompleted = false;
 	}
 
 }

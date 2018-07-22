@@ -75,6 +75,7 @@ public class TaoXinWen {
 				callback.onRestartApp(driver);
 			}
 		}
+		isCompleted = true;
 		callback.onSuccess(driver);
 
 //		if (!isLookVideoCompleted) {
@@ -150,5 +151,11 @@ public class TaoXinWen {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public void reset(){
+		isCompleted = false;
+		isLookNewCompleted = false;
+		isLookVideoCompleted = false;
 	}
 }

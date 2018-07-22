@@ -81,6 +81,7 @@ public class KanDianTouTiao {
 				callback.onRestartApp(driver);
 			}
 		}
+		isCompleted = true;
 		callback.onSuccess(driver);
 
 	}
@@ -125,4 +126,11 @@ public class KanDianTouTiao {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
+	
+	public void reset(){
+		isCompleted = false;
+		isLookNewCompleted = false;
+		isLookVideoCompleted = false;
+	}
+	
 }

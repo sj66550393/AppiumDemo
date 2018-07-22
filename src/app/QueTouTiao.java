@@ -82,6 +82,8 @@ public class QueTouTiao {
 				callback.onRestartApp(driver);
 			}
 		}
+		
+		isCompleted = true;
 		callback.onSuccess(driver);
 	}
 
@@ -148,5 +150,11 @@ public class QueTouTiao {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public void reset(){
+		isCompleted = false;
+		isLookNewCompleted = false;
+		isLookVideoCompleted = false;
 	}
 }
