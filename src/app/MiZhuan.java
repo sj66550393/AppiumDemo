@@ -98,7 +98,6 @@ public class MiZhuan {
 			Thread.sleep(20 * 1000);
 		} catch (Exception e) {
 			System.out.println("error" + e.getMessage());
-			driver.quit();
 			e.printStackTrace();
 			callback.onRestartApp(driver);
 			return;
@@ -220,25 +219,21 @@ public class MiZhuan {
 			// }
 			if (!is360Completed) {
 				if (!clickThreeSixZeroNews()) {
-					driver.quit();
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
 			if (!isTurnturnComleted) {
 				if (!clickTurnturn()) {
-					driver.quit();
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
 			if (!isTuituiComleted) {
 				if (!clickTuitui()) {
-					driver.quit();
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
 			if (!isPackageCompleted) {
 				if (!clickRedPackage()) {
-					driver.quit();
 					return ResultDict.COMMAND_RESTART_APP;
 				}
 			}
@@ -811,12 +806,13 @@ public class MiZhuan {
 						.findElement(By
 								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName" +  taskAppName);
+				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName = " +  taskAppName);
 				
 				System.out.println("taskAppName = " + taskAppName);
 				System.out.println("lastAppName = " + lastAppName);
 				if(taskAppName.equals(lastAppName)){
 					repeatCount ++;
+					System.out.println("count = " + repeatCount);
 					if(repeatCount == 5){ 
 						isInstallCompleted = true;
 						isInstallNoApp = true;
@@ -828,7 +824,8 @@ public class MiZhuan {
 				}
 				
 				double appSize = Double.parseDouble(taskAppSize.split("M")[0]);
-				if (("注册".equals(taskType) || "体验".equals(taskType)) && appSize < 40) {
+				lastAppName = taskAppName;
+				if (("注册".equals(taskType) || "体验".equals(taskType)) && appSize < 100) {
 					driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]"))
 							.click();
@@ -942,7 +939,7 @@ public class MiZhuan {
 						buttomButton.click();
 						Thread.sleep(20 * 1000);
 						Log.log.info("开始体验5分钟。。。");
-						Thread.sleep(5 * 60 * 1000);
+						Thread.sleep(7 * 60 * 1000);
 						installCount++;
 						Log.log.info("已安装" + installCount + "个应用");
 						Log.log.info("kill " + AdbUtils.getCurrentPackage());
@@ -1049,7 +1046,7 @@ public class MiZhuan {
 		try {
 			driver.findElement(By.name("安装")).click();
 			Thread.sleep(60 * 1000);
-			while (AdbUtils.getCurrentPackage().equals("packageinstaller")) {
+			while (AdbUtils.getCurrentPackage().contains("packageinstaller")) {
 				AdbUtils.back();
 				Thread.sleep(1000);
 			}
@@ -1303,6 +1300,13 @@ public class MiZhuan {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public void reset(){
+		isCompleted = false;
+		isExtraBonusCompleted = false;
+		isInstallCompleted = false;
+//		isClickAdsCompleted = false;
 	}
 
 	private int timeSwitcher() {

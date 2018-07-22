@@ -20,9 +20,9 @@ import utils.Log;
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
 	public boolean isCompleted = false;
-	public boolean isExtraBonusCompleted = false;
+	public boolean isExtraBonusCompleted = true;
 	public boolean isLooklookCompleted = false;
-	public boolean isInstallCompleted = true;
+	public boolean isInstallCompleted = false;
 	public boolean isReadNewsCompleted = false;
 	private int DEFAULT_INSTALL_COUNT = 10;
 	private int currentNewsCount = 0;
@@ -210,13 +210,16 @@ public class MeiRiZhuanDian {
 						if (result != ResultDict.COMMAND_SUCCESS) {
 							return result;
 						} else {
-							AdbUtils.back();
 							installCount++;
+							Log.log.info("kill " + AdbUtils.getCurrentPackage());
+							AdbUtils.killProcess(AdbUtils.getCurrentPackage());
 							Thread.sleep(2000);
 							if (isElementExistByString("不了")) {
 								driver.findElement(By.name("不了")).click();
 								Thread.sleep(1000);
 							}
+							AdbUtils.back();
+							Thread.sleep(2000);
 						}
 					} else {
 						return ResultDict.COMMAND_RESTART_APP;
@@ -234,25 +237,41 @@ public class MeiRiZhuanDian {
 	}
 
 	private int installApp_CUN_AL(AndroidDriver driver2) {
-
-		return 0;
+		try {
+			while (true) {
+				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+				if ("下一步".equals(installButton.getText())) {
+					installButton.click();
+					Thread.sleep(1000);
+				} else {
+					installButton.click();
+					Thread.sleep(1000);
+					break;
+				}
+			}
+			Thread.sleep(10 * 1000);
+			Log.log.info("开始体验5分钟");
+			Thread.sleep(5 * 60 * 1000);
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
 	}
 
 	private int installApp_CUN_TL(AndroidDriver driver2) {
 		try {
 			driver.findElement(By.name("安装")).click();
 			Thread.sleep(60 * 1000);
-			while (AdbUtils.getCurrentPackage().equals("packageinstaller")) {
+			while (AdbUtils.getCurrentPackage().contains("packageinstaller")) {
 				AdbUtils.back();
 				Thread.sleep(1000);
 			}
-			AdbUtils.back();
 			Thread.sleep(3 * 1000);
 			WebElement buttomButton1 = driver.findElement(By.name("打开"));
 			buttomButton1.click();
-			Thread.sleep(10 * 1000);
 			Log.log.info("开始体验5分钟。。。");
-			Thread.sleep(5 * 60 * 1000);
+			Thread.sleep(5 * 70 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,9 +293,7 @@ public class MeiRiZhuanDian {
 				}
 			}
 			Log.log.info("开始体验5分钟。。。");
-			Thread.sleep(5 * 1000);
-			AdbUtils.killProcess(AdbUtils.getCurrentPackage());
-			Thread.sleep(2000);
+			Thread.sleep(5 *60* 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			return ResultDict.COMMAND_RESTART_APP;
@@ -471,6 +488,13 @@ public class MeiRiZhuanDian {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public void reset(){
+		isCompleted = false;
+		isExtraBonusCompleted = false;
+		isLooklookCompleted = false;
+		isReadNewsCompleted = false;
 	}
 
 }

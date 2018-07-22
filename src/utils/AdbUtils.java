@@ -50,12 +50,17 @@ public class AdbUtils {
     		Thread.sleep(1000);
     	    for (String value : Configure.map.values()) {
     	        System.out.println(value);
-    	        if(value.equals("me.mizhuan") || value.equals("io.appium.unlock")|| value.equals("io.appium.settings") || value.equals("com.jiesong.myapplicationlist") || value.equals("com.adsmobile.mrzd")||value.equals("com.qihoo.permmgr")){
+    	        if(value.equals("me.mizhuan") 
+    	        		|| value.equals("io.appium.unlock")
+    	        		|| value.equals("io.appium.settings")
+    	        		|| value.equals("com.jiesong.myapplicationlist")
+    	        		|| value.equals("com.adsmobile.mrzd")
+    	        		||value.equals("com.qihoo.permmgr")){
     	        	continue;
     	        }
     	        Thread.sleep(50);
     	        os.writeBytes("pm disable " + value + "\n");
-    	      }       
+    	      }
     	    Thread.sleep(1000);
             os.writeBytes("exit\n");
             os.flush();
