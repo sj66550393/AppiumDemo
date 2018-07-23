@@ -249,7 +249,14 @@ public class MeiRiZhuanDian {
 					break;
 				}
 			}
-			Thread.sleep(10 * 1000);
+			Thread.sleep(60 * 1000);
+			while (AdbUtils.getCurrentPackage().contains("packageinstaller")) {
+				AdbUtils.back();
+				Thread.sleep(1000);
+			}
+			Thread.sleep(3 * 1000);
+			WebElement buttomButton1 = driver.findElement(By.name("打开"));
+			buttomButton1.click();
 			Log.log.info("开始体验5分钟");
 			Thread.sleep(5 * 60 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
