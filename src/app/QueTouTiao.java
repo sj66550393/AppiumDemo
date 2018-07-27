@@ -46,18 +46,22 @@ public class QueTouTiao {
 		try {
 			System.out.println("start");
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort + "/wd/hub"), capabilities);
-			Thread.sleep(20 * 1000);
+			Thread.sleep(5 * 1000);
 		} catch (Exception e) {
 			System.out.println("error" + e.getMessage());
 			e.printStackTrace();
 			callback.onRestartApp(driver);
 			return;
 		}
-		
 		// 点击领取
 		try {
-			if (isElementExistById("com.expflow.reading:id/ivCountDownTime")) {
-				driver.findElement(By.id("com.expflow.reading:id/ivCountDownTime")).click();
+//			if (isElementExistById("com.expflow.reading:id/ivCountDownTime")) {
+//				driver.findElement(By.id("com.expflow.reading:id/ivCountDownTime")).click();
+//				Thread.sleep(1000);
+//				AdbUtils.back();
+//			}
+			if(isElementExistByString("领取")) {
+				driver.findElement(By.name("领取")).click();
 				Thread.sleep(1000);
 				AdbUtils.back();
 			}
@@ -69,12 +73,12 @@ public class QueTouTiao {
 		}
 		
 		
-		if (!isLookNewCompleted) {
-			result = lookNews();
-			if (result != ResultDict.COMMAND_SUCCESS) {
-				callback.onRestartApp(driver);
-			}
-		}
+//		if (!isLookNewCompleted) {
+//			result = lookNews();
+//			if (result != ResultDict.COMMAND_SUCCESS) {
+//				callback.onRestartApp(driver);
+//			}
+//		}
 
 		if (!isLookVideoCompleted) {
 			result = lookVideo();
@@ -89,29 +93,40 @@ public class QueTouTiao {
 
 	private int lookNews() {
 		try {
-			driver.findElement(By.name("刷新")).click();
 			for (int i = 0; i < 5; i++) {
+				driver.findElement(By.id("com.jifen.qukan:id/ir")).click();
+				if(isElementExistByString("忽略")) {
+					driver.findElement(By.name("忽略")).click();
+					Thread.sleep(2000);
+				}
+				if(!isElementExistByString("我的")) {
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(3000);
-				AdbUtils.click(300, 600);
+				AdbUtils.click(300, 500);
 				Thread.sleep(2000);
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 800, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 800);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 800, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 800);
+					Thread.sleep(500);
 				}
-				driver.findElement(By.id("com.expflow.reading:id/iv_close")).click();
+				if(isElementExistByString("关闭")) {
+				    driver.findElement(By.name("关闭")).click();
+				}else {
+					AdbUtils.back();
+				}
 				Thread.sleep(2000);
 				AdbUtils.swipe(600, 700, 300, 700);
 			}
@@ -125,14 +140,26 @@ public class QueTouTiao {
 
 	private int lookVideo() {
 		try {
-			driver.findElement(By.name("视频")).click();
 			for (int i = 0; i < 5; i++) {
+				driver.findElement(By.id("com.jifen.qukan:id/it")).click();
+				if(isElementExistByString("忽略")) {
+					driver.findElement(By.name("忽略")).click();
+					Thread.sleep(2000);
+				}
+				if(!isElementExistByString("我的")) {
+					return ResultDict.COMMAND_RESTART_APP;
+				}
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(3000);
-				AdbUtils.click(300, 600);
+				AdbUtils.click(300, 500);
 				Thread.sleep(35 * 1000);
-				AdbUtils.back();
+				if(isElementExistByString("关闭")) {
+				    driver.findElement(By.name("关闭")).click();
+				}else {
+					AdbUtils.back();
+				}
 				Thread.sleep(2000);
+				AdbUtils.swipe(600, 700, 300, 700);
 			}
 			isLookVideoCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
@@ -156,5 +183,15 @@ public class QueTouTiao {
 		isCompleted = false;
 		isLookNewCompleted = false;
 		isLookVideoCompleted = false;
+	}
+	
+	private boolean isElementExistByString(String name) {
+		try {
+			WebElement element = driver.findElement(By.name(name));
+			element.isDisplayed();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

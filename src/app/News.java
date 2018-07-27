@@ -28,8 +28,10 @@ public class News {
 	}
 	
 	public void start(TaskCallback callback){
+		System.out.println("news start and count = " + current);
 		while(current < 10){
 			if(!kandiantoutiao.isCompleted){
+				System.out.println("before kankan start");
 				kandiantoutiao.start(new TaskCallback() {
 					
 					@Override

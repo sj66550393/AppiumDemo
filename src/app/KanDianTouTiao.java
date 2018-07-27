@@ -2,7 +2,10 @@ package app;
 
 import java.net.URL;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import callback.TaskCallback;
@@ -53,8 +56,20 @@ public class KanDianTouTiao {
 			callback.onRestartApp(driver);
 			return;
 		}
+		
+	
+		
 		// 点击宝箱
 		try {
+			
+			if(isElementExistById("com.jskj.besensible:id/openimg")) {
+				driver.findElement(By.id("com.jskj.besensible:id/openimg")).click();
+				Thread.sleep(2000);
+				AdbUtils.back();
+				Thread.sleep(2000);
+			}
+			
+	
 			String baoxiangText = driver.findElement(By.id("com.jskj.besensible:id/boaxiangtx")).getText();
 			if ("领取".equals(baoxiangText)) {
 				driver.findElement(By.id("com.jskj.besensible:id/baoxianglayout")).click();
@@ -73,6 +88,7 @@ public class KanDianTouTiao {
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 			}
+			System.out.println("kandian look new end");
 		}
 
 		if (!isLookVideoCompleted) {
@@ -93,10 +109,22 @@ public class KanDianTouTiao {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(3000);
 				AdbUtils.click(300, 600);
-				Thread.sleep(18 * 1000);
+//				Thread.sleep(18 * 1000);
 				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(1000);
+					AdbUtils.swipe(300, 600, 300, 500);
+					Thread.sleep(500);
+				}
+				for (int j = 0; j < 10; j++) {
+					AdbUtils.swipe(300, 500, 300, 600);
+					Thread.sleep(500);
+				}
+				for (int j = 0; j < 10; j++) {
+					AdbUtils.swipe(300, 600, 300, 500);
+					Thread.sleep(500);
+				}
+				for (int j = 0; j < 10; j++) {
+					AdbUtils.swipe(300, 500, 300, 600);
+					Thread.sleep(500);
 				}
 				AdbUtils.back();
 				Thread.sleep(2000);
@@ -124,6 +152,16 @@ public class KanDianTouTiao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private boolean isElementExistById(String id) {
+		try {
+			WebElement element = driver.findElement(By.id(id));
+			element.isDisplayed();
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 	

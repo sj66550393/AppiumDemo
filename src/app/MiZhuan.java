@@ -54,7 +54,7 @@ public class MiZhuan {
 	private boolean isPackageCompleted = true;
 	
 	
-	public boolean isCompleted = false;
+	public boolean isCompleted = true;
 	public boolean isGetInstallCount = false;
 	public boolean isInstallNoApp = false;
 	private int installCount = 0;

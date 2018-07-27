@@ -95,21 +95,21 @@ public class YueTouTiao {
 				Thread.sleep(3000);
 				AdbUtils.click(300, 600);
 				Thread.sleep(2000);
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 700, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 700);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 700, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 700);
+					Thread.sleep(500);
 				}
 				driver.findElement(By.id("com.expflow.reading:id/iv_close")).click();
 				Thread.sleep(2000);
@@ -131,7 +131,11 @@ public class YueTouTiao {
 				Thread.sleep(3000);
 				AdbUtils.click(300, 600);
 				Thread.sleep(35 * 1000);
-				AdbUtils.back();
+				if(isElementExistById("com.expflow.reading:id/iv_close")) {
+					driver.findElement(By.id("com.expflow.reading:id/iv_close")).click();
+				}else {
+					AdbUtils.back();
+				}
 				Thread.sleep(2000);
 			}
 			isLookVideoCompleted = true;

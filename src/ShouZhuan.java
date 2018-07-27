@@ -40,8 +40,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "d:\\";
-			AdbUtils.storageDes = "d:\\";
+			Configure.logDir = "e:\\";
+			AdbUtils.storageDes = "e:\\";
 		}
 		if (args.length > 1 && args[1] != null) {
 			Configure.deviceId = args[1];
@@ -49,15 +49,15 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "68add08e";
-			AdbUtils.deviceId = "68add08e";
-			AdbUtils.storageDir = AdbUtils.storageDes + "68add08e" + "/";
-			AdbUtils.adb = "adb -s " + "68add08e" + " shell ";
+			Configure.deviceId = "238ade0021";
+			AdbUtils.deviceId = "238ade0021";
+			AdbUtils.storageDir = AdbUtils.storageDes + "238ade0021" + "/";
+			AdbUtils.adb = "adb -s " + "238ade0021" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4811";
+			Configure.appiumPort = "4801";
 		}
 
 		if (args.length > 3 && args[3] != null) {
@@ -69,12 +69,13 @@ public class ShouZhuan {
 			}
 		}else{
 			MiZhuan.getInstance().isGetInstallCount = true;
+			Configure.Mizhuan_instlal_count = -1;
 		}
 
 		if (args.length > 4 && args[4] != null) {
 			Configure.appConfig = Integer.parseInt(args[4]);
 		}else{
-			Configure.appConfig = 1;
+			Configure.appConfig = 4;
 		}
 
 		init();
@@ -183,15 +184,16 @@ class Task1 extends TimerTask {
 					checkWhenRestartApp(driver);
 				}
 			});
-		} else if (News.getInstance().isCompleted) {
+		} else if (!News.getInstance().isCompleted) {
+			System.out.println("news start");
 			News.getInstance().start(new TaskCallback() {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
-					if (((Configure.appConfig >> 3) & 1) == 0) {
+					if (((Configure.appConfig >> 2) & 1) == 0) {
 						System.out.println("reset mizhuan and meizhuan and news");
-						MiZhuan.getInstance().reset();
-						MeiRiZhuanDian.getInstance().reset();
+//						MiZhuan.getInstance().reset();
+//						MeiRiZhuanDian.getInstance().reset();
 						News.getInstance().reset();
 					}
 				}

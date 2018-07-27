@@ -49,13 +49,17 @@ public class AdbUtils {
     		DataOutputStream os = new DataOutputStream(process.getOutputStream());
     		Thread.sleep(1000);
     	    for (String value : Configure.map.values()) {
-    	        System.out.println(value);
+//    	        System.out.println(value);
     	        if(value.equals("me.mizhuan") 
     	        		|| value.equals("io.appium.unlock")
     	        		|| value.equals("io.appium.settings")
     	        		|| value.equals("com.jiesong.myapplicationlist")
     	        		|| value.equals("com.adsmobile.mrzd")
-    	        		||value.equals("com.qihoo.permmgr")){
+    	        		|| value.equals("com.qihoo.permmgr")
+    	        		|| value.equals("com.jskj.besensible")
+    	        		|| value.equals("com.jifen.qukan")
+    	        		|| value.equals("com.coohua.xinwenzhuan")
+    	        		|| value.equals("com.expflow.reading")){
     	        	continue;
     	        }
     	        Thread.sleep(50);

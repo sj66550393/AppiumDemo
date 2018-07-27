@@ -19,7 +19,7 @@ import utils.Log;
 
 public class MeiRiZhuanDian {
 	private static MeiRiZhuanDian meiRiZhuanDian;
-	public boolean isCompleted = false;
+	public boolean isCompleted = true;
 	public boolean isExtraBonusCompleted = true;
 	public boolean isLooklookCompleted = false;
 	public boolean isInstallCompleted = false;

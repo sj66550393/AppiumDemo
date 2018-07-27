@@ -27,8 +27,8 @@ public class TaoXinWen {
 		capabilities.setCapability("automationName", "Appium");
 		capabilities.setCapability("platformName", "Android");
 		capabilities.setCapability("platformVersion", "5.1.1");
-		capabilities.setCapability("appPackage", "com.expflow.reading");
-		capabilities.setCapability("appActivity", ".activity.SplashActivity");
+		capabilities.setCapability("appPackage", "com.coohua.xinwenzhuan");
+		capabilities.setCapability("appActivity", ".controller.MainActivity");
 		capabilities.setCapability("newCommandTimeout", 600);
 		capabilities.setCapability("noReset", true);
 		capabilities.setCapability("udid", Configure.deviceId);
@@ -55,18 +55,18 @@ public class TaoXinWen {
 		}
 		
 		// 点击领取
-//		try {
-//			if (isElementExistById("com.expflow.reading:id/ivCountDownTime")) {
-//				driver.findElement(By.id("com.expflow.reading:id/ivCountDownTime")).click();
-//				Thread.sleep(1000);
-//				AdbUtils.back();
-//			}
-//		} catch (Exception e) {
-//			System.out.println("error" + e.getMessage());
-//			e.printStackTrace();
-//			callback.onRestartApp(driver);
-//			return;
-//		}
+		try {
+			if (isElementExistById("com.coohua.xinwenzhuan:id/home_feed_punch_the_clock")) {
+				driver.findElement(By.id("com.coohua.xinwenzhuan:id/home_feed_punch_the_clock")).click();
+				Thread.sleep(1000);
+				AdbUtils.back();
+			}
+		} catch (Exception e) {
+			System.out.println("error" + e.getMessage());
+			e.printStackTrace();
+			callback.onRestartApp(driver);
+			return;
+		}
 		
 		
 		if (!isLookNewCompleted) {
@@ -90,29 +90,30 @@ public class TaoXinWen {
 
 	private int lookNews() {
 		try {
-			driver.findElement(By.name("新闻赚钱")).click();
+//			driver.findElement(By.name("新闻赚钱")).click();
 			for (int i = 0; i < 5; i++) {
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(3000);
-				AdbUtils.click(300, 600);
+				AdbUtils.click(300, 400);
 				Thread.sleep(2000);
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 700, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 700);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 1100, 300, 500);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 700, 300, 500);
+					Thread.sleep(500);
 				}
-				for (int j = 0; j < 10; j++) {
-					AdbUtils.swipe(300, 500, 300, 1000);
-					Thread.sleep(2000);
+				for (int j = 0; j < 5; j++) {
+					AdbUtils.swipe(300, 500, 300, 700);
+					Thread.sleep(500);
 				}
-				driver.findElement(By.id("com.expflow.reading:id/iv_close")).click();
+//				driver.findElement(By.id("com.expflow.reading:id/iv_close")).click();
+				AdbUtils.back();
 				Thread.sleep(2000);
 				AdbUtils.swipe(600, 700, 300, 700);
 			}
@@ -124,24 +125,24 @@ public class TaoXinWen {
 		}
 	}
 
-	private int lookVideo() {
-		try {
-			driver.findElement(By.name("视频")).click();
-			for (int i = 0; i < 5; i++) {
-				AdbUtils.swipe(300, 500, 300, 1000);
-				Thread.sleep(3000);
-				AdbUtils.click(300, 600);
-				Thread.sleep(35 * 1000);
-				AdbUtils.back();
-				Thread.sleep(2000);
-			}
-			isLookVideoCompleted = true;
-			return ResultDict.COMMAND_SUCCESS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResultDict.COMMAND_RESTART_APP;
-		}
-	}
+//	private int lookVideo() {
+//		try {
+//			driver.findElement(By.name("视频")).click();
+//			for (int i = 0; i < 5; i++) {
+//				AdbUtils.swipe(300, 500, 300, 1000);
+//				Thread.sleep(3000);
+//				AdbUtils.click(300, 600);
+//				Thread.sleep(35 * 1000);
+//				AdbUtils.back();
+//				Thread.sleep(2000);
+//			}
+//			isLookVideoCompleted = true;
+//			return ResultDict.COMMAND_SUCCESS;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return ResultDict.COMMAND_RESTART_APP;
+//		}
+//	}
 	
 	private boolean isElementExistById(String id) {
 		try {
