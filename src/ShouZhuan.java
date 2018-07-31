@@ -75,7 +75,7 @@ public class ShouZhuan {
 		if (args.length > 4 && args[4] != null) {
 			Configure.appConfig = Integer.parseInt(args[4]);
 		}else{
-			Configure.appConfig = 4;
+			Configure.appConfig = 2;
 		}
 
 		init();

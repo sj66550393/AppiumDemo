@@ -342,6 +342,7 @@ public class MeiRiZhuanDian {
 							"//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout"))
 							.click();
 				} else {
+				    Log.log.info("taskAppName = " + taskAppName + "can not find packageName");
 					isExtraBonusCompleted = true;
 					break;
 				}
