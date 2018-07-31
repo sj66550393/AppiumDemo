@@ -53,6 +53,7 @@ public class KanDianTouTiao {
 		} catch (Exception e) {
 			System.out.println("error" + e.getMessage());
 			e.printStackTrace();
+			isCompleted = true;
 			callback.onRestartApp(driver);
 			return;
 		}

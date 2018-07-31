@@ -118,13 +118,13 @@ public class MeiRiZhuanDian {
 			}
 		}
 
-		if (!isReadNewsCompleted) {
-			result = startNews();
-			if (result != ResultDict.COMMAND_SUCCESS) {
-				callback.onRestartApp(driver);
-				return;
-			}
-		}
+//		if (!isReadNewsCompleted) {
+//			result = startNews();
+//			if (result != ResultDict.COMMAND_SUCCESS) {
+//				callback.onRestartApp(driver);
+//				return;
+//			}
+//		}
 		callback.onSuccess(driver);
 	}
 
@@ -191,7 +191,7 @@ public class MeiRiZhuanDian {
 					Thread.sleep(2000);
 					if (isElementExistByString("开始任务")) {
 						driver.findElement(By.name("开始任务")).click();
-						Thread.sleep(60 * 1000);
+						Thread.sleep(3 * 60 * 1000);
 						switch (Configure.productModel) {
 						case "[OPPO A37m]":
 							result = installApp_OPPO(driver);
@@ -258,7 +258,7 @@ public class MeiRiZhuanDian {
 			WebElement buttomButton1 = driver.findElement(By.name("打开"));
 			buttomButton1.click();
 			Log.log.info("开始体验5分钟");
-			Thread.sleep(5 * 60 * 1000);
+			Thread.sleep(6 * 60 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -278,7 +278,7 @@ public class MeiRiZhuanDian {
 			WebElement buttomButton1 = driver.findElement(By.name("打开"));
 			buttomButton1.click();
 			Log.log.info("开始体验5分钟。。。");
-			Thread.sleep(5 * 70 * 1000);
+			Thread.sleep(6 * 70 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -300,7 +300,7 @@ public class MeiRiZhuanDian {
 				}
 			}
 			Log.log.info("开始体验5分钟。。。");
-			Thread.sleep(5 *60* 1000);
+			Thread.sleep(6 *60* 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			return ResultDict.COMMAND_RESTART_APP;

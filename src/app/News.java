@@ -11,6 +11,7 @@ public class News {
 	private QueTouTiao qutoutiao;
 	private TaoXinWen taoxinwen;
 	private YueTouTiao yuetoutiao;
+	private MeiZhuanNews meizhuanNews;
 	
 	private static News news;
 	private News(){
@@ -18,6 +19,7 @@ public class News {
 		qutoutiao = QueTouTiao.getInstance();
 		taoxinwen = TaoXinWen.getInstance();
 		yuetoutiao = YueTouTiao.getInstance();
+		meizhuanNews = MeiZhuanNews.getInstance();
 	}
 	
 	public static News getInstance(){
@@ -99,10 +101,29 @@ public class News {
 					}
 				});
 			}
+			
+			if(!meizhuanNews.isCompleted){
+				meizhuanNews.start(new TaskCallback() {
+					
+					@Override
+					public void onSuccess(AndroidDriver driver) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onRestartApp(AndroidDriver driver) {
+						callback.onRestartApp(driver);
+						
+					}
+				});
+			}
+			
 			kandiantoutiao.reset();
 			qutoutiao.reset();
 			taoxinwen.reset();
 			yuetoutiao.reset();
+			meizhuanNews.reset();
 		}
 	}
 	
