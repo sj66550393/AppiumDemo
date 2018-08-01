@@ -190,12 +190,13 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
-					if (((Configure.appConfig >> 2) & 1) == 0) {
+					if (((Configure.appConfig >> 3) & 1) == 0) {
 						System.out.println("reset mizhuan and meizhuan and news");
-//						MiZhuan.getInstance().reset();
-//						MeiRiZhuanDian.getInstance().reset();
+						MiZhuan.getInstance().reset();
+						MeiRiZhuanDian.getInstance().reset();
 						News.getInstance().reset();
 					}
+					checkWhenRestartApp(driver);
 				}
 
 				@Override
