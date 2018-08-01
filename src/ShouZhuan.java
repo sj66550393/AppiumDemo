@@ -75,7 +75,7 @@ public class ShouZhuan {
 		if (args.length > 4 && args[4] != null) {
 			Configure.appConfig = Integer.parseInt(args[4]);
 		}else{
-			Configure.appConfig = 2;
+			Configure.appConfig = 7;
 		}
 
 		init();
@@ -171,6 +171,7 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
+					MeiRiZhuanDian.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 2) & 1) == 0) {
 						System.out.println("reset mizhuan and meizhuan");
 						MiZhuan.getInstance().reset();
@@ -190,6 +191,7 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
+					News.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 3) & 1) == 0) {
 						System.out.println("reset mizhuan and meizhuan and news");
 						MiZhuan.getInstance().reset();

@@ -44,6 +44,7 @@ public class QueTouTiao {
 	public void start(TaskCallback callback) {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
+			AdbUtils.rootComandEnablePackage("com.jifen.qukan");
 			System.out.println("start");
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort + "/wd/hub"), capabilities);
 			Thread.sleep(5 * 1000);

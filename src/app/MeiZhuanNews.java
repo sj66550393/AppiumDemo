@@ -136,7 +136,8 @@ public class MeiZhuanNews {
 					break;
 				}
 				if (count == 6) {
-					return ResultDict.COMMAND_RESTART_APP;
+					isCompleted = true;
+					return ResultDict.COMMAND_SUCCESS;
 				}
 				if (!isElementExistByString("新闻阅读")) {
 					return ResultDict.COMMAND_RESTART_APP;
