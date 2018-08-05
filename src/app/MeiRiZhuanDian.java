@@ -118,13 +118,13 @@ public class MeiRiZhuanDian {
 			}
 		}
 
-//		if (!isReadNewsCompleted) {
-//			result = startNews();
-//			if (result != ResultDict.COMMAND_SUCCESS) {
-//				callback.onRestartApp(driver);
-//				return;
-//			}
-//		}
+		if (!isReadNewsCompleted &&  Configure.appConfig >> 2 == 0) {
+			result = startNews();
+			if (result != ResultDict.COMMAND_SUCCESS) {
+				callback.onRestartApp(driver);
+				return;
+			}
+		}
 		callback.onSuccess(driver);
 	}
 
@@ -386,6 +386,8 @@ public class MeiRiZhuanDian {
 			startAds("娱乐圈秘闻");
 			startAds("天降红包");
 			startAds("健康养生");
+			startAds("优惠全家桶");
+			startAds("娱乐一夏");
 			System.out.println("lookAds end");
 			Thread.sleep(3000);
 			AdbUtils.back();
@@ -499,6 +501,7 @@ public class MeiRiZhuanDian {
 	}
 	
 	public void reset(){
+		Log.log.info("meizhuan reset");
 		isCompleted = false;
 		isExtraBonusCompleted = false;
 		isLooklookCompleted = false;

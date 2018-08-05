@@ -40,8 +40,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "e:\\";
-			AdbUtils.storageDes = "e:\\";
+			Configure.logDir = "d:\\";
+			AdbUtils.storageDes = "d:\\";
 		}
 		if (args.length > 1 && args[1] != null) {
 			Configure.deviceId = args[1];
@@ -49,15 +49,15 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "238ade0021";
-			AdbUtils.deviceId = "238ade0021";
-			AdbUtils.storageDir = AdbUtils.storageDes + "238ade0021" + "/";
-			AdbUtils.adb = "adb -s " + "238ade0021" + " shell ";
+			Configure.deviceId = "242add002";
+			AdbUtils.deviceId = "242add002";
+			AdbUtils.storageDir = AdbUtils.storageDes + "242add002" + "/";
+			AdbUtils.adb = "adb -s " + "242add002" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4801";
+			Configure.appiumPort = "4811";
 		}
 
 		if (args.length > 3 && args[3] != null) {
@@ -87,15 +87,12 @@ public class ShouZhuan {
 
 	private static void init() {
 		if((Configure.appConfig & 1) == 1){
-			System.out.println("mizhuan reset");
 			MiZhuan.getInstance().reset();
 		}
 		if((Configure.appConfig>>1 & 1) == 1){
-			System.out.println("meizhuan reset");
 			MeiRiZhuanDian.getInstance().reset();
 		}
 		if((Configure.appConfig>>2 & 1) == 1){
-			System.out.println("news reset");
 			News.getInstance().reset();
 		}
 		Configure.isPad = AdbUtils.isPad();
@@ -153,9 +150,9 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
+					Log.log.info("mizhuan onSuccess");
 					MiZhuan.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 1) & 1) == 0) {
-						System.out.println("reset mizhuan");
 						MiZhuan.getInstance().reset();
 					}
 					checkWhenRestartApp(driver);
@@ -171,9 +168,9 @@ class Task1 extends TimerTask {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
+					Log.log.info("meizhuan onSuccess");
 					MeiRiZhuanDian.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 2) & 1) == 0) {
-						System.out.println("reset mizhuan and meizhuan");
 						MiZhuan.getInstance().reset();
 						MeiRiZhuanDian.getInstance().reset();
 					}
@@ -186,14 +183,13 @@ class Task1 extends TimerTask {
 				}
 			});
 		} else if (!News.getInstance().isCompleted) {
-			System.out.println("news start");
 			News.getInstance().start(new TaskCallback() {
 
 				@Override
 				public void onSuccess(AndroidDriver driver) {
+					Log.log.info("News onSuccess");
 					News.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 3) & 1) == 0) {
-						System.out.println("reset mizhuan and meizhuan and news");
 						MiZhuan.getInstance().reset();
 						MeiRiZhuanDian.getInstance().reset();
 						News.getInstance().reset();
@@ -218,6 +214,7 @@ class Task1 extends TimerTask {
 			run();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			run();
 		}
 	}
 
@@ -227,12 +224,6 @@ class Task1 extends TimerTask {
 				driver.findElement(By.name("确定")).click();
 			}
 			AdbUtils.setScreenTimeout(1800 * 1000);
-//			if ((System.currentTimeMillis() - Configure.mizhuanInstallNoAppTime > 4 * 60 * 60 * 1000)
-//					&& MiZhuan.getInstance().isInstallNoApp == true) {
-//				MiZhuan.getInstance().isCompleted = false;
-//				MiZhuan.getInstance().isInstallNoApp = false;
-//				MiZhuan.getInstance().isInstallCompleted = false;
-//			}
 			driver.quit();
 		} catch (Exception e) {
 			restartApp();

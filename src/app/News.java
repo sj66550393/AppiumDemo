@@ -1,7 +1,9 @@
 package app;
 
 import callback.TaskCallback;
+import common.Configure;
 import io.appium.java_client.android.AndroidDriver;
+import utils.Log;
 
 public class News {
 	
@@ -30,10 +32,9 @@ public class News {
 	}
 	
 	public void start(TaskCallback callback){
-		System.out.println("news start and count = " + current);
-		while(current < 10){
-			if(!kandiantoutiao.isCompleted){
-				System.out.println("before kankan start");
+		Log.log.info("news start and count = " + current);
+		while(current < 5){
+			if(!kandiantoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				kandiantoutiao.start(new TaskCallback() {
 					
 					@Override
@@ -50,7 +51,7 @@ public class News {
 				});
 			}
 			
-			if(!qutoutiao.isCompleted){
+			if(!qutoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				qutoutiao.start(new TaskCallback() {
 					
 					@Override
@@ -68,24 +69,24 @@ public class News {
 			}
 			
 			
-			if(!taoxinwen.isCompleted){
-				taoxinwen.start(new TaskCallback() {
-					
-					@Override
-					public void onSuccess(AndroidDriver driver) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void onRestartApp(AndroidDriver driver) {
-						callback.onRestartApp(driver);
-						return;
-					}
-				});
-			}
+//			if(!taoxinwen.isCompleted){
+//				taoxinwen.start(new TaskCallback() {
+//					
+//					@Override
+//					public void onSuccess(AndroidDriver driver) {
+//						// TODO Auto-generated method stub
+//						
+//					}
+//					
+//					@Override
+//					public void onRestartApp(AndroidDriver driver) {
+//						callback.onRestartApp(driver);
+//						return;
+//					}
+//				});
+//			}
 			
-			if(!yuetoutiao.isCompleted){
+			if(!yuetoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				yuetoutiao.start(new TaskCallback() {
 					
 					@Override
@@ -118,7 +119,7 @@ public class News {
 					}
 				});
 			}
-			
+			current++;
 			kandiantoutiao.reset();
 			qutoutiao.reset();
 			taoxinwen.reset();
@@ -129,6 +130,7 @@ public class News {
 	
 	
 	public void reset(){
+		Log.log.info("News reset");
 		isCompleted = false;
 		current = 0;
 		kandiantoutiao.reset();

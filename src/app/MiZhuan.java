@@ -691,7 +691,9 @@ public class MiZhuan {
 					Thread.sleep(1000);
 				}
 				// pad 用xpath会找不到路径
-				if (Configure.isPad || !AdbUtils.isRoot()) {
+				if (!AdbUtils.isRoot()
+//						|| Configure.isPad 
+						) {
 					button = driver.findElement(By.id("me.mizhuan:id/mituo_status"));
 					taskDesc = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo"));
 					taskNameDesc = driver.findElement(By.id("me.mizhuan:id/mituo_textViewName"));
@@ -709,6 +711,7 @@ public class MiZhuan {
 				buttonText = button.getText();
 				taskType = taskDesc.getText().substring(1, 3);
 				taskName = taskNameDesc.getText();
+				if(taskDesc.getText().length() >= 9)
 				taskTime = taskDesc.getText().substring(8, 9);
 				System.out.println("buttonText = " + buttonText + "    taskType = " + taskType + "    taskName = "
 						+ taskName + "    taskTime = " + taskTime);
@@ -1303,6 +1306,7 @@ public class MiZhuan {
 	}
 	
 	public void reset(){
+		Log.log.info("mizhuan reset");
 		isCompleted = false;
 		isExtraBonusCompleted = false;
 		isInstallCompleted = false;
