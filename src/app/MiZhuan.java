@@ -699,7 +699,7 @@ public class MiZhuan {
 					taskNameDesc = driver.findElement(By.id("me.mizhuan:id/mituo_textViewName"));
 				} else {
 					button = driver.findElement(By
-							.xpath("//android.view.View/android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
+							.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
 									+ position + ")]/android.widget.LinearLayout/android.widget.Button"));
 					taskDesc = driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
@@ -898,6 +898,9 @@ public class MiZhuan {
 						case "[CUN-AL00]":
 							result = universalInstall_CUN_AL(driver);
 							break;
+						case "[M5]":
+							result = universalInstall_M5(driver);
+						     break;
 						default:
 							break;
 						}
@@ -936,6 +939,7 @@ public class MiZhuan {
 						if (AdbUtils.isRoot()) {
 							String name = driver.findElement(By.id("me.mizhuan:id/mituo_tvTitle")).getText();
 							String packageName = Configure.map.get(name);
+							System.out.println("packageName = " + packageName);;
 							AdbUtils.rootComandEnablePackage(packageName);
 							Thread.sleep(3000);
 						}
@@ -1038,6 +1042,29 @@ public class MiZhuan {
 			Thread.sleep(10 * 1000);
 			Log.log.info("开始体验5分钟");
 			Thread.sleep(5 * 60 * 1000);
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private int universalInstall_M5(AndroidDriver driver) {
+		try {
+			while (true) {
+				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/action_positive"));
+				if ("下一步".equals(installButton.getText())) {
+					installButton.click();
+					Thread.sleep(1000);
+				} else {
+					installButton.click();
+					Thread.sleep(1000);
+					break;
+				}
+			}
+			Thread.sleep(10 * 1000);
+			Log.log.info("开始体验5分钟");
+			Thread.sleep(6 * 60 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
