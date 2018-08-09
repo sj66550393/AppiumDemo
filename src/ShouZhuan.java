@@ -57,7 +57,7 @@ public class ShouZhuan {
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
 		} else {
-			Configure.appiumPort = "4811";
+			Configure.appiumPort = "4791";
 		}
 
 		if (args.length > 3 && args[3] != null) {
@@ -75,7 +75,7 @@ public class ShouZhuan {
 		if (args.length > 4 && args[4] != null) {
 			Configure.appConfig = Integer.parseInt(args[4]);
 		}else{
-			Configure.appConfig = 7;
+			Configure.appConfig = 2;
 		}
 
 		init();
