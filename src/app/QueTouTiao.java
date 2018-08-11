@@ -11,12 +11,15 @@ import common.Configure;
 import common.ResultDict;
 import io.appium.java_client.android.AndroidDriver;
 import utils.AdbUtils;
+import utils.Log;
 
 public class QueTouTiao {
 	private static QueTouTiao quetoutiao;
 	public boolean isCompleted = false;
 	public boolean isLookNewCompleted = false;
 	public boolean isLookVideoCompleted = false;
+	public int lookNewsCount = 0;
+	public int lookVideoCount = 0;
 
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
@@ -45,7 +48,7 @@ public class QueTouTiao {
 		int result = ResultDict.COMMAND_SUCCESS;
 		try {
 			AdbUtils.rootComandEnablePackage("com.jifen.qukan");
-			System.out.println("start");
+			Log.log.info("qutoutiao start");
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort + "/wd/hub"), capabilities);
 			Thread.sleep(5 * 1000);
 		} catch (Exception e) {
@@ -57,30 +60,24 @@ public class QueTouTiao {
 		}
 		// 点击领取
 		try {
-//			if (isElementExistById("com.expflow.reading:id/ivCountDownTime")) {
-//				driver.findElement(By.id("com.expflow.reading:id/ivCountDownTime")).click();
-//				Thread.sleep(1000);
-//				AdbUtils.back();
-//			}
 			if(isElementExistByString("领取")) {
 				driver.findElement(By.name("领取")).click();
 				Thread.sleep(1000);
 				AdbUtils.back();
 			}
 		} catch (Exception e) {
-			System.out.println("error" + e.getMessage());
 			e.printStackTrace();
 			callback.onRestartApp(driver);
 			return;
 		}
 		
 		
-//		if (!isLookNewCompleted) {
-//			result = lookNews();
-//			if (result != ResultDict.COMMAND_SUCCESS) {
-//				callback.onRestartApp(driver);
-//			}
-//		}
+		if (!isLookNewCompleted) {
+			result = lookNews();
+			if (result != ResultDict.COMMAND_SUCCESS) {
+				callback.onRestartApp(driver);
+			}
+		}
 
 		if (!isLookVideoCompleted) {
 			result = lookVideo();
@@ -95,7 +92,7 @@ public class QueTouTiao {
 
 	private int lookNews() {
 		try {
-			for (int i = 0; i < 5; i++) {
+			while (lookNewsCount < 5) {
 				driver.findElement(By.id("com.jifen.qukan:id/ir")).click();
 				if(isElementExistByString("忽略")) {
 					driver.findElement(By.name("忽略")).click();
@@ -131,6 +128,7 @@ public class QueTouTiao {
 				}
 				Thread.sleep(2000);
 				AdbUtils.swipe(600, 700, 300, 700);
+				lookNewsCount++;
 			}
 			isLookNewCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
@@ -142,7 +140,7 @@ public class QueTouTiao {
 
 	private int lookVideo() {
 		try {
-			for (int i = 0; i < 5; i++) {
+			while (lookVideoCount < 5) {
 				driver.findElement(By.id("com.jifen.qukan:id/it")).click();
 				if(isElementExistByString("忽略")) {
 					driver.findElement(By.name("忽略")).click();
@@ -162,6 +160,7 @@ public class QueTouTiao {
 				}
 				Thread.sleep(2000);
 				AdbUtils.swipe(600, 700, 300, 700);
+				lookVideoCount++;
 			}
 			isLookVideoCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
@@ -183,6 +182,8 @@ public class QueTouTiao {
 	
 	public void reset(){
 		isCompleted = false;
+		lookNewsCount = 0;
+		lookVideoCount = 0;
 		isLookNewCompleted = false;
 		isLookVideoCompleted = false;
 	}

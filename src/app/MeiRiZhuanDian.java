@@ -414,12 +414,12 @@ public class MeiRiZhuanDian {
 			startAds("让红包飞");
 			startAds("福利大放送");
 			startAds("养生之道");
-			startAds("巨头条");
+//			startAds("巨头条");
 			startAds("今日宜抢红包");
 			startAds("翻牌赢大奖");
 			startAds("抽现金红包");
 			startAds("红包最真情");
-			startAds("娱乐圈秘闻");
+//			startAds("娱乐圈秘闻");
 			startAds("天降红包");
 			startAds("健康养生");
 			startAds("优惠全家桶");

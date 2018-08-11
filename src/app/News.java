@@ -32,14 +32,16 @@ public class News {
 	}
 	
 	public void start(TaskCallback callback){
-		Log.log.info("news start and count = " + current);
+		
 		while(current < 5){
+			Log.log.info("news count = " + current);
+			Log.log.info("kantoutiao start");
 			if(!kandiantoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				kandiantoutiao.start(new TaskCallback() {
 					
 					@Override
 					public void onSuccess(AndroidDriver driver) {
-						// TODO Auto-generated method stub
+						Log.log.info("kantoutiao finish");
 						
 					}
 					
@@ -51,12 +53,13 @@ public class News {
 				});
 			}
 			
+			Log.log.info("qutoutiao start");
 			if(!qutoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				qutoutiao.start(new TaskCallback() {
 					
 					@Override
 					public void onSuccess(AndroidDriver driver) {
-						// TODO Auto-generated method stub
+						Log.log.info("qutoutiao finish");
 						
 					}
 					
@@ -86,12 +89,13 @@ public class News {
 //				});
 //			}
 			
+			Log.log.info("yuetoutiao start");
 			if(!yuetoutiao.isCompleted && Configure.appConfig >> 2 == 1){
 				yuetoutiao.start(new TaskCallback() {
 					
 					@Override
 					public void onSuccess(AndroidDriver driver) {
-						// TODO Auto-generated method stub
+						Log.log.info("yuetoutiao finish");
 						
 					}
 					
@@ -103,19 +107,19 @@ public class News {
 				});
 			}
 			
+			Log.log.info("meizhuan start");
 			if(!meizhuanNews.isCompleted){
 				meizhuanNews.start(new TaskCallback() {
 					
 					@Override
 					public void onSuccess(AndroidDriver driver) {
-						// TODO Auto-generated method stub
+						Log.log.info("meizhuan finish");
 						
 					}
 					
 					@Override
 					public void onRestartApp(AndroidDriver driver) {
-						callback.onRestartApp(driver);
-						
+//						callback.onRestartApp(driver);
 					}
 				});
 			}

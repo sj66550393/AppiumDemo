@@ -19,6 +19,8 @@ public class KanDianTouTiao {
 	public boolean isCompleted = false;
 	public boolean isLookNewCompleted = false;
 	public boolean isLookVideoCompleted = false;
+	public int lookNewsCount = 0;
+	public int lookVideoCount = 0;
 
 	AndroidDriver driver;
 	DesiredCapabilities capabilities;
@@ -87,7 +89,6 @@ public class KanDianTouTiao {
 			if (result != ResultDict.COMMAND_SUCCESS) {
 				callback.onRestartApp(driver);
 			}
-			System.out.println("kandian look new end");
 		}
 
 		if (!isLookVideoCompleted) {
@@ -103,12 +104,11 @@ public class KanDianTouTiao {
 
 	private int lookNews() {
 		try {
-			driver.findElement(By.name("刷新")).click();
-			for (int i = 0; i < 5; i++) {
+			while (lookNewsCount < 5) {
+				driver.findElement(By.id("com.jskj.besensible:id/home")).click();
 				AdbUtils.swipe(300, 500, 300, 1000);
 				Thread.sleep(3000);
 				AdbUtils.click(300, 600);
-//				Thread.sleep(18 * 1000);
 				for (int j = 0; j < 10; j++) {
 					AdbUtils.swipe(300, 600, 300, 500);
 					Thread.sleep(500);
@@ -128,6 +128,7 @@ public class KanDianTouTiao {
 				AdbUtils.back();
 				Thread.sleep(2000);
 				AdbUtils.swipe(600, 700, 300, 700);
+				lookNewsCount++;
 			}
 			isLookNewCompleted = true;
 			return ResultDict.COMMAND_SUCCESS;
@@ -139,7 +140,7 @@ public class KanDianTouTiao {
 
 	private int lookVideo() {
 		try {
-			driver.findElement(By.name("视频")).click();
+			driver.findElement(By.id("com.jskj.besensible:id/video")).click();
 			AdbUtils.swipe(300, 500, 300, 1000);
 			Thread.sleep(3000);
 			AdbUtils.click(300, 600);
@@ -166,6 +167,7 @@ public class KanDianTouTiao {
 	
 	public void reset(){
 		isCompleted = false;
+		lookNewsCount = 0;
 		isLookNewCompleted = false;
 		isLookVideoCompleted = false;
 	}

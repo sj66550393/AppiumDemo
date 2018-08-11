@@ -43,13 +43,12 @@ public class MeiZhuanNews {
 	}
 	
 	public void start(TaskCallback callback) {
-		try {
-			System.out.println("start");
+		try {			
 			driver = new AndroidDriver(new URL("http://127.0.0.1:" + Configure.appiumPort + "/wd/hub"), capabilities);
 			Thread.sleep(20 * 1000);
-		} catch (Exception e) {
-			System.out.println("error" + e.getMessage());
+		} catch (Exception e) {			
 			e.printStackTrace();
+			isCompleted = true;
 			callback.onRestartApp(driver);
 			return;
 		}

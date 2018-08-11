@@ -67,14 +67,14 @@ public class ShouZhuan {
 				MiZhuan.getInstance().isGetInstallCount = false;
 				Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 			}
-		}else{
+		} else {
 			MiZhuan.getInstance().isGetInstallCount = false;
 			Configure.Mizhuan_instlal_count = 18;
 		}
 
 		if (args.length > 4 && args[4] != null) {
 			Configure.appConfig = Integer.parseInt(args[4]);
-		}else{
+		} else {
 			Configure.appConfig = 2;
 		}
 
@@ -86,13 +86,13 @@ public class ShouZhuan {
 	}
 
 	private static void init() {
-		if((Configure.appConfig & 1) == 1){
+		if ((Configure.appConfig & 1) == 1) {
 			MiZhuan.getInstance().reset();
 		}
-		if((Configure.appConfig>>1 & 1) == 1){
+		if ((Configure.appConfig >> 1 & 1) == 1) {
 			MeiRiZhuanDian.getInstance().reset();
 		}
-		if((Configure.appConfig>>2 & 1) == 1){
+		if ((Configure.appConfig >> 2 & 1) == 1) {
 			News.getInstance().reset();
 		}
 		Configure.isPad = AdbUtils.isPad();
@@ -152,7 +152,7 @@ class Task1 extends TimerTask {
 				public void onSuccess(AndroidDriver driver) {
 					Log.log.info("mizhuan onSuccess");
 					MiZhuan.getInstance().isCompleted = true;
-					if (((Configure.appConfig >> 1) & 1) == 0) {
+					if (((Configure.appConfig >> 1) & 1) == 0 && ((Configure.appConfig >> 2) & 1) == 0) {
 						MiZhuan.getInstance().reset();
 					}
 					checkWhenRestartApp(driver);
@@ -171,9 +171,14 @@ class Task1 extends TimerTask {
 					Log.log.info("meizhuan onSuccess");
 					MeiRiZhuanDian.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 2) & 1) == 0) {
-						MiZhuan.getInstance().reset();
-						MeiRiZhuanDian.getInstance().reset();
+						if ((Configure.appConfig & 1) == 1) {
+							MiZhuan.getInstance().reset();
+						}
+						if ((Configure.appConfig >> 1 & 1) == 1) {
+							MeiRiZhuanDian.getInstance().reset();
+						}
 					}
+
 					checkWhenRestartApp(driver);
 				}
 
@@ -190,9 +195,15 @@ class Task1 extends TimerTask {
 					Log.log.info("News onSuccess");
 					News.getInstance().isCompleted = true;
 					if (((Configure.appConfig >> 3) & 1) == 0) {
-						MiZhuan.getInstance().reset();
-						MeiRiZhuanDian.getInstance().reset();
-						News.getInstance().reset();
+						if ((Configure.appConfig & 1) == 1) {
+							MiZhuan.getInstance().reset();
+						}
+						if ((Configure.appConfig >> 1 & 1) == 1) {
+							MeiRiZhuanDian.getInstance().reset();
+						}
+						if ((Configure.appConfig >> 2 & 1) == 1) {
+							News.getInstance().reset();
+						}
 					}
 					checkWhenRestartApp(driver);
 				}
@@ -222,6 +233,9 @@ class Task1 extends TimerTask {
 		try {
 			if (isElementExistByString(driver, "确定")) {
 				driver.findElement(By.name("确定")).click();
+			}
+			if (isElementExistByString(driver, "允许")) {
+				driver.findElement(By.name("允许")).click();
 			}
 			AdbUtils.setScreenTimeout(1800 * 1000);
 			driver.quit();
