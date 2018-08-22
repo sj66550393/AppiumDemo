@@ -52,8 +52,7 @@ public class MiZhuan {
 	private boolean isTuituiComleted = true;
 	private boolean isTurnturnComleted = true;
 	private boolean isPackageCompleted = true;
-	
-	
+
 	public boolean isCompleted = true;
 	public boolean isGetInstallCount = false;
 	public boolean isInstallNoApp = false;
@@ -61,7 +60,7 @@ public class MiZhuan {
 	public boolean isExtraBonusCompleted = false;
 	public boolean isInstallCompleted = false;
 	private boolean isClickAdsCompleted = true;
-	
+
 	ExtraBonusManager extraBonusManager;
 	LooklookManager looklookManager;
 	InstallAppManager installAppManager;
@@ -122,54 +121,68 @@ public class MiZhuan {
 				return;
 			}
 		}
-		if (isElementExistByString("签到")) {
-			try {
-				driver.findElement(By.name("签到")).click();
-				Thread.sleep(5000);
-				driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
-				Thread.sleep(5000);
-				AdbUtils.back();
-				Thread.sleep(2000);
-				AdbUtils.back();
-			} catch (Exception e) {
-				e.printStackTrace();
-				callback.onRestartApp(driver);
-				return;
-			}
+
+		try {
+			driver.findElement(By.id("me.mizhuan:id/left_back")).click();
+			Thread.sleep(2000);
+			driver.findElement(By.id("me.mizhuan:id/check_btn")).click();
+			Thread.sleep(3000);
+			AdbUtils.back();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		if (isElementExistByString("上午探班") || isElementExistByString("中午探班") || isElementExistByString("下午探班")
-				|| isElementExistByString("晚上探班")) {
-			try {
-				Log.log.info("点击探班");
-				// driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
-				if (isElementExistByString("上午探班")) {
-					driver.findElement(By.name("上午探班")).click();
-					isSigninMorning = true;
-					Thread.sleep(4000);
-					AdbUtils.back();
-				} else if (isElementExistByString("中午探班")) {
-					driver.findElement(By.name("中午探班")).click();
-					isSigninNoon = true;
-					Thread.sleep(4000);
-					AdbUtils.back();
-				} else if (isElementExistByString("下午探班")) {
-					driver.findElement(By.name("下午探班")).click();
-					isSigninAfternoon = true;
-					Thread.sleep(4000);
-					AdbUtils.back();
-				} else if (isElementExistByString("晚上探班")) {
-					driver.findElement(By.name("晚上探班")).click();
-					isSigninNight = true;
-					Thread.sleep(4000);
-					AdbUtils.back();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				callback.onRestartApp(driver);
-				return;
-			}
-		}
+		// if (isElementExistByString("签到")) {
+		// try {
+		// driver.findElement(By.name("签到")).click();
+		// Thread.sleep(5000);
+		// driver.findElement(By.id("me.mizhuan:id/btnaction_one")).click();
+		// Thread.sleep(5000);
+		// AdbUtils.back();
+		// Thread.sleep(2000);
+		// AdbUtils.back();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// callback.onRestartApp(driver);
+		// return;
+		// }
+		// }
+
+		// if (isElementExistByString("上午探班") || isElementExistByString("中午探班")
+		// || isElementExistByString("下午探班")
+		// || isElementExistByString("晚上探班")) {
+		// try {
+		// Log.log.info("点击探班");
+		// //
+		// driver.findElement(By.xpath("//android.widget.ListView/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[contains(@index,0)]")).click();
+		// if (isElementExistByString("上午探班")) {
+		// driver.findElement(By.name("上午探班")).click();
+		// isSigninMorning = true;
+		// Thread.sleep(4000);
+		// AdbUtils.back();
+		// } else if (isElementExistByString("中午探班")) {
+		// driver.findElement(By.name("中午探班")).click();
+		// isSigninNoon = true;
+		// Thread.sleep(4000);
+		// AdbUtils.back();
+		// } else if (isElementExistByString("下午探班")) {
+		// driver.findElement(By.name("下午探班")).click();
+		// isSigninAfternoon = true;
+		// Thread.sleep(4000);
+		// AdbUtils.back();
+		// } else if (isElementExistByString("晚上探班")) {
+		// driver.findElement(By.name("晚上探班")).click();
+		// isSigninNight = true;
+		// Thread.sleep(4000);
+		// AdbUtils.back();
+		// }
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// callback.onRestartApp(driver);
+		// return;
+		// }
+		// }
 		if (!isExtraBonusCompleted) {
 			Log.log.info("开始额外任务");
 			result = startSigninAppTask();
@@ -692,14 +705,14 @@ public class MiZhuan {
 				}
 				// pad 用xpath会找不到路径
 				if (!AdbUtils.isRoot()
-//						|| Configure.isPad 
-						) {
+				// || Configure.isPad
+				) {
 					button = driver.findElement(By.id("me.mizhuan:id/mituo_status"));
 					taskDesc = driver.findElement(By.id("me.mizhuan:id/mituo_textViewPromo"));
 					taskNameDesc = driver.findElement(By.id("me.mizhuan:id/mituo_textViewName"));
 				} else {
-					button = driver.findElement(By
-							.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
+					button = driver.findElement(
+							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
 									+ position + ")]/android.widget.LinearLayout/android.widget.Button"));
 					taskDesc = driver.findElement(
 							By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
@@ -711,12 +724,12 @@ public class MiZhuan {
 				buttonText = button.getText();
 				taskType = taskDesc.getText().substring(1, 3);
 				taskName = taskNameDesc.getText();
-				if(taskDesc.getText().length() >= 9)
-				taskTime = taskDesc.getText().substring(8, 9);
+				if (taskDesc.getText().length() >= 9)
+					taskTime = taskDesc.getText().substring(8, 9);
 				System.out.println("buttonText = " + buttonText + "    taskType = " + taskType + "    taskName = "
 						+ taskName + "    taskTime = " + taskTime);
 				if ("已抢完".equals(buttonText) || "未到时间".equals(buttonText)
-//						|| "0万".equals(buttonText.substring(buttonText.length() - 2))
+				// || "0万".equals(buttonText.substring(buttonText.length() - 2))
 						|| "深度".equals(taskType)) {
 					Log.log.info("额外任务完成");
 					isExtraBonusCompleted = true;
@@ -809,23 +822,24 @@ public class MiZhuan {
 						.findElement(By
 								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName = " +  taskAppName);
-				
+				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName = "
+						+ taskAppName);
+
 				System.out.println("taskAppName = " + taskAppName);
 				System.out.println("lastAppName = " + lastAppName);
-				if(taskAppName.equals(lastAppName)){
-					repeatCount ++;
+				if (taskAppName.equals(lastAppName)) {
+					repeatCount++;
 					System.out.println("count = " + repeatCount);
-					if(repeatCount == 5){ 
+					if (repeatCount == 5) {
 						isInstallCompleted = true;
 						isInstallNoApp = true;
 						Configure.mizhuanInstallNoAppTime = System.currentTimeMillis();
 						break;
 					}
-				}else{
+				} else {
 					repeatCount = 0;
 				}
-				
+
 				double appSize = Double.parseDouble(taskAppSize.split("M")[0]);
 				lastAppName = taskAppName;
 				if (("注册".equals(taskType) || "体验".equals(taskType)) && appSize < 100) {
@@ -900,7 +914,7 @@ public class MiZhuan {
 							break;
 						case "[M5]":
 							result = universalInstall_M5(driver);
-						     break;
+							break;
 						default:
 							break;
 						}
@@ -939,7 +953,8 @@ public class MiZhuan {
 						if (AdbUtils.isRoot()) {
 							String name = driver.findElement(By.id("me.mizhuan:id/mituo_tvTitle")).getText();
 							String packageName = Configure.map.get(name);
-							System.out.println("packageName = " + packageName);;
+							System.out.println("packageName = " + packageName);
+							;
 							AdbUtils.rootComandEnablePackage(packageName);
 							Thread.sleep(3000);
 						}
@@ -1048,7 +1063,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
-	
+
 	private int universalInstall_M5(AndroidDriver driver) {
 		try {
 			while (true) {
@@ -1331,13 +1346,13 @@ public class MiZhuan {
 			return false;
 		}
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		Log.log.info("mizhuan reset");
 		isCompleted = false;
 		isExtraBonusCompleted = false;
 		isInstallCompleted = false;
-//		isClickAdsCompleted = false;
+		// isClickAdsCompleted = false;
 	}
 
 	private int timeSwitcher() {
