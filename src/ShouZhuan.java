@@ -49,10 +49,10 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "238ade0021";
-			AdbUtils.deviceId = "238ade0021";
-			AdbUtils.storageDir = AdbUtils.storageDes + "238ade0021" + "/";
-			AdbUtils.adb = "adb -s " + "238ade0021" + " shell ";
+			Configure.deviceId = "UCZHUGEU99999999";
+			AdbUtils.deviceId = "UCZHUGEU99999999";
+			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
+			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
@@ -69,7 +69,7 @@ public class ShouZhuan {
 			}
 		} else {
 			MiZhuan.getInstance().isGetInstallCount = false;
-			Configure.Mizhuan_instlal_count = -1;
+			Configure.Mizhuan_instlal_count = 2;
 		}
 
 		if (args.length > 4 && args[4] != null) {

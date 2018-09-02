@@ -386,7 +386,7 @@ public class MeiRiZhuanDian {
 				// .findElement(By
 				// .xpath("//android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.widget.ListView/android.widget.LinearLayout/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 				// .getText();
-				Thread.sleep(experienceTime * 70 * 1000);
+				Thread.sleep((experienceTime+1) * 70 * 1000);
 				String name = AdbUtils.getCurrentPackage();
 				AdbUtils.killProcess(name);
 				Thread.sleep(3000);

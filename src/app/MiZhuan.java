@@ -860,13 +860,15 @@ public class MiZhuan {
 							if (!str.equals("首次")) {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
-								SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//								SwipeScreen.swipe(driver, 300, 800, 300, 665);
+								SwipeScreen.swipe(driver, 300, 400, 300, 265);
 								continue;
 							}
 						} else {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						String size = driver.findElement(By.id("me.mizhuan:id/mituo_app_view1")).getText();
@@ -874,7 +876,8 @@ public class MiZhuan {
 						if (DetailAppSize > 100) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Log.log.info("点击立即安装");
@@ -883,7 +886,8 @@ public class MiZhuan {
 						if (isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
@@ -910,6 +914,9 @@ public class MiZhuan {
 							result = universalInstall_TB3(driver);
 							break;
 						case "[CUN-AL00]":
+							result = universalInstall_CUN_AL(driver);
+							break;
+						case "[Coolpad 5270]":
 							result = universalInstall_CUN_AL(driver);
 							break;
 						case "[M5]":
