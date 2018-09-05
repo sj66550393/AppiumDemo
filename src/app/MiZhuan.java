@@ -115,7 +115,7 @@ public class MiZhuan {
 			driver.findElement(By.id("me.mizhuan:id/close")).click();
 			try {
 				Thread.sleep(2000);
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				callback.onRestartApp(driver);
 				return;
@@ -125,12 +125,15 @@ public class MiZhuan {
 		try {
 			driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 			Thread.sleep(2000);
-			driver.findElement(By.id("me.mizhuan:id/check_btn")).click();
+			if(isElementExistById("me.mizhuan:id/check_btn")){
+				driver.findElement(By.id("me.mizhuan:id/check_btn")).click();
+			}
 			Thread.sleep(3000);
 			AdbUtils.back();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
+			callback.onRestartApp(driver);
+			return;
 		}
 
 		// if (isElementExistByString("签到")) {
@@ -772,30 +775,45 @@ public class MiZhuan {
 			Thread.sleep(10000);
 			// 获取安装数量
 			System.out.println("isGetInstallCount = " + isGetInstallCount);
-			if (isGetInstallCount) {
-				driver.findElement(By.name("推荐")).click();
+//			if (isGetInstallCount) {
+				driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 				Thread.sleep(2000);
-				driver.findElement(By.name("领奖励")).click();
-				Thread.sleep(2000);
-				String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
-				if ("领取".equals(str)) {
-					driver.findElement(By.id("me.mizhuan:id/status")).click();
-					Thread.sleep(5000);
-					AdbUtils.back();
-					isInstallCompleted = true;
-					return ResultDict.COMMAND_SUCCESS;
-				} else if ("已领取".equals(str)) {
-					isInstallCompleted = true;
-					AdbUtils.back();
-					return ResultDict.COMMAND_SUCCESS;
-				} else {
-					Configure.Mizhuan_instlal_count = Integer.parseInt(str.split("/")[1])
-							- Integer.parseInt(str.split("/")[0]);
-					installCount = 0;
-					AdbUtils.back();
-					System.out.println("install count = " + Configure.Mizhuan_instlal_count);
+				while(!isElementExistByString("完成3个应用赚任务")){
+					AdbUtils.swipe(300, 800, 300, 665);
 				}
-			}
+				driver.findElement(By.name("完成3个应用赚任务")).click();
+				Thread.sleep(1000);
+				if(!isElementExistByString("去领取")){
+					Configure.Mizhuan_instlal_count = 1;
+					AdbUtils.back();
+					Thread.sleep(3000);
+				}else{
+					driver.findElement(By.name("去领取")).click();
+					isInstallCompleted = true;
+				}
+//				driver.findElement(By.name("推荐")).click();
+//				Thread.sleep(2000);
+//				driver.findElement(By.name("领奖励")).click();
+//				Thread.sleep(2000);
+//				String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
+//				if ("领取".equals(str)) {
+//					driver.findElement(By.id("me.mizhuan:id/status")).click();
+//					Thread.sleep(5000);
+//					AdbUtils.back();
+//					isInstallCompleted = true;
+//					return ResultDict.COMMAND_SUCCESS;
+//				} else if ("已领取".equals(str)) {
+//					isInstallCompleted = true;
+//					AdbUtils.back();
+//					return ResultDict.COMMAND_SUCCESS;
+//				} else {
+//					Configure.Mizhuan_instlal_count = Integer.parseInt(str.split("/")[1])
+//							- Integer.parseInt(str.split("/")[0]);
+//					installCount = 0;
+//					AdbUtils.back();
+//					System.out.println("install count = " + Configure.Mizhuan_instlal_count);
+//				}
+//			}
 			driver.findElement(By.name("推荐")).click();
 			Thread.sleep(2000);
 			Log.log.info("点击应用赚");
@@ -860,15 +878,15 @@ public class MiZhuan {
 							if (!str.equals("首次")) {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
-//								SwipeScreen.swipe(driver, 300, 800, 300, 665);
-								SwipeScreen.swipe(driver, 300, 400, 300, 265);
+								SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//								SwipeScreen.swipe(driver, 300, 400, 300, 265);
 								continue;
 							}
 						} else {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						String size = driver.findElement(By.id("me.mizhuan:id/mituo_app_view1")).getText();
@@ -876,8 +894,8 @@ public class MiZhuan {
 						if (DetailAppSize > 100) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Log.log.info("点击立即安装");
@@ -886,8 +904,8 @@ public class MiZhuan {
 						if (isElementExistByString("立即安装")) {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
-//							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							SwipeScreen.swipe(driver, 300, 800, 300, 665);
+//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
@@ -922,6 +940,9 @@ public class MiZhuan {
 						case "[M5]":
 							result = universalInstall_M5(driver);
 							break;
+						case "[ZTE BV0701]":
+							result = universalInstall_CUN_AL(driver);
+							break;
 						default:
 							break;
 						}
@@ -946,6 +967,12 @@ public class MiZhuan {
 							case "[Lenovo TB3-X70N]":
 								break;
 							case "[CUN-AL00]":
+								while (isElementExistByString("打开")) {
+									driver.pressKeyCode(AndroidKeyCode.BACK);
+									Thread.sleep(2000);
+								}
+								break;
+							case "[ZTE BV0701]":
 								while (isElementExistByString("打开")) {
 									driver.pressKeyCode(AndroidKeyCode.BACK);
 									Thread.sleep(2000);
