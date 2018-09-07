@@ -186,22 +186,22 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-		if (!isExtraBonusCompleted) {
-			Log.log.info("开始额外任务");
-			result = startSigninAppTask();
-			if (ResultDict.COMMAND_SUCCESS != result) {
-				callback.onRestartApp(driver);
-				return;
-			}
-		}
-		if (!isClickAdsCompleted) {
-			Log.log.info("开始看广告任务");
-			result = startClickAds();
-			if (ResultDict.COMMAND_SUCCESS != result) {
-				callback.onRestartApp(driver);
-				return;
-			}
-		}
+//		if (!isExtraBonusCompleted) {
+//			Log.log.info("开始额外任务");
+//			result = startSigninAppTask();
+//			if (ResultDict.COMMAND_SUCCESS != result) {
+//				callback.onRestartApp(driver);
+//				return;
+//			}
+//		}
+//		if (!isClickAdsCompleted) {
+//			Log.log.info("开始看广告任务");
+//			result = startClickAds();
+//			if (ResultDict.COMMAND_SUCCESS != result) {
+//				callback.onRestartApp(driver);
+//				return;
+//			}
+//		}
 		if (!isInstallCompleted) {
 			Log.log.info("开始安装任务");
 			result = universalInstall();
@@ -943,6 +943,9 @@ public class MiZhuan {
 						case "[ZTE BV0701]":
 							result = universalInstall_CUN_AL(driver);
 							break;
+						case "[M653]":
+							result = universalInstall_CUN_A3S(driver);
+							break;
 						default:
 							break;
 						}
@@ -973,6 +976,12 @@ public class MiZhuan {
 								}
 								break;
 							case "[ZTE BV0701]":
+								while (isElementExistByString("打开")) {
+									driver.pressKeyCode(AndroidKeyCode.BACK);
+									Thread.sleep(2000);
+								}
+								break;
+							case "[M653]":
 								while (isElementExistByString("打开")) {
 									driver.pressKeyCode(AndroidKeyCode.BACK);
 									Thread.sleep(2000);
@@ -1091,6 +1100,32 @@ public class MiZhuan {
 			Thread.sleep(10 * 1000);
 			Log.log.info("开始体验5分钟");
 			Thread.sleep(5 * 60 * 1000);
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private int universalInstall_CUN_A3S(AndroidDriver driver) {
+		try {
+			while (true) {
+				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+				if ("下一步".equals(installButton.getText())) {
+					installButton.click();
+					Thread.sleep(1000);
+				} else {
+					installButton.click();
+					Thread.sleep(1000);
+					break;
+				}
+			}
+			Thread.sleep(10 * 1000);
+			if(isElementExistByString("打开")) {
+				driver.findElement(By.name("打开")).click();
+			}
+			Log.log.info("开始体验5分钟");
+			Thread.sleep(5 * 70 * 1000);
 			return ResultDict.COMMAND_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
