@@ -125,7 +125,7 @@ public class MiZhuan {
 		try {
 			driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 			Thread.sleep(2000);
-			if(isElementExistById("me.mizhuan:id/check_btn")){
+			if (isElementExistById("me.mizhuan:id/check_btn")) {
 				driver.findElement(By.id("me.mizhuan:id/check_btn")).click();
 			}
 			Thread.sleep(3000);
@@ -186,22 +186,22 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-//		if (!isExtraBonusCompleted) {
-//			Log.log.info("开始额外任务");
-//			result = startSigninAppTask();
-//			if (ResultDict.COMMAND_SUCCESS != result) {
-//				callback.onRestartApp(driver);
-//				return;
-//			}
-//		}
-//		if (!isClickAdsCompleted) {
-//			Log.log.info("开始看广告任务");
-//			result = startClickAds();
-//			if (ResultDict.COMMAND_SUCCESS != result) {
-//				callback.onRestartApp(driver);
-//				return;
-//			}
-//		}
+		// if (!isExtraBonusCompleted) {
+		// Log.log.info("开始额外任务");
+		// result = startSigninAppTask();
+		// if (ResultDict.COMMAND_SUCCESS != result) {
+		// callback.onRestartApp(driver);
+		// return;
+		// }
+		// }
+		// if (!isClickAdsCompleted) {
+		// Log.log.info("开始看广告任务");
+		// result = startClickAds();
+		// if (ResultDict.COMMAND_SUCCESS != result) {
+		// callback.onRestartApp(driver);
+		// return;
+		// }
+		// }
 		if (!isInstallCompleted) {
 			Log.log.info("开始安装任务");
 			result = universalInstall();
@@ -775,45 +775,23 @@ public class MiZhuan {
 			Thread.sleep(10000);
 			// 获取安装数量
 			System.out.println("isGetInstallCount = " + isGetInstallCount);
-//			if (isGetInstallCount) {
+			if (isGetInstallCount) {
 				driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 				Thread.sleep(2000);
-				while(!isElementExistByString("完成3个应用赚任务")){
+				while (!isElementExistByString("完成3个应用赚任务")) {
 					AdbUtils.swipe(300, 800, 300, 665);
 				}
 				driver.findElement(By.name("完成3个应用赚任务")).click();
 				Thread.sleep(1000);
-				if(!isElementExistByString("去领取")){
+				if (!isElementExistByString("去领取")) {
 					Configure.Mizhuan_instlal_count = 1;
 					AdbUtils.back();
 					Thread.sleep(3000);
-				}else{
+				} else {
 					driver.findElement(By.name("去领取")).click();
 					isInstallCompleted = true;
 				}
-//				driver.findElement(By.name("推荐")).click();
-//				Thread.sleep(2000);
-//				driver.findElement(By.name("领奖励")).click();
-//				Thread.sleep(2000);
-//				String str = driver.findElement(By.id("me.mizhuan:id/status")).getText();
-//				if ("领取".equals(str)) {
-//					driver.findElement(By.id("me.mizhuan:id/status")).click();
-//					Thread.sleep(5000);
-//					AdbUtils.back();
-//					isInstallCompleted = true;
-//					return ResultDict.COMMAND_SUCCESS;
-//				} else if ("已领取".equals(str)) {
-//					isInstallCompleted = true;
-//					AdbUtils.back();
-//					return ResultDict.COMMAND_SUCCESS;
-//				} else {
-//					Configure.Mizhuan_instlal_count = Integer.parseInt(str.split("/")[1])
-//							- Integer.parseInt(str.split("/")[0]);
-//					installCount = 0;
-//					AdbUtils.back();
-//					System.out.println("install count = " + Configure.Mizhuan_instlal_count);
-//				}
-//			}
+			}
 			driver.findElement(By.name("推荐")).click();
 			Thread.sleep(2000);
 			Log.log.info("点击应用赚");
@@ -828,17 +806,14 @@ public class MiZhuan {
 			String lastAppName = "";
 			int repeatCount = 0;
 			while (installCount < Configure.Mizhuan_instlal_count) {
-				taskType = driver
-						.findElement(By
-								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+				taskType = driver.findElement(By.xpath(
+						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 						.getText().substring(0, 2);
-				taskAppSize = driver
-						.findElement(By
-								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				taskAppSize = driver.findElement(By.xpath(
+						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				taskAppName = driver
-						.findElement(By
-								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
+				taskAppName = driver.findElement(By.xpath(
+						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName = "
 						+ taskAppName);
@@ -879,14 +854,14 @@ public class MiZhuan {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
 								SwipeScreen.swipe(driver, 300, 800, 300, 665);
-//								SwipeScreen.swipe(driver, 300, 400, 300, 265);
+								// SwipeScreen.swipe(driver, 300, 400, 300, 265);
 								continue;
 							}
 						} else {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							// SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						String size = driver.findElement(By.id("me.mizhuan:id/mituo_app_view1")).getText();
@@ -895,7 +870,7 @@ public class MiZhuan {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							// SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Log.log.info("点击立即安装");
@@ -905,7 +880,7 @@ public class MiZhuan {
 							AdbUtils.back();
 							Thread.sleep(2 * 1000);
 							SwipeScreen.swipe(driver, 300, 800, 300, 665);
-//							SwipeScreen.swipe(driver, 300, 400, 300, 265);
+							// SwipeScreen.swipe(driver, 300, 400, 300, 265);
 							continue;
 						}
 						Thread.sleep(60 * 1000);
@@ -1024,15 +999,34 @@ public class MiZhuan {
 			}
 			Thread.sleep(2000);
 			if (isGetInstallCount) {
-				driver.findElement(By.name("推荐")).click();
-				Thread.sleep(5000);
-				driver.findElement(By.name("领奖励")).click();
+				driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 				Thread.sleep(2000);
-				driver.findElement(By.name("领取")).click();
-				Thread.sleep(5000);
-			} else {
+				while (!isElementExistByString("完成3个应用赚任务")) {
+					AdbUtils.swipe(300, 800, 300, 665);
+				}
+				driver.findElement(By.name("完成3个应用赚任务")).click();
+				Thread.sleep(1000);
+				if (!isElementExistByString("去领取")) {
+					Configure.Mizhuan_instlal_count = 1;
+					return ResultDict.COMMAND_RESTART_APP;		
+				} else {
+					driver.findElement(By.name("去领取")).click();
+					isInstallCompleted = true;
+				}
+			}else {
 				isInstallCompleted = true;
 			}
+			
+			// if (isGetInstallCount) {
+			// driver.findElement(By.name("推荐")).click();
+			// Thread.sleep(5000);
+			// driver.findElement(By.name("领奖励")).click();
+			// Thread.sleep(2000);
+			// driver.findElement(By.name("领取")).click();
+			// Thread.sleep(5000);
+			// } else {
+			// isInstallCompleted = true;
+			// }
 			AdbUtils.back();
 			Thread.sleep(2000);
 			AdbUtils.back();
@@ -1106,7 +1100,7 @@ public class MiZhuan {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
-	
+
 	private int universalInstall_CUN_A3S(AndroidDriver driver) {
 		try {
 			while (true) {
@@ -1121,7 +1115,7 @@ public class MiZhuan {
 				}
 			}
 			Thread.sleep(10 * 1000);
-			if(isElementExistByString("打开")) {
+			if (isElementExistByString("打开")) {
 				driver.findElement(By.name("打开")).click();
 			}
 			Log.log.info("开始体验5分钟");
@@ -1318,9 +1312,8 @@ public class MiZhuan {
 						.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
 								+ position + ")]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				String text = driver
-						.findElement(By
-								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+				String text = driver.findElement(By.xpath(
+						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 						.getText().substring(0, 2);
 				System.out.println(text);
 				if ((!"注册".equals(text)) && (!"体验".equals(text))) {
@@ -1341,9 +1334,8 @@ public class MiZhuan {
 				}
 				if (repeatCount >= 5) {
 					for (int i = 2; i < 20; i++) {
-						String text1 = driver
-								.findElement(By
-										.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+						String text1 = driver.findElement(By.xpath(
+								"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 								.getText().substring(0, 2);
 						if ((!"注册".equals(text1)) && (!"体验".equals(text1))) {
 							continue;
