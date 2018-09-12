@@ -784,6 +784,7 @@ public class MiZhuan {
 				Thread.sleep(1000);
 				if (!isElementExistByString("领奖励")) {
 					Configure.Mizhuan_instlal_count = 1;
+					installCount = 0;
 					AdbUtils.back();
 					Thread.sleep(3000);
 				} else {
@@ -969,11 +970,13 @@ public class MiZhuan {
 						Log.log.info("点击继续体验");
 						if (AdbUtils.isRoot()) {
 							String name = driver.findElement(By.id("me.mizhuan:id/mituo_tvTitle")).getText();
-							String packageName = Configure.map.get(name);
-							System.out.println("packageName = " + packageName);
-							;
-							AdbUtils.rootComandEnablePackage(packageName);
-							Thread.sleep(3000);
+							if (Configure.map != null) {
+								String packageName = Configure.map.get(name);
+								System.out.println("packageName = " + packageName);
+								;
+								AdbUtils.rootComandEnablePackage(packageName);
+								Thread.sleep(3000);
+							}
 						}
 						buttomButton.click();
 						Thread.sleep(20 * 1000);
@@ -1007,15 +1010,15 @@ public class MiZhuan {
 				Thread.sleep(1000);
 				if (!isElementExistByString("领奖励")) {
 					Configure.Mizhuan_instlal_count = 1;
-					return ResultDict.COMMAND_RESTART_APP;		
+					return ResultDict.COMMAND_RESTART_APP;
 				} else {
 					driver.findElement(By.name("领奖励")).click();
 					isInstallCompleted = true;
 				}
-			}else {
+			} else {
 				isInstallCompleted = true;
 			}
-			
+
 			// if (isGetInstallCount) {
 			// driver.findElement(By.name("推荐")).click();
 			// Thread.sleep(5000);
