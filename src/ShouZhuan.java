@@ -68,7 +68,7 @@ public class ShouZhuan {
 				Configure.Mizhuan_instlal_count = Integer.parseInt(args[3]);
 			}
 		} else {
-			MiZhuan.getInstance().isGetInstallCount = false;
+			MiZhuan.getInstance().isGetInstallCount = true;
 			Configure.Mizhuan_instlal_count = 3;
 		}
 
@@ -76,6 +76,12 @@ public class ShouZhuan {
 			Configure.appConfig = Integer.parseInt(args[4]);
 		} else {
 			Configure.appConfig = 1;
+		}
+		
+		if (args.length > 5 && args[5] != null) {
+			Configure.mizhuanStartTime = Integer.parseInt(args[5]);
+		} else {
+			Configure.mizhuanStartTime = 8;
 		}
 
 		init();

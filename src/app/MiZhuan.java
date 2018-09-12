@@ -781,14 +781,13 @@ public class MiZhuan {
 				while (!isElementExistByString("完成3个应用赚任务")) {
 					AdbUtils.swipe(300, 800, 300, 665);
 				}
-				driver.findElement(By.name("完成3个应用赚任务")).click();
 				Thread.sleep(1000);
-				if (!isElementExistByString("去领取")) {
+				if (!isElementExistByString("领奖励")) {
 					Configure.Mizhuan_instlal_count = 1;
 					AdbUtils.back();
 					Thread.sleep(3000);
 				} else {
-					driver.findElement(By.name("去领取")).click();
+					driver.findElement(By.name("领奖励")).click();
 					isInstallCompleted = true;
 				}
 			}
@@ -1006,11 +1005,11 @@ public class MiZhuan {
 				}
 				driver.findElement(By.name("完成3个应用赚任务")).click();
 				Thread.sleep(1000);
-				if (!isElementExistByString("去领取")) {
+				if (!isElementExistByString("领奖励")) {
 					Configure.Mizhuan_instlal_count = 1;
 					return ResultDict.COMMAND_RESTART_APP;		
 				} else {
-					driver.findElement(By.name("去领取")).click();
+					driver.findElement(By.name("领奖励")).click();
 					isInstallCompleted = true;
 				}
 			}else {

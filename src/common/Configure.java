@@ -12,4 +12,5 @@ public class Configure {
 	public static HashMap<String, String> map;
 	public static Long mizhuanInstallNoAppTime = Long.MAX_VALUE;
 	public static int appConfig;
+	public static int mizhuanStartTime;
 }
