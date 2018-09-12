@@ -186,14 +186,14 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-		// if (!isExtraBonusCompleted) {
-		// Log.log.info("开始额外任务");
-		// result = startSigninAppTask();
-		// if (ResultDict.COMMAND_SUCCESS != result) {
-		// callback.onRestartApp(driver);
-		// return;
-		// }
-		// }
+		 if (!isExtraBonusCompleted) {
+		 Log.log.info("开始额外任务");
+		 result = startSigninAppTask();
+		 if (ResultDict.COMMAND_SUCCESS != result) {
+		 callback.onRestartApp(driver);
+		 return;
+		 }
+		 }
 		// if (!isClickAdsCompleted) {
 		// Log.log.info("开始看广告任务");
 		// result = startClickAds();
@@ -781,8 +781,17 @@ public class MiZhuan {
 				while (!isElementExistByString("完成3个应用赚任务")) {
 					AdbUtils.swipe(300, 800, 300, 665);
 				}
+				AdbUtils.swipe(300, 800, 300, 665);
 				Thread.sleep(1000);
 				if (!isElementExistByString("领奖励")) {
+					System.out.println("not exist 奖励");
+					driver.findElement(By.name("完成3个应用赚任务")).click();
+					Thread.sleep(1000);
+					if(isElementExistByString("已完成")){
+						System.out.println("exist completed");
+						isInstallCompleted = true;
+						return ResultDict.COMMAND_SUCCESS;
+					}
 					Configure.Mizhuan_instlal_count = 1;
 					installCount = 0;
 					AdbUtils.back();
@@ -1112,12 +1121,12 @@ public class MiZhuan {
 	
 	private int universalInstall_CUN_MX4(AndroidDriver driver) {
 		try {
-			if(isElementExistByString("安装")) {
-				driver.findElement(By.name("安装")).click();
+			if(isElementExistById("com.android.packageinstaller:id/action_positive")) {
+				driver.findElement(By.name("com.android.packageinstaller:id/action_positive")).click();
 				Thread.sleep(3000);
 			}
 			while (true) {
-				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/action_positive"));
 				if ("下一步".equals(installButton.getText())) {
 					installButton.click();
 					Thread.sleep(1000);
