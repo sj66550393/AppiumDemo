@@ -1122,7 +1122,7 @@ public class MiZhuan {
 	private int universalInstall_CUN_MX4(AndroidDriver driver) {
 		try {
 			if(isElementExistById("com.android.packageinstaller:id/action_positive")) {
-				driver.findElement(By.name("com.android.packageinstaller:id/action_positive")).click();
+				driver.findElement(By.id("com.android.packageinstaller:id/action_positive")).click();
 				Thread.sleep(3000);
 			}
 			while (true) {
