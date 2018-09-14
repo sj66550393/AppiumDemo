@@ -186,14 +186,14 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-		 if (!isExtraBonusCompleted) {
-		 Log.log.info("开始额外任务");
-		 result = startSigninAppTask();
-		 if (ResultDict.COMMAND_SUCCESS != result) {
-		 callback.onRestartApp(driver);
-		 return;
-		 }
-		 }
+//		 if (!isExtraBonusCompleted) {
+//		 Log.log.info("开始额外任务");
+//		 result = startSigninAppTask();
+//		 if (ResultDict.COMMAND_SUCCESS != result) {
+//		 callback.onRestartApp(driver);
+//		 return;
+//		 }
+//		 }
 		// if (!isClickAdsCompleted) {
 		// Log.log.info("开始看广告任务");
 		// result = startClickAds();
@@ -1136,7 +1136,7 @@ public class MiZhuan {
 					break;
 				}
 			}
-			Thread.sleep(70 * 1000);
+			Thread.sleep(120 * 1000);
 			AdbUtils.back();
 			WebElement buttomButton1 = driver.findElement(By.id("me.mizhuan:id/mituo_linearLayoutBottom"));
 			buttomButton1.click();
