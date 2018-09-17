@@ -186,14 +186,14 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-//		 if (!isExtraBonusCompleted) {
-//		 Log.log.info("开始额外任务");
-//		 result = startSigninAppTask();
-//		 if (ResultDict.COMMAND_SUCCESS != result) {
-//		 callback.onRestartApp(driver);
-//		 return;
-//		 }
-//		 }
+		 if (!isExtraBonusCompleted) {
+		 Log.log.info("开始额外任务");
+		 result = startSigninAppTask();
+		 if (ResultDict.COMMAND_SUCCESS != result) {
+		 callback.onRestartApp(driver);
+		 return;
+		 }
+		 }
 		// if (!isClickAdsCompleted) {
 		// Log.log.info("开始看广告任务");
 		// result = startClickAds();
