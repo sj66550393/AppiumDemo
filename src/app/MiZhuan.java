@@ -186,14 +186,14 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-//		 if (!isExtraBonusCompleted) {
-//		 Log.log.info("开始额外任务");
-//		 result = startSigninAppTask();
-//		 if (ResultDict.COMMAND_SUCCESS != result) {
-//		 callback.onRestartApp(driver);
-//		 return;
-//		 }
-//		 }
+		 if (!isExtraBonusCompleted) {
+		 Log.log.info("开始额外任务");
+		 result = startSigninAppTask();
+		 if (ResultDict.COMMAND_SUCCESS != result) {
+		 callback.onRestartApp(driver);
+		 return;
+		 }
+		 }
 		// if (!isClickAdsCompleted) {
 		// Log.log.info("开始看广告任务");
 		// result = startClickAds();
@@ -933,6 +933,9 @@ public class MiZhuan {
 						case "[MX4]":
 							result = universalInstall_CUN_MX4(driver);
 							break;
+						case "[ZTE V0840]":
+							result = universalInstall_CUN_BA804(driver);
+							break;
 						default:
 							break;
 						}
@@ -1110,6 +1113,33 @@ public class MiZhuan {
 				}
 			}
 			Thread.sleep(10 * 1000);
+			Log.log.info("开始体验5分钟");
+			Thread.sleep(5 * 60 * 1000);
+			return ResultDict.COMMAND_SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultDict.COMMAND_RESTART_APP;
+		}
+	}
+	
+	private int universalInstall_CUN_BA804(AndroidDriver driver) {
+		try {
+			if(isElementExistByString("安装")) {
+				driver.findElement(By.name("安装")).click();
+				Thread.sleep(3000);
+			}
+//			while (true) {
+//				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+//				if ("下一步".equals(installButton.getText())) {
+//					installButton.click();
+//					Thread.sleep(1000);
+//				} else {
+//					installButton.click();
+//					Thread.sleep(1000);
+//					break;
+//				}
+//			}
+			Thread.sleep(70 * 1000);
 			Log.log.info("开始体验5分钟");
 			Thread.sleep(5 * 60 * 1000);
 			return ResultDict.COMMAND_SUCCESS;

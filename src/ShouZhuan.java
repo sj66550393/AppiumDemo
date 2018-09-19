@@ -49,10 +49,10 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-			Configure.deviceId = "750BBLC2223H";
-			AdbUtils.deviceId = "750BBLC2223H";
-			AdbUtils.storageDir = AdbUtils.storageDes + "750BBLC2223H" + "/";
-			AdbUtils.adb = "adb -s " + "750BBLC2223H" + " shell ";
+			Configure.deviceId = "84549a97";
+			AdbUtils.deviceId = "84549a97";
+			AdbUtils.storageDir = AdbUtils.storageDes + "84549a97" + "/";
+			AdbUtils.adb = "adb -s " + "84549a97" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
