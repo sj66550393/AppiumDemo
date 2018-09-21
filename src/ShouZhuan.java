@@ -40,8 +40,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "d:\\";
-			AdbUtils.storageDes = "d:\\";
+			Configure.logDir = "e:\\";
+			AdbUtils.storageDes = "e:\\";
 		}
 		if (args.length > 1 && args[1] != null) {
 			Configure.deviceId = args[1];
@@ -49,17 +49,10 @@ public class ShouZhuan {
 			AdbUtils.storageDir = AdbUtils.storageDes + args[1] + "/";
 			AdbUtils.adb = "adb -s " + args[1] + " shell ";
 		} else {
-<<<<<<< HEAD
-			Configure.deviceId = "84549a97";
-			AdbUtils.deviceId = "84549a97";
-			AdbUtils.storageDir = AdbUtils.storageDes + "84549a97" + "/";
-			AdbUtils.adb = "adb -s " + "84549a97" + " shell ";
-=======
-			Configure.deviceId = "UCZHUGEU99999999";
-			AdbUtils.deviceId = "UCZHUGEU99999999";
-			AdbUtils.storageDir = AdbUtils.storageDes + "UCZHUGEU99999999" + "/";
-			AdbUtils.adb = "adb -s " + "UCZHUGEU99999999" + " shell ";
->>>>>>> 50ba00131c6012713a6e7d4a53559c049e491f07
+			Configure.deviceId = "249AEA102";
+			AdbUtils.deviceId = "249AEA102";
+			AdbUtils.storageDir = AdbUtils.storageDes + "249AEA102" + "/";
+			AdbUtils.adb = "adb -s " + "249AEA102" + " shell ";
 		}
 		if (args.length > 2 && args[2] != null) {
 			Configure.appiumPort = args[2];
