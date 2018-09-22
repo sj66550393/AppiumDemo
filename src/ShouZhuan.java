@@ -40,8 +40,8 @@ public class ShouZhuan {
 			Configure.logDir = args[0];
 			AdbUtils.storageDes = args[0];
 		} else {
-			Configure.logDir = "e:\\";
-			AdbUtils.storageDes = "e:\\";
+			Configure.logDir = "d:\\";
+			AdbUtils.storageDes = "d:\\";
 		}
 		if (args.length > 1 && args[1] != null) {
 			Configure.deviceId = args[1];

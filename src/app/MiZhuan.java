@@ -186,14 +186,14 @@ public class MiZhuan {
 		// return;
 		// }
 		// }
-//		 if (!isExtraBonusCompleted) {
-//		 Log.log.info("开始额外任务");
-//		 result = startSigninAppTask();
-//		 if (ResultDict.COMMAND_SUCCESS != result) {
-//		 callback.onRestartApp(driver);
-//		 return;
-//		 }
-//		 }
+		if (!isExtraBonusCompleted) {
+			Log.log.info("开始额外任务");
+			result = startSigninAppTask();
+			if (ResultDict.COMMAND_SUCCESS != result) {
+				callback.onRestartApp(driver);
+				return;
+			}
+		}
 		// if (!isClickAdsCompleted) {
 		// Log.log.info("开始看广告任务");
 		// result = startClickAds();
@@ -778,8 +778,13 @@ public class MiZhuan {
 			if (isGetInstallCount) {
 				driver.findElement(By.id("me.mizhuan:id/left_back")).click();
 				Thread.sleep(2000);
+				int repeat = 0;
 				while (!isElementExistByString("完成3个应用赚任务")) {
 					AdbUtils.swipe(300, 800, 300, 665);
+					if(repeat == 10){
+						break;
+					}
+					repeat++;
 				}
 				AdbUtils.swipe(300, 800, 300, 665);
 				Thread.sleep(1000);
@@ -787,7 +792,7 @@ public class MiZhuan {
 					System.out.println("not exist 奖励");
 					driver.findElement(By.name("完成3个应用赚任务")).click();
 					Thread.sleep(1000);
-					if(isElementExistByString("已完成")){
+					if (isElementExistByString("已完成")) {
 						System.out.println("exist completed");
 						isInstallCompleted = true;
 						return ResultDict.COMMAND_SUCCESS;
@@ -815,14 +820,17 @@ public class MiZhuan {
 			String lastAppName = "";
 			int repeatCount = 0;
 			while (installCount < Configure.Mizhuan_instlal_count) {
-				taskType = driver.findElement(By.xpath(
-						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+				taskType = driver
+						.findElement(By
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 						.getText().substring(0, 2);
-				taskAppSize = driver.findElement(By.xpath(
-						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
+				taskAppSize = driver
+						.findElement(By
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.LinearLayout/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				taskAppName = driver.findElement(By.xpath(
-						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
+				taskAppName = driver
+						.findElement(By
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
 				Log.log.info("taskType = " + taskType + "   " + "    taskAppSize = " + taskAppSize + "   taskAppName = "
 						+ taskAppName);
@@ -863,7 +871,8 @@ public class MiZhuan {
 								AdbUtils.back();
 								Thread.sleep(2 * 1000);
 								SwipeScreen.swipe(driver, 300, 800, 300, 665);
-								// SwipeScreen.swipe(driver, 300, 400, 300, 265);
+								// SwipeScreen.swipe(driver, 300, 400, 300,
+								// 265);
 								continue;
 							}
 						} else {
@@ -1097,7 +1106,7 @@ public class MiZhuan {
 
 	private int universalInstall_CUN_AL(AndroidDriver driver) {
 		try {
-			if(isElementExistByString("安装")) {
+			if (isElementExistByString("安装")) {
 				driver.findElement(By.name("安装")).click();
 				Thread.sleep(3000);
 			}
@@ -1121,24 +1130,25 @@ public class MiZhuan {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
-	
+
 	private int universalInstall_CUN_BA804(AndroidDriver driver) {
 		try {
-			if(isElementExistByString("安装")) {
+			if (isElementExistByString("安装")) {
 				driver.findElement(By.name("安装")).click();
 				Thread.sleep(3000);
 			}
-//			while (true) {
-//				WebElement installButton = driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
-//				if ("下一步".equals(installButton.getText())) {
-//					installButton.click();
-//					Thread.sleep(1000);
-//				} else {
-//					installButton.click();
-//					Thread.sleep(1000);
-//					break;
-//				}
-//			}
+			// while (true) {
+			// WebElement installButton =
+			// driver.findElement(By.id("com.android.packageinstaller:id/ok_button"));
+			// if ("下一步".equals(installButton.getText())) {
+			// installButton.click();
+			// Thread.sleep(1000);
+			// } else {
+			// installButton.click();
+			// Thread.sleep(1000);
+			// break;
+			// }
+			// }
 			Thread.sleep(70 * 1000);
 			Log.log.info("开始体验5分钟");
 			Thread.sleep(5 * 60 * 1000);
@@ -1148,10 +1158,10 @@ public class MiZhuan {
 			return ResultDict.COMMAND_RESTART_APP;
 		}
 	}
-	
+
 	private int universalInstall_CUN_MX4(AndroidDriver driver) {
 		try {
-			if(isElementExistById("com.android.packageinstaller:id/action_positive")) {
+			if (isElementExistById("com.android.packageinstaller:id/action_positive")) {
 				driver.findElement(By.id("com.android.packageinstaller:id/action_positive")).click();
 				Thread.sleep(3000);
 			}
@@ -1391,8 +1401,9 @@ public class MiZhuan {
 						.findElement(By.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,"
 								+ position + ")]/android.widget.TextView[contains(@index,1)]"))
 						.getText();
-				String text = driver.findElement(By.xpath(
-						"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+				String text = driver
+						.findElement(By
+								.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 						.getText().substring(0, 2);
 				System.out.println(text);
 				if ((!"注册".equals(text)) && (!"体验".equals(text))) {
@@ -1413,8 +1424,9 @@ public class MiZhuan {
 				}
 				if (repeatCount >= 5) {
 					for (int i = 2; i < 20; i++) {
-						String text1 = driver.findElement(By.xpath(
-								"//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
+						String text1 = driver
+								.findElement(By
+										.xpath("//android.widget.ListView/android.widget.RelativeLayout[contains(@index,1)]/android.widget.Button"))
 								.getText().substring(0, 2);
 						if ((!"注册".equals(text1)) && (!"体验".equals(text1))) {
 							continue;
